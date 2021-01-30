@@ -1,7 +1,7 @@
 package main.utils;
 
 public enum FileType {
-    FXML("FXML");
+    FXML("fxml");
 
     private final String type;
 
@@ -9,6 +9,6 @@ public enum FileType {
 
     @Override
     public String toString() {
-        return type.toLowerCase();
+        return type;
     }
 }

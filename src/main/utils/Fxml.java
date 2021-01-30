@@ -1,9 +1,9 @@
 package main.utils;
 
 public enum Fxml {
-    GAME("GAME"),
-    MENU("MENU"),
-    SETTINGS("SETTINGS");
+    GAME("game"),
+    MENU("menu"),
+    SETTINGS("settings");
 
     private final String filename;
 
@@ -13,9 +13,9 @@ public enum Fxml {
 
     @Override
     public String toString() {
-        // TODO: Refactor ( probably use StringBuilder ) or add constants for directories
-        return  "../views/".concat(filename.toLowerCase())
-                            .concat(".")
-                            .concat(FileType.FXML.toString());
+        return ResourcePath.VIEWS_PATH.toString()
+                       .concat(filename)
+                       .concat(".")
+                       .concat(FileType.FXML.toString());
     }
 }

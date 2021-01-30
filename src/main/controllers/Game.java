@@ -1,30 +1,29 @@
 package main.controllers;
 
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import main.components.CommonShip;
 import main.exceptions.SettingsNotFound;
 import main.exceptions.UnknownSetting;
 import main.utils.Fxml;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.IntStream;
 
-public class Game {
+public class Game extends Controller {
     private final HashMap<String, String> settings = null;
-    private Scene scene;
-    private GridPane parent;
 
-   /*
+    /*
     * By default, the FXMLLoader will create the controller
     * by calling its zero-argument constructor.
     * As stated here: https://stackoverflow.com/a/28845702/13455322
@@ -32,16 +31,17 @@ public class Game {
     public Game() {}
 
     public Game(Stage stage) {
-            setParent();
-            setScene(this.parent);
-            addPlayer();
-            addEnemies();
+        String filename = Fxml.GAME.toString();
 
-            // initSettings();
+        setParent(filename);
+        setScene();
+        addPlayer();
+        addEnemies();
 
-            stage.setScene(this.scene);
-            stage.show();
+        // initSettings();
 
+        stage.setScene(getScene());
+        stage.show();
     }
 
     private void addPlayer() {
@@ -51,25 +51,26 @@ public class Game {
     }
 
     private void addEnemies() {
-        List<Rectangle> enemies = new java.util.ArrayList<>();
+        final GridPane parent = (GridPane) getParent();
+        final CommonShip commonShip = new CommonShip();
+        final List<ImageView> enemies = commonShip.getCommonShips();
+        final Group group = new Group();
 
-        /*
-        for (int i = 0; i < 15; i++) {
-            final Rectangle enemy = new Rectangle(100, 100, Color.RED);
-            enemy.setTranslateX(110 * i);
-            enemies.add(enemy);
-        }*/
+        group.getChildren().addAll(enemies);
 
-        // TODO: make a factory of enemies and animate it
-
-        this.parent.getChildren().addAll(enemies);
+        final Bounds bounds = group.getLayoutBounds();
+        System.out.println("bounds:" + bounds);
+        // Centering the group by get the difference between him and his father component
+        group.setTranslateX(parent.getWidth() / 2 - bounds.getWidth() / 2);
+        commonShip.move(group, 3.0);
+        parent.getChildren().add(group);
     }
 
     private void initSettings() {
         // ask SettingService to load data and return it as an HashMap<String,String> ( name, setting to apply
 
         if (this.settings != null) {
-            throw new SettingsNotFound("Check the if the database connection");
+            throw new SettingsNotFound("Check the settings.yaml file");
         }
 
         this.settings.forEach((key, value) -> {
@@ -103,21 +104,5 @@ public class Game {
 
     private static void intiOrientation() {
         // TODO: think about it with @arianna
-    }
-
-    private void setScene(Parent parent) {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        double width = primaryScreenBounds.getWidth() / 1.8;
-        double height = primaryScreenBounds.getHeight() / 1.8;
-
-        this.scene = new Scene(parent, width, height);
-    }
-
-    private void setParent() {
-        try {
-            this.parent = FXMLLoader.load(getClass().getResource(Fxml.GAME.toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

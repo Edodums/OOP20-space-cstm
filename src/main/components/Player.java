@@ -1,10 +1,11 @@
 package main.components;
 
-import javafx.scene.image.Image;
+import javafx.scene.Node;
+import main.components.interfaces.Entity;
 
-public class Player implements Sprite, Entity {
+public class Player implements Entity {
     @Override
-    public void move() {
+    public void move(Node node, double velocity) {
 
     }
 
@@ -21,15 +22,5 @@ public class Player implements Sprite, Entity {
     @Override
     public void looseLife() {
 
-    }
-
-    @Override
-    public void animate() {
-
-    }
-
-    @Override
-    public Image getFromFile() {
-        return null;
     }
 }
