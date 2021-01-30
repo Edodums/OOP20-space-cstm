@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="anchor" xmlns="http://javafx.com/javafx/11.0.1 " xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.Menu">
+   <stylesheets>
+      <URL value="@../../resources/assets/css/menu.css" />
+   </stylesheets>
+
+   <children>
+<!--      <Button onAction="#ranking" layoutX="123.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="RANKING" />-->
+      <Button onAction="#start" layoutX="263.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="START" />
+<!--      <Button onAction="#settings" layoutX="396.0" layoutY="200.0" mnemonicParsing="false" text="SETTINGS" />-->
+   </children>
+</AnchorPane>
