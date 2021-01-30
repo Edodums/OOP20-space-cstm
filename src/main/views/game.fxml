@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import java.net.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<GridPane fx:controller="main.controllers.Game"
-          xmlns:fx="http://javafx.com/fxml">
-
+<GridPane styleClass="gameBackground" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="main.controllers.Game">
+    <stylesheets>
+        <URL value="@../../resources/assets/css/game.css" />
+    </stylesheets>
 </GridPane>
