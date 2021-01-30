@@ -10,6 +10,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         stage.setTitle("Space Invaders");
 
+
         new Menu(stage);
     }
 
