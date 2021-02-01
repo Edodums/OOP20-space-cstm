@@ -3,7 +3,8 @@ package main.utils;
 public enum Fxml {
     GAME("game"),
     MENU("menu"),
-    SETTINGS("settings");
+    SETTINGS("settings"),
+    RANKING("ranking");
 
     private final String filename;
 
