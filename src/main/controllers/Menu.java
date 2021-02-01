@@ -1,67 +1,64 @@
 package main.controllers;
 
-
+import com.sun.scenario.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
+import javafx.scene.Node;
 import javafx.stage.Stage;
 import main.utils.Fxml;
 
-
-import java.io.IOException;
-
-public class Menu {
-
-    private Stage stage;
-    private Scene scene;
-    private AnchorPane parent;
-
-    @FXML
-    private Button start;
-
-    @FXML
-    private Button settings;
-
-    @FXML
-    private Button ranking;
+public class Menu extends Controller {
 
     public Menu() {}
 
     public Menu(Stage stage) {
-        setParent();
-        setScene(this.parent);
+        String filename = Fxml.MENU.toString();
+        setParent(filename);
+        setScene();
 
-        stage.setScene(this.scene);
+        stage.setScene(getScene());
         stage.show();
     }
 
-    private void setScene(Parent parent) {
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        double width = primaryScreenBounds.getWidth() / 1.8;
-        double height = primaryScreenBounds.getHeight() / 1.8;
-
-        this.scene = new Scene(parent, width, height);
-    }
-
-    private void setParent() {
-        try {
-            this.parent = FXMLLoader.load(getClass().getResource(Fxml.MENU.toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    @FXML
     public void start(ActionEvent actionEvent) {
-        try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(Fxml.GAME.toString()))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+         changeScene(Fxml.GAME.toString());
+
+         Stage stage = getUpdatedStage(actionEvent);
+
+         new Game(stage);
     }
+
+    @FXML
+    public void settings(ActionEvent actionEvent) {
+        changeScene(Fxml.SETTINGS.toString());
+
+        Stage stage = getUpdatedStage(actionEvent);
+
+        //new Settings(stage);
+    }
+
+    @FXML
+    public void ranking(ActionEvent actionEvent){
+        changeScene(Fxml.RANKING.toString());
+
+        Stage stage = getUpdatedStage(actionEvent);
+
+        new Ranking(stage);
+    }
+    private void changeScene(String filename) {
+        setParent(filename);
+        setScene();
+
+    }
+
+    private Stage getUpdatedStage(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        stage.setScene(getScene());
+        stage.show();
+
+        return stage;
+    }
+
 }

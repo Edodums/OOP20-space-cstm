@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import main.components.CommonShip;
+import main.components.MotherShip;
 import main.exceptions.SettingsNotFound;
 import main.exceptions.UnknownSetting;
 import main.utils.Fxml;
@@ -55,6 +56,8 @@ public class Game extends Controller {
         final CommonShip commonShip = new CommonShip();
         final List<ImageView> enemies = commonShip.getCommonShips();
         final Group group = new Group();
+        final MotherShip motherShip = new MotherShip();
+        final ImageView motherOfEnemies = motherShip.getMotherShip();
 
         group.getChildren().addAll(enemies);
 
@@ -63,7 +66,10 @@ public class Game extends Controller {
         // Centering the group by get the difference between him and his father component
         group.setTranslateX(parent.getWidth() / 2 - bounds.getWidth() / 2);
         commonShip.move(group, 3.0);
+        motherShip.move(motherOfEnemies, 3.0);
         parent.getChildren().add(group);
+        parent.getChildren().add(motherOfEnemies);
+
     }
 
     private void initSettings() {
