@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane depthTest="ENABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="606.0" styleClass="anchor" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controllers.Menu">
+   <stylesheets>
+      <URL value="@../../resources/assets/css/menu.css" />
+   </stylesheets>
+
+   <children>
+     <Button layoutX="410.0" layoutY="151.0" mnemonicParsing="false" onAction="#ranking" prefHeight="25.0" prefWidth="76.0" text="RANKING" textAlignment="CENTER" textFill="#fc2929">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <InnerShadow choke="0.36" height="43.24" radius="20.0075" width="38.79">
+               <color>
+                  <Color red="1.0" green="0.9098039269447327" blue="0.11764705926179886" />
+               </color>
+            </InnerShadow>
+         </effect></Button>
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="266.0" layoutY="149.0" mnemonicParsing="false" onAction="#start" opacity="0.9" prefHeight="27.0" prefWidth="76.0" text="START" textAlignment="CENTER" textFill="#4d3d06">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Arial Rounded MT Bold" size="12.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <effect>
+            <InnerShadow choke="0.67" height="18.03" radius="10.74" width="26.93">
+               <color>
+                  <Color red="0.8684210777282715" green="0.04020467773079872" blue="0.04020467773079872" />
+               </color>
+            </InnerShadow>
+         </effect></Button>
+      <Button layoutX="118.0" layoutY="150.0" mnemonicParsing="false" onAction="#settings" prefHeight="27.0" prefWidth="76.0" text="SETTINGS" textAlignment="CENTER" textFill="#fc2929">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <InnerShadow choke="0.36" height="39.91" radius="19.174999999999997" width="38.79">
+               <color>
+                  <Color red="1.0" green="0.9098039269447327" blue="0.11764705926179886" />
+               </color>
+            </InnerShadow>
+         </effect>
+         <font>
+            <Font name="Arial Rounded MT Bold" size="11.0" />
+         </font></Button>
+   </children>
+</AnchorPane>
