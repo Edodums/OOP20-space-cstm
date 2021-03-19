@@ -2,7 +2,7 @@ package main.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import main.models.Model;
+import main.models.ObservableModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class YamlService {
         return new File(classLoader.getResource(filename).getFile());
     }
 
-    private void writeFile(String filename, Model model){
+    private void writeFile(String filename, ObservableModel model){
         try {
             objectMapper.writeValue(getFile(filename), model);
         } catch (IOException e) {
@@ -29,7 +29,7 @@ public class YamlService {
         }
     }
 
-    private Model readFile(String filename, Model model){
+    private ObservableModel readFile(String filename, ObservableModel model){
         try {
             return objectMapper.readValue(getFile(filename),model.getClass());
         } catch (IOException e) {
