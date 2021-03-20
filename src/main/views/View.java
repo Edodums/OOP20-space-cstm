@@ -6,9 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-public abstract class View {
+public abstract class View implements PropertyChangeListener {
     /* Literally a number that I choose without any critical thinking */
     private static final double BOUND_FACTOR = 1.8;
     /* Primary Screen (useful if the user has multiple monitors bounds */
