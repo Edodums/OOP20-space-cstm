@@ -1,55 +1,69 @@
 package main.models;
 
-import main.components.interfaces.Entity;
+import main.exceptions.SettingsNotLoaded;
+import main.models.components.EntityFactory;
+import main.models.components.interfaces.Entity;
 import main.utils.Pair;
 
 import java.beans.PropertyChangeSupport;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Game extends ObservableModel {
-    private static final Integer MAX_X_POSITION = 4;
-    private static final Integer MAX_Y_POSITION = 12;
+    private static final Integer MAX_X = 14;
+    private static final Integer MAX_Y = 12;
 
-    private Map<Pair<Integer,Integer>, Entity> entities = new HashMap<>();
+    private final EntityFactory entityFactory = new EntityFactory();
+
+    private Set<Entity> entities = new HashSet<>();
+    private Map<Pair<Integer, Integer>, Optional<Entity>> grid = new HashMap<>();
+
     private Integer gamePoints = 0;
     private Integer aliveEnemies;
     private String playerName;
 
-    public Map<Pair<Integer, Integer>, Entity> entitiesPosition() {  return Collections.unmodifiableMap(this.entities); }
+    public Game() throws SettingsNotLoaded {
+        if (getEntitySet().isEmpty()) throw new SettingsNotLoaded();
+    }
 
-    public Game() {
+    public Game(Settings settings) {
+        // TODO: CHECK IF MODEL GETS CALLED BEFORE VIEW
         setSupport(new PropertyChangeSupport(this));
+
+        initEntities(settings);
+        initGrid();
     }
 
     public void initEntities(Settings settings) {
-        // TODO: init entities getting serialized data from settings
+        this.entities = settings.getEntityImage()
+                                .stream()
+                                .map(entityImage -> entityFactory.getEntity(entityImage.getEntityType()))
+                                .collect(Collectors.toUnmodifiableSet());
     }
 
-    public boolean canEntityMove(Integer x, Integer y) {
-        return x < MAX_X_POSITION && y < MAX_Y_POSITION;
+    public void initGrid() {
+        IntStream.range(0, getMaxX())
+                .boxed()
+                .flatMap(x -> IntStream.range(0, getMaxY())
+                        .mapToObj(y -> new Pair<>(x, y)))
+                .forEach(pair -> this.grid.put(pair, Optional.empty()));
+
+        this.entities.forEach(entity ->
+            entity.create().forEach((key , value) -> this.grid.replace(key, value))
+        );
     }
 
-    public void moveEntity(Entity entity) {
-        /* TODO:
-         Map<Pair<Integer, Integer>, Entity> currentEntitiesPosition = entitiesPosition();
-         always change position to the left
-         when you reach y max position go 1 down
-         when you reach x max position is finished*/
+    public Set<Entity> getEntitySet() {
+        return Collections.unmodifiableSet(this.entities);
     }
 
-    public void primaryFire() {
-        //  TODO: handle position & spawn of entity laser
+    public static Integer getMaxX() {
+        return MAX_X;
     }
 
-    private void initCommonShip() {
-        /* TODO:
-         from index 1 to size -1 ( or minus 2 )
-         create a CommonShip Entity
-         for x columns and y rows
-         set also the position x,y
-         in this case I think It would be needed a Component or a the Factory Method Pattern*/
+    public static Integer getMaxY() {
+        return MAX_Y;
     }
 
     public void setPlayerName(String playerName) {
