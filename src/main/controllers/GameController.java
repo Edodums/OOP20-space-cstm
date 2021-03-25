@@ -11,14 +11,8 @@ public class GameController extends Controller {
     private View view;
 
     GameController(Settings settings) {
-        //TODO: check if still MVC like this, probably not
-        setModel(new Game());
+        setModel(new Game(settings));
         setView(new GameView(this));
-        initEntities(settings);
-    }
-
-    private void initEntities(Settings settings) {
-        this.model.initEntities(settings);
     }
 
     @Override

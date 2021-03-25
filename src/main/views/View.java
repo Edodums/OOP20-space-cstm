@@ -41,7 +41,7 @@ public abstract class View implements PropertyChangeListener {
         this.scene = new Scene(this.parent, getWidth(), getHeight());
     }
 
-    void setParent(String filename) {
+    final void setParent(String filename) {
         try {
             this.parent = FXMLLoader.load(getClass().getResource(filename));
         } catch (IOException e) {
