@@ -1,4 +1,4 @@
-package main.models.components;
+package main.models.components.entities;
 
 import main.exceptions.EntityNotFoundException;
 import main.models.components.interfaces.Entity;

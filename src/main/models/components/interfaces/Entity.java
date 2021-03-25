@@ -1,7 +1,7 @@
 package main.models.components.interfaces;
 
+import main.models.components.entities.CommonShip;
 import main.utils.Pair;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -10,12 +10,22 @@ import static main.models.Game.getMaxY;
 
 public interface Entity {
     Map<Pair<Integer, Integer>, Optional<Entity>> create();
-    void move(double velocity);
-    void shoot();
+    Pair<Integer, Integer> getPosition();
+
+    void move();
+    void fire();
     void die();
+
     Integer getSpawnNumber();
 
-    default boolean canEntityMove(Integer x, Integer y) {
-        return x < getMaxX() && y < getMaxY();
+    /**
+     * TODO: check it and comment about it,if you think this is method more suitable for Player
+     * default boolean canEntityMove(Integer x, Integer y) {
+     *   return x < getMaxX() && y < getMaxY();
+     * }
+     */
+
+    default boolean isNPC() {
+        return this instanceof CommonShip;
     }
 }
