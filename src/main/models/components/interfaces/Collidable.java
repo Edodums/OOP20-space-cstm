@@ -4,7 +4,7 @@ import main.models.components.Collider;
 import main.utils.Pair;
 
 public interface Collidable {
-    default boolean wasHit(Collider entity, Collider deployedWeapon) {
+    default boolean hit(Collider entity, Collider deployedWeapon) {
         Pair<Integer, Integer> entityPosition = entity.getPosition();
         Pair<Integer, Integer> deployedWeaponPosition = deployedWeapon.getPosition();
 
