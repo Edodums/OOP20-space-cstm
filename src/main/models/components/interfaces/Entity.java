@@ -1,31 +1,35 @@
 package main.models.components.interfaces;
 
-import main.models.components.entities.CommonShip;
-import main.utils.Pair;
 import java.util.Map;
 import java.util.Optional;
-
-import static main.models.Game.getMaxX;
-import static main.models.Game.getMaxY;
+import main.models.components.entities.CommonShip;
+import main.utils.Pair;
 
 public interface Entity {
-    Map<Pair<Integer, Integer>, Optional<Entity>> create();
-    Pair<Integer, Integer> getPosition();
+  Map<Pair<Integer, Integer>, Optional<Entity>> create();
 
-    void move();
-    void fire();
-    void die();
+  Pair<Integer, Integer> getPosition();
 
-    Integer getSpawnNumber();
+  void move();
 
-    /**
-     * TODO: check it and comment about it,if you think this is method more suitable for Player
-     * default boolean canEntityMove(Integer x, Integer y) {
-     *   return x < getMaxX() && y < getMaxY();
-     * }
-     */
+  void fire();
 
-    default boolean isNPC() {
-        return this instanceof CommonShip;
-    }
+  void die();
+
+  String getFilename();
+
+  String getSpriteType();
+
+  Integer getSpawnNumber();
+
+  /**
+   * TODO: check it and comment about it,if you think this is method more suitable for Player
+   * default boolean canEntityMove(Integer x, Integer y) {
+   *   return x < getMaxX() && y < getMaxY();
+   * }
+   */
+
+  default boolean isNpc() {
+    return this instanceof CommonShip;
+  }
 }

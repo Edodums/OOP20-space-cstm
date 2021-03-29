@@ -6,53 +6,71 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+/**
+ * Utility Class that handles how the animation of a imageView works.
+ * Taken from here: https://netopyr.com/2012/03/09/creating-a-sprite-animation-with-javafx/
+ */
 public class SpriteAnimation extends Transition {
-    /*
-     * Taken from here: https://netopyr.com/2012/03/09/creating-a-sprite-animation-with-javafx/
-     */
+  private static final Integer OFFSET_X = 6;
+  private static final Integer OFFSET_Y = 4;
+  private static final Duration DURATION = new Duration(2.0);
 
-    private final ImageView imageView;
-    private final int count;
-    private final int columns;
-    private final int offsetX;
-    private final int offsetY;
-    private final int width;
-    private final int height;
+  private final ImageView imageView;
+  private final int count;
+  private final int columns;
+  private final int rows;
+  private final int width;
+  private final int height;
 
-    private int lastIndex;
+  private int lastIndex;
 
-    public SpriteAnimation(
-        ImageView imageView,
-        Duration duration,
+  /**
+    * Pass imageView and it's data, probably will use reflection.
+    *
+    * @param imageView
+    *
+    * @param count
+    *
+    * @param columns
+    *
+    * @param rows
+    *
+    * @param width
+    *
+    * @param height
+   *
+  */
+  public SpriteAnimation(
+       ImageView imageView,
         int count,
         int columns,
-        int offsetX,
-        int offsetY,
+        int rows,
         int width,
         int height
-    ) {
-        this.imageView = imageView;
-        this.count     = count;
-        this.columns   = columns;
-        this.offsetX   = offsetX;
-        this.offsetY   = offsetY;
-        this.width     = width;
-        this.height    = height;
+  ) {
+    this.imageView = imageView;
+    this.count     = count;
+    this.columns   = columns;
+    this.rows   = rows;
+    this.width     = width;
+    this.height    = height;
 
-        setCycleDuration(duration);
-        setInterpolator(Interpolator.LINEAR);
+    setCycleDuration(DURATION);
+    setInterpolator(Interpolator.LINEAR);
+  }
+
+  protected void interpolate(double k) {
+    final int index = Math.min((int) Math.floor(k * count), count - 1);
+
+    if (index != lastIndex) {
+      final int columnIndex = index % columns;
+      final int rowIndex = index % rows;
+      final int x =  columnIndex * (width  + OFFSET_X);
+      final int y = rowIndex * height + OFFSET_Y;
+
+      imageView.setViewport(new Rectangle2D(x, y, width, height));
+
+      lastIndex = index;
     }
-
-    protected void interpolate(double k) {
-        final int index = Math.min((int) Math.floor(k * count), count - 1);
-
-        if (index != lastIndex) {
-            final int x = (index % columns) * width  + offsetX;
-            final int y = (index / columns) * height + offsetY;
-
-            imageView.setViewport(new Rectangle2D(x, y, width, height));
-
-            lastIndex = index;
-        }
-    }
+  }
 }

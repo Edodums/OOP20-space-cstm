@@ -12,7 +12,7 @@ public class GameController extends Controller {
 
     GameController(Settings settings) {
         setModel(new Game(settings));
-        setView(new GameView(this));
+        setView(new GameView(model));
     }
 
     @Override
