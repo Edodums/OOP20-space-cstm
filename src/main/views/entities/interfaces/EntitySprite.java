@@ -8,5 +8,5 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface EntitySprite {
-    Node create(Map<Pair<Integer, Integer>, Optional<Entity>> commonShips);
+    Node create(Map<Pair<Integer, Integer>, Optional<Entity>> entity);
 }

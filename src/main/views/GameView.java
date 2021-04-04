@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Objects;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
+import main.events.PlayerShootEvent;
 import main.exceptions.SettingsNotLoaded;
 import main.models.Game;
 import main.models.components.entities.CommonShip;
@@ -12,6 +13,7 @@ import main.utils.GameLoop;
 import main.views.command.PrimaryFireCommand;
 import main.views.entities.CommonShipView;
 import main.views.entities.interfaces.EntitySprite;
+import org.greenrobot.eventbus.EventBus;
 
 public class GameView extends View {
   private Game game;
@@ -48,14 +50,13 @@ public class GameView extends View {
   
   private void init() {
     game.getEntitySet().forEach(entity -> {
-      strategy = getStrategy(entity);
-      addToParent(Objects.requireNonNull(strategy)
-                        .create(game.getFilteredEntitiesInGrid(entity)));
+      addToParent(Objects.requireNonNull(getStrategy(entity))
+                         .create(game.getFilteredEntitiesInGrid(entity)));
     });
   }
   
   private EntitySprite getStrategy(Entity entity) {
-    if (entity.getClass().equals(CommonShip.class)) {
+    if (entity instanceof CommonShip) {
       return new CommonShipView();
     }
     
@@ -66,6 +67,8 @@ public class GameView extends View {
     getParent().setOnKeyPressed(keyEvent -> {
       if (keyEvent.getCode().equals(KeyCode.SPACE)) {
         new PrimaryFireCommand(game);
+        
+        EventBus.getDefault().post(new PlayerShootEvent());
       }
     });
   }
@@ -75,7 +78,6 @@ public class GameView extends View {
       @Override
       public void tick(float secondsSinceLastFrame) {
         game.updateGrid();
-        
       }
     };
     

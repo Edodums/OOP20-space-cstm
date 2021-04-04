@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import main.exceptions.SettingsNotLoaded;
+import main.models.components.Collider;
 import main.models.components.entities.EntityFactory;
 import main.models.components.interfaces.Entity;
 import main.models.components.interfaces.Weapon;
@@ -43,6 +44,13 @@ public class Game extends ObservableModel {
     
     initEntities(settings);
     initGrid();
+    
+    setAliveEnemies((int) this.grid
+                                .entrySet()
+                                .stream()
+                                .filter(entry -> entry.getValue().isPresent())
+                                .filter(entry -> entry.getValue().get().isNpc())
+                                .count());
   }
   
   public void initEntities(Settings settings) {
@@ -63,11 +71,30 @@ public class Game extends ObservableModel {
     fireGridChange();
   }
   
+  public void removeFromGrid(Pair<Integer, Integer> position) {
+    if (this.grid.get(position).isPresent()) {
+      this.grid.remove(position);
+      fireGridChange();
+    }
+  
+    System.out.println("Not present"); // TODO: handle it happens during alpha TESTS
+  }
+  
   public void primaryFire() {
-    WeaponType playerWeaponType = WeaponType.PLAYER;
-    Weapon weapon = weaponFactory.getWeapon(playerWeaponType);
-    // TODO: startingPoint is the current position of the player
-    weapon.deploy(new Pair<>(1, 1));
+    getPlayerWeapon().deploy(new Pair<>(1, 1));
+  }
+  
+  public void collisionHandler() {
+    getSetOfNPCEntities()
+          .stream()
+          .filter(Optional::isPresent)
+          .forEach((entity) -> {
+            getPlayerWeapon().checkCollision((Collider) entity.get());
+          });
+  }
+  
+  public Weapon getPlayerWeapon() {
+    return weaponFactory.getWeapon(WeaponType.PLAYER);
   }
   
   public Map<Pair<Integer, Integer>, Optional<Entity>> getGrid() {
@@ -82,6 +109,19 @@ public class Game extends ObservableModel {
                  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
   
+  public Set<Optional<Entity>> getSetOfNPCEntities() {
+    Set<Optional<Entity>> npcSet = new HashSet<>(Collections.emptySet());
+    
+    getEntitySet()
+          .stream()
+          .filter(Entity::isNpc)
+          .forEach(entity -> {
+            npcSet.addAll(getFilteredEntitiesInGrid(entity).values());
+          });
+    
+    return npcSet;
+  }
+  
   public Set<Entity> getEntitySet() {
     return Collections.unmodifiableSet(this.entities);
   }
@@ -92,6 +132,14 @@ public class Game extends ObservableModel {
   
   public static Integer getMaxY() {
     return MAX_Y;
+  }
+  
+  public Integer getGamePoints() {
+    return gamePoints;
+  }
+  
+  public Integer getAliveEnemies() {
+    return aliveEnemies;
   }
   
   public void setPlayerName(String playerName) {
@@ -116,9 +164,7 @@ public class Game extends ObservableModel {
                               .mapToObj(y -> new Pair<>(x, y)))
           .forEach(pair -> this.grid.put(pair, Optional.empty()));
     
-    this.entities.forEach(entity ->
-                                entity.create().forEach(this.grid::replace)
-    );
+    this.entities.forEach(entity -> entity.create().forEach(this.grid::replace));
     
     fireGridChange();
   }

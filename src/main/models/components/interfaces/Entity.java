@@ -21,6 +21,8 @@ public interface Entity {
   String getSpriteType();
 
   Integer getSpawnNumber();
+  
+  Integer getPointsValue();
 
   /**
    * TODO: check it and comment about it,if you think this is method more suitable for Player
