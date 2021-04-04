@@ -6,7 +6,7 @@ import main.models.Settings;
 import main.views.GameView;
 import main.views.View;
 
-public class GameController extends Controller {
+public class GameController implements Controller {
     private Game model;
     private View view;
 
@@ -16,12 +16,12 @@ public class GameController extends Controller {
     }
 
     @Override
-    protected void setModel(ObservableModel model) {
+    public void setModel(ObservableModel model) {
         this.model = (Game) model;
     }
 
     @Override
-    protected void setView(View view) {
+    public void setView(View view) {
         this.view = view;
     }
 }
