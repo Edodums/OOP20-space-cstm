@@ -4,5 +4,6 @@ import main.models.components.Collider;
 import main.utils.Pair;
 
 public interface Weapon {
-    void deploy(Pair<Integer, Integer> startingPoint, Collider entityToCheck);
+    void deploy(Pair<Integer, Integer> startingPoint);
+    void checkCollision(Collider entityToCheck);
 }

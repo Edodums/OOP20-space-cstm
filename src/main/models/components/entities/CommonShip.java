@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import main.events.CommonShipHitEvent;
 import main.models.EntityImage;
 import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
 import main.utils.Pair;
+import org.greenrobot.eventbus.EventBus;
 
 public class CommonShip extends Collider implements Entity, Collidable {
   private static final Integer COLUMNS = 8;
@@ -22,6 +25,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
   private final EntityImage entityImage;
   
   public CommonShip(EntityImage entityImage) {
+    super();
     this.entityImage = entityImage;
   }
   
@@ -79,7 +83,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
   
   @Override
   public void die() {
-    System.out.println("Commoship is dead!");
+    EventBus.getDefault().post(new CommonShipHitEvent(this));
   }
   
   @Override
@@ -143,5 +147,10 @@ public class CommonShip extends Collider implements Entity, Collidable {
   @Override
   public Integer getSpawnNumber() {
     return getCommonEnemiesColumns() * getCommonEnemiesRows();
+  }
+  
+  @Override
+  public Integer getPointsValue() {
+     return getPosition().getY() % getCommonEnemiesRows() * 10;
   }
 }
