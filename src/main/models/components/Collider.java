@@ -8,7 +8,7 @@ public abstract class Collider {
     public abstract double getWidth();
     public abstract double getHeight();
 
-    public Pair<Integer, Integer> getPosition()  {
+    public Pair<Double, Double> getPosition()  {
         return this.position;
     }
 

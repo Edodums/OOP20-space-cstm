@@ -50,7 +50,7 @@ public class Game extends ObservableModel {
                 .forEach(pair -> this.grid.put(pair, Optional.empty()));
 
         this.entities.forEach(entity ->
-            entity.create().forEach((key , value) -> this.grid.replace(key, value))
+            entity.create(newHashMap).forEach((key , value) -> this.grid.replace(key, value))
         );
     }
 
