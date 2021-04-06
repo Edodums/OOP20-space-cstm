@@ -18,16 +18,15 @@ public class CommonShip extends Collider implements Entity, Collidable {
     private static final double WIDTH = 3.0;
     private static final double HEIGHT = 2.0;
 
-
     public CommonShip() {
         // empty
     }
 
-   @Override
+    @Override
     public void move() {
         Pair<Integer, Integer> newPair = null;
 
-        *//* 1. if you've reach the end you set take away 1 life from player counter. *//*
+        /* 1. if you've reach the end you set take away 1 life from player counter. */
         if (getPosition().getX().equals(getCommonEnemiesColumns()) &&
                 getPosition().getY().equals(getCommonEnemiesRows() + getCommonEnemiesNextRows())) {
             //TODO: probably I'll handle it with an Event ( if so, @Arianna have to create an Event Manager )
@@ -35,22 +34,22 @@ public class CommonShip extends Collider implements Entity, Collidable {
             return;
         }
 
-        *//* 2. if you've to go right then check if the current number (x) is lower than the next one *//*
+        /* 2. if you've to go right then check if the current number (x) is lower than the next one */
         if (!isComingRight(getPosition().getY())) {
             newPair = new Pair<>(getPosition().getX() + 1, getPosition().getY());
         }
 
-        *//* 3. if you've to go left then check if the current number (x) is greater than the next one *//*
+        /* 3. if you've to go left then check if the current number (x) is greater than the next one */
         if (isComingRight(getPosition().getY())) {
             newPair = new Pair<>(getPosition().getX() - 1, getPosition().getY());
         }
 
-        *//* 4. if you reach the last column then go down and back (x - 1) && check if coming from the left *//*
+        /* 4. if you reach the last column then go down and back (x - 1) && check if coming from the left */
         if (getPosition().getX().equals(getCommonEnemiesColumns()) && !isComingRight(getPosition().getY())) {
             newPair = new Pair<>(getPosition().getX() - 1, getPosition().getY() + 1);
         }
 
-        *//* 5. if you reach the first column then go down and forth ( x + 1 ) && check if coming from the right *//*
+        /* 5. if you reach the first column then go down and forth ( x + 1 ) && check if coming from the right */
         if (getPosition().getX().equals(getStartingPoint().getX()) && isComingRight(getPosition().getY())) {
             newPair = new Pair<>(getPosition().getX() + 1, getPosition().getY() + 1);
         }
@@ -73,7 +72,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public Map<Pair<Integer, Integer>, Optional<Entity>> create(Object newHashMap) {
+    public Map<Pair<Integer, Integer>, Optional<Entity>> create() {
         Map<Pair<Integer, Integer>, Optional<Entity>> army = new HashMap<>();
 
         IntStream.range(0, getCommonEnemiesColumns())
@@ -90,15 +89,15 @@ public class CommonShip extends Collider implements Entity, Collidable {
         return army;
     }
 
-    private boolean isComingRight(Double currentY) {
+    private boolean isComingRight(Integer currentY) {
         return currentY % 2 == 0;
     }
 
-    public static Integer getCommonEnemiesColumns() {
+    private static Integer getCommonEnemiesColumns() {
         return COLUMNS;
     }
 
-    public static Integer getCommonEnemiesRows() {
+    private static Integer getCommonEnemiesRows() {
         return ROWS;
     }
 
@@ -106,7 +105,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
         return NEXT_ROWS;
     }
 
-    public static Pair<Integer, Integer> getStartingPoint() {
+    private static Pair<Integer, Integer> getStartingPoint() {
         return STARTING_POINT;
     }
 
@@ -121,7 +120,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public double getSpawnNumber() {
+    public Integer getSpawnNumber() {
         return getCommonEnemiesColumns() * getCommonEnemiesRows();
     }
 }
