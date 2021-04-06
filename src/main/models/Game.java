@@ -19,14 +19,16 @@ import main.utils.Pair;
 import main.utils.enums.WeaponType;
 
 public class Game extends ObservableModel {
-  private static final Integer MAX_X = 14;
-  private static final Integer MAX_Y = 12;
-  
+  private static final double MAX_X = 14;
+  private static final double MAX_Y = 12;
+  private static final double ENEMIES_COLUMNS = 8;
+  private static final double ENEMIES_ROWS = 3;
+
   private final WeaponFactory weaponFactory = new WeaponFactory();
   private final EntityFactory entityFactory = new EntityFactory();
   
   private Set<Entity> entities = new HashSet<>();
-  private final Map<Pair<Integer, Integer>, Optional<Entity>> grid = new HashMap<>();
+  private final Map<Pair<Double, Double>, Optional<Entity>> grid = new HashMap<>();
   
   private Integer gamePoints = 0;
   private Integer aliveEnemies;
@@ -125,6 +127,14 @@ public class Game extends ObservableModel {
   public Set<Entity> getEntitySet() {
     return Collections.unmodifiableSet(this.entities);
   }
+
+  public static double getEnemiesColumns(){
+    return ENEMIES_COLUMNS;
+  }
+
+  public static double getEnemiesRows(){
+    return ENEMIES_ROWS;
+  }
   
   public static Integer getMaxX() {
     return MAX_X;
@@ -173,3 +183,4 @@ public class Game extends ObservableModel {
     firePropertyChange("grid", this.grid, this.grid);
   }
 }
+
