@@ -85,5 +85,4 @@ public interface Entity {
     default boolean isComingRight(Double currentY) {
         return currentY % 2 == 0;
     }
-
 }

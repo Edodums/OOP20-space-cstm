@@ -1,35 +1,91 @@
 package main.views;
 
-import com.sun.jdi.ClassNotLoadedException;
-import main.controllers.GameController;
-import main.models.Game;
-
 import java.beans.PropertyChangeEvent;
+import java.util.Objects;
+import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import main.events.PlayerShootEvent;
+import main.exceptions.SettingsNotLoaded;
+import main.models.Game;
+import main.models.components.entities.CommonShip;
+import main.models.components.interfaces.Entity;
+import main.utils.GameLoop;
+import main.views.command.PrimaryFireCommand;
+import main.views.entities.CommonShipView;
+import main.views.entities.interfaces.EntitySprite;
+import org.greenrobot.eventbus.EventBus;
 
 public class GameView extends View {
-    private Game game;
-    public GameView(GameController controller) {
-        try {
-            game = new Game();
-            game.addPropertyChangeListener(this);
+  private Game game;
+  private static EntitySprite strategy;
 
-            new LoginDialog(game);
-        } catch (ClassNotLoadedException e) {
-            e.printStackTrace();
-        }
+  public GameView(Game game) {
+    try {
+      this.game = game;
+      
+      game.addPropertyChangeListener(this);
+
+      new LoginDialog(game);
+    } catch (SettingsNotLoaded e) {
+      e.printStackTrace();
     }
+    
+    primaryFireEvent();
+    init();
+  }
+  
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    Object source = evt.getSource();
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Object source = evt.getSource();
+    /*
+        Useful link:
+        https://docs.oracle.com/javase/tutorial/uiswing/events/propertychangelistener.html
 
-        /*
-            Useful link:
-            https://docs.oracle.com/javase/tutorial/uiswing/events/propertychangelistener.html
-
-            if (source == amountField) {
-            amount = ((Number)amountField.getValue()).doubleValue();
-            ...
-        }*/
+        if (source == amountField) {
+        amount = ((Number)amountField.getValue()).doubleValue();
+        ...
+    }*/
+  }
+  
+  private void init() {
+    game.getEntitySet().forEach(entity -> {
+      addToParent(Objects.requireNonNull(getStrategy(entity))
+                         .create(game.getFilteredEntitiesInGrid(entity)));
+    });
+  }
+  
+  private EntitySprite getStrategy(Entity entity) {
+    if (entity instanceof CommonShip) {
+      return new CommonShipView();
     }
+    
+    return null;
+  }
+  
+  private void primaryFireEvent() {
+    getParent().setOnKeyPressed(keyEvent -> {
+      if (keyEvent.getCode().equals(KeyCode.SPACE)) {
+        new PrimaryFireCommand(game);
+        
+        EventBus.getDefault().post(new PlayerShootEvent());
+      }
+    });
+  }
+  
+  private void updateCommonShip() {
+    GameLoop timer = new GameLoop() {
+      @Override
+      public void tick(float secondsSinceLastFrame) {
+        game.updateGrid();
+      }
+    };
+    
+    timer.start();
+    // TODO: Event Manager could be useful here
+  }
+  
+  private void addToParent(Node... nodes) {
+    getParent().getChildren().addAll(nodes);
+  }
 }

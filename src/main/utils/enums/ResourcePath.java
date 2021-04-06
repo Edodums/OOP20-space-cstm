@@ -1,4 +1,4 @@
-package main.utils;
+package main.utils.enums;
 
 public enum ResourcePath {
     VIEWS_PATH("../views/"),
