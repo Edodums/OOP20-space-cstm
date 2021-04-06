@@ -13,6 +13,8 @@ import java.util.stream.IntStream;
 public class Game extends ObservableModel {
     private static final Integer MAX_X = 14;
     private static final Integer MAX_Y = 12;
+    private static final double ENEMIES_COLUMNS = 8;
+    private static final double ENEMIES_ROWS = 3;
 
     private final EntityFactory entityFactory = new EntityFactory();
 
@@ -80,4 +82,13 @@ public class Game extends ObservableModel {
         firePropertyChange("aliveEnemies", this.aliveEnemies, aliveEnemies);
         this.aliveEnemies = aliveEnemies;
     }
+
+    public static double getEnemiesColumns(){
+        return ENEMIES_COLUMNS;
+    }
+
+    public static double getEnemiesRows(){
+        return ENEMIES_ROWS;
+    }
 }
+

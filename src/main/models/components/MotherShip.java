@@ -21,11 +21,8 @@ public class MotherShip extends Collider implements Entity, Collidable {
 
     public MotherShip(){}
 
-    public void move(){}
-
-
     @Override
-    public Map<Pair<Double, Double>, Optional<Entity>> create(Object newHashMap) {
+    public Map<Pair<Double, Double>, Optional<Entity>> create(double newHashMap) {
         MotherShip motherShip = this ;
 
         return Collections.unmodifiableMap(new HashMap<>(){{
@@ -57,6 +54,10 @@ public class MotherShip extends Collider implements Entity, Collidable {
     private double getMotherShipRows() { return ROWS; }
 
     private double getMotherShipColumns() {return COLUMNS; }
+
+    public Pair<Double, Double> getStartingPoint() {
+        return STARTING_POINT;
+    }
 
 }
 
