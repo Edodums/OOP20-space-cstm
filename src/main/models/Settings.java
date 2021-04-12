@@ -1,16 +1,20 @@
 package main.models;
 
-import main.utils.Orientations;
+import main.utils.enums.Orientations;
 
-public class Settings extends Model {
+import java.util.List;
+
+public class Settings extends ObservableModel {
 
     private final Orientations orientation;
-    private final EntityImage entityImage;
+    private final List<EntityImage> entityImage;
 
-    public Settings(Orientations orientation, EntityImage entityImage){
+    public Settings(Orientations orientation, List<EntityImage> entityImage){
         this.orientation = orientation;
         this.entityImage = entityImage;
     }
 
-
+    public List<EntityImage> getEntityImage() {
+        return entityImage;
+    }
 }

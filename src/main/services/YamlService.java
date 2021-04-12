@@ -15,13 +15,9 @@ public class YamlService {
         
     }
 
-    private File getFile(String filename){
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        return new File(classLoader.getResource(filename).getFile());
-    }
 
-    private void writeFile(String filename, ObservableModel model){
+    public void writeFile(String filename, ObservableModel model){
         try {
             objectMapper.writeValue(getFile(filename), model);
         } catch (IOException e) {
@@ -29,7 +25,7 @@ public class YamlService {
         }
     }
 
-    private ObservableModel readFile(String filename, ObservableModel model){
+    public ObservableModel readFile(String filename, ObservableModel model){
         try {
             return objectMapper.readValue(getFile(filename),model.getClass());
         } catch (IOException e) {
@@ -37,5 +33,11 @@ public class YamlService {
         }
 
         return null;
+    }
+
+    private File getFile(String filename){
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        return new File(classLoader.getResource(filename).getFile());
     }
 }
