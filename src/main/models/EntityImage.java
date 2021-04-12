@@ -1,17 +1,26 @@
 package main.models;
 
-import main.utils.EntityType;
-import main.utils.SpriteType;
+import main.utils.enums.EntityType;
+import main.utils.enums.WeaponType;
+
 
 public class EntityImage {
 
     private final String name;
-    private final EntityType entityType;
-    private final SpriteType spriteType;
+    private final Type<EntityType, WeaponType> type;
+    private final Grid grid;
 
-    public EntityImage (String name,EntityType entityType, SpriteType spriteType){
+    public EntityImage (String name,Type<EntityType,WeaponType> type, Grid grid){
          this.name = name;
-         this.entityType = entityType;
-         this.spriteType = spriteType;
+         this.type = type;
+         this.grid = grid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Type<EntityType, WeaponType> getType() {
+        return type;
     }
 }
