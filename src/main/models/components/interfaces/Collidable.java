@@ -5,8 +5,8 @@ import main.utils.Pair;
 
 public interface Collidable {
     default boolean hit(Collider entity, Collider deployedWeapon) {
-        Pair<Integer, Integer> entityPosition = entity.getPosition();
-        Pair<Integer, Integer> deployedWeaponPosition = deployedWeapon.getPosition();
+        Pair<Double, Double> entityPosition = entity.getPosition();
+        Pair<Double, Double> deployedWeaponPosition = deployedWeapon.getPosition();
 
         return entityPosition.getX() < (deployedWeaponPosition.getX() + deployedWeapon.getWidth()) &&
               (entityPosition.getX() + entity.getWidth()) > deployedWeaponPosition.getX() &&

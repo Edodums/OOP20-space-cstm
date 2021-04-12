@@ -3,25 +3,25 @@ package main.controllers;
 import main.models.Game;
 import main.models.ObservableModel;
 import main.models.Settings;
-import main.views.GameView;
-import main.views.View;
 
 public class GameController implements Controller {
-    private Game model;
-    private View view;
-
-    GameController(Settings settings) {
-        setModel(new Game(settings));
-        setView(new GameView(model));
-    }
-
-    @Override
-    public void setModel(ObservableModel model) {
-        this.model = (Game) model;
-    }
-
-    @Override
-    public void setView(View view) {
-        this.view = view;
-    }
+  private Game model;
+  
+  public GameController() {
+    Settings settings = new Settings();
+    setModel(new Game(settings.load()));
+  }
+  
+  @Override
+  public void setModel(ObservableModel model) {
+    this.model = (Game) model;
+  }
+  
+  public void setPlayerName(String playerName) {
+    this.model.setPlayerName(playerName);
+  }
+  
+  public void updateGrid() {
+    this.model.updateGrid();
+  }
 }
