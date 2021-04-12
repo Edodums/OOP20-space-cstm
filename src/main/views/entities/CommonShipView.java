@@ -12,7 +12,7 @@ import main.views.entities.interfaces.EntitySprite;
 public class CommonShipView implements EntitySprite {
   
   @Override
-  public Node create(Map<Pair<Integer, Integer>, Optional<Entity>> commonShips) {
+  public Node create(Map<Pair<Double, Double>, Optional<Entity>> commonShips, double unit) {
     Group group = new Group();
     
     commonShips.forEach((key, value) -> {
@@ -21,9 +21,8 @@ public class CommonShipView implements EntitySprite {
       }
       
       ImageView commonShip = new ImageView(value.get().getFileName());
-      // TODO: add unit ( 1 square/rectangle )
-      commonShip.setTranslateX(key.getX());
-      commonShip.setTranslateY(key.getY());
+      commonShip.setTranslateX(key.getX() + unit);
+      commonShip.setTranslateY(key.getY() + unit);
       
       group.getChildren().add(commonShip);
     });

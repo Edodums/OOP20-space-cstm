@@ -7,6 +7,7 @@ public abstract class Collider {
 
     public abstract double getWidth();
     public abstract double getHeight();
+    
     public abstract Pair<Double, Double> getStartingPoint();
 
     public Pair<Double, Double> getPosition()  {

@@ -1,12 +1,12 @@
-package main.views.command;
+package main.views.fire;
 
 import main.models.Game;
 
 // TODO: check if is better as an abstract class or as an interface
-public abstract class Command {
+public abstract class FireCommand {
     public Game game;
 
-    Command(Game game) {
+    FireCommand(Game game) {
         this.game = game;
     }
 

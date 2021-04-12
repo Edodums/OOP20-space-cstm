@@ -21,8 +21,10 @@ import main.utils.enums.WeaponType;
 public class Game extends ObservableModel {
   private static final double MAX_X = 14;
   private static final double MAX_Y = 12;
+  
   private static final double ENEMIES_COLUMNS = 8;
   private static final double ENEMIES_ROWS = 3;
+  private static final double ENEMIES_NEXT_ROWS = 6;
 
   private final WeaponFactory weaponFactory = new WeaponFactory();
   private final EntityFactory entityFactory = new EntityFactory();
@@ -30,8 +32,8 @@ public class Game extends ObservableModel {
   private Set<Entity> entities = new HashSet<>();
   private final Map<Pair<Double, Double>, Optional<Entity>> grid = new HashMap<>();
   
-  private Integer gamePoints = 0;
-  private Integer aliveEnemies;
+  private double gamePoints = 0.0;
+  private double aliveEnemies;
   private String playerName;
   
   public Game() throws SettingsNotLoaded {
@@ -47,25 +49,25 @@ public class Game extends ObservableModel {
     initEntities(settings);
     initGrid();
     
-    setAliveEnemies((int) this.grid
-                                .entrySet()
-                                .stream()
-                                .filter(entry -> entry.getValue().isPresent())
-                                .filter(entry -> entry.getValue().get().isNpc())
-                                .count());
+    setAliveEnemies((double) this.grid
+                                 .entrySet()
+                                 .stream()
+                                 .filter(entry -> entry.getValue().isPresent())
+                                 .filter(entry -> entry.getValue().get().isNPC())
+                                 .count());
   }
   
   public void initEntities(Settings settings) {
     this.entities = settings.getEntityImage()
                           .stream()
-                          .map(entityImage -> entityFactory.getEntity(entityImage))
+                          .map(entityFactory::getEntity)
                           .collect(Collectors.toUnmodifiableSet());
   }
   
   public void updateGrid() {
     for (Entity entity : this.entities) {
-      if (entity.isNpc()) {
-        entity.move();
+      if (entity.isNPC()) {
+        entity.move((Collider) entity);
         this.grid.replace(entity.getPosition(), Optional.of(entity));
       }
     }
@@ -73,7 +75,7 @@ public class Game extends ObservableModel {
     fireGridChange();
   }
   
-  public void removeFromGrid(Pair<Integer, Integer> position) {
+  public void removeFromGrid(Pair<Double, Double> position) {
     if (this.grid.get(position).isPresent()) {
       this.grid.remove(position);
       fireGridChange();
@@ -83,7 +85,8 @@ public class Game extends ObservableModel {
   }
   
   public void primaryFire() {
-    getPlayerWeapon().deploy(new Pair<>(1, 1));
+    // TODO: change it with the current position of the player ( add a -1 to Y )
+    getPlayerWeapon().deploy(new Pair<>(1.0, 1.0));
   }
   
   public void collisionHandler() {
@@ -95,15 +98,30 @@ public class Game extends ObservableModel {
           });
   }
   
+  private void initGrid() {
+    IntStream.range(0, (int) getMaxX())
+          .boxed()
+          .flatMap(x -> IntStream.range(0, (int) getMaxY()).mapToObj(y -> new Pair<>(x, y)))
+          .forEach(pair -> this.grid.put(pair, Optional.empty()));
+    
+    this.entities.forEach(entity -> entity.create().forEach(this.grid::replace));
+    
+    fireGridChange();
+  }
+  
+  private void fireGridChange() {
+    firePropertyChange("grid", this.grid, this.grid);
+  }
+  
   public Weapon getPlayerWeapon() {
     return weaponFactory.getWeapon(WeaponType.PLAYER);
   }
   
-  public Map<Pair<Integer, Integer>, Optional<Entity>> getGrid() {
+  public Map<Pair<Double, Double>, Optional<Entity>> getGrid() {
     return grid;
   }
   
-  public Map<Pair<Integer, Integer>, Optional<Entity>> getFilteredEntitiesInGrid(Entity entityFilter) {
+  public Map<Pair<Double, Double>, Optional<Entity>> getFilteredEntitiesInGrid(Entity entityFilter) {
     return getGrid()
                  .entrySet()
                  .stream()
@@ -116,7 +134,7 @@ public class Game extends ObservableModel {
     
     getEntitySet()
           .stream()
-          .filter(Entity::isNpc)
+          .filter(Entity::isNPC)
           .forEach(entity -> {
             npcSet.addAll(getFilteredEntitiesInGrid(entity).values());
           });
@@ -127,28 +145,32 @@ public class Game extends ObservableModel {
   public Set<Entity> getEntitySet() {
     return Collections.unmodifiableSet(this.entities);
   }
-
+  
   public static double getEnemiesColumns(){
     return ENEMIES_COLUMNS;
   }
-
+  
   public static double getEnemiesRows(){
     return ENEMIES_ROWS;
   }
   
-  public static Integer getMaxX() {
+  public static double getEnemiesNextRows() {
+    return ENEMIES_NEXT_ROWS;
+  }
+  
+  public static double getMaxX() {
     return MAX_X;
   }
   
-  public static Integer getMaxY() {
+  public static double getMaxY() {
     return MAX_Y;
   }
   
-  public Integer getGamePoints() {
+  public double getGamePoints() {
     return gamePoints;
   }
   
-  public Integer getAliveEnemies() {
+  public double getAliveEnemies() {
     return aliveEnemies;
   }
   
@@ -157,30 +179,14 @@ public class Game extends ObservableModel {
     firePropertyChange("playerName", this.playerName, playerName);
   }
   
-  public void setGamePoints(Integer gamePoints) {
+  public void setGamePoints(double gamePoints) {
     this.gamePoints = gamePoints;
     firePropertyChange("gamePoints", this.gamePoints, gamePoints);
   }
   
-  public void setAliveEnemies(Integer aliveEnemies) {
+  public void setAliveEnemies(double aliveEnemies) {
     this.aliveEnemies = aliveEnemies;
     firePropertyChange("aliveEnemies", this.aliveEnemies, aliveEnemies);
-  }
-  
-  private void initGrid() {
-    IntStream.range(0, getMaxX())
-          .boxed()
-          .flatMap(x -> IntStream.range(0, getMaxY())
-                              .mapToObj(y -> new Pair<>(x, y)))
-          .forEach(pair -> this.grid.put(pair, Optional.empty()));
-    
-    this.entities.forEach(entity -> entity.create().forEach(this.grid::replace));
-    
-    fireGridChange();
-  }
-  
-  private void fireGridChange() {
-    firePropertyChange("grid", this.grid, this.grid);
   }
 }
 

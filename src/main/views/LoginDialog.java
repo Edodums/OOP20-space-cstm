@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import main.models.Game;
+import main.controllers.GameController;
 
 public class LoginDialog extends Dialog<String> {
     private static final String SAVE = "Save";
@@ -20,7 +20,7 @@ public class LoginDialog extends Dialog<String> {
     private final TextField playerName = new TextField();
     private final Button saveButton = (Button) this.getDialogPane().lookupButton(saveButtonType);
 
-    LoginDialog(Game game) {
+    LoginDialog(GameController controller) {
         setDialogTexts();
 
         saveButton.setDisable(true);
@@ -39,7 +39,7 @@ public class LoginDialog extends Dialog<String> {
             return null;
         });
 
-        showAndWait().ifPresent(game::setPlayerName);
+        showAndWait().ifPresent(controller::setPlayerName);
 
         DialogPane dialogPane = getDialogPane();
         dialogPane.getButtonTypes().addAll( saveButtonType, ButtonType.CANCEL );

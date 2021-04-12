@@ -1,9 +1,9 @@
-package main.views.command;
+package main.views.fire;
 
 import main.models.Game;
 
-public class PrimaryFireCommand extends Command {
-    public PrimaryFireCommand(Game game) {
+public class Primary extends FireCommand {
+    public Primary(Game game) {
         super(game);
     }
 
