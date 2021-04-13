@@ -1,7 +1,8 @@
 package main.utils.enums;
 
 public enum CurrentScene {
-    START,
+    GAME,
+    MENU,
     SETTINGS,
     RANKING;
 }
