@@ -16,8 +16,8 @@ public abstract class ObservableModel {
         }
     }
 
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        this.support.addPropertyChangeListener(propertyName, listener);
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        this.support.addPropertyChangeListener(pcl);
     }
 
     public void removePropertyChangeLister(PropertyChangeListener pcl) {

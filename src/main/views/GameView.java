@@ -1,5 +1,7 @@
 package main.views;
 
+import java.beans.PropertyChangeEvent;
+import java.util.Objects;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -7,18 +9,13 @@ import main.controllers.GameController;
 import main.events.PlayerShootEvent;
 import main.exceptions.SettingsNotLoaded;
 import main.models.Game;
-import main.models.components.MotherShip;
 import main.models.components.entities.CommonShip;
 import main.models.components.interfaces.Entity;
 import main.utils.GameLoop;
-import main.views.entities.CommonShipView;
-import main.views.entities.MotherShipView;
-import main.views.entities.interfaces.EntitySprite;
 import main.views.fire.Primary;
+import main.views.entities.CommonShipView;
+import main.views.entities.interfaces.EntitySprite;
 import org.greenrobot.eventbus.EventBus;
-
-import java.beans.PropertyChangeEvent;
-import java.util.Objects;
 
 public class GameView implements View {
   private final static double BOUND_FACTOR = 1.8;
@@ -61,10 +58,6 @@ public class GameView implements View {
     if (entity instanceof CommonShip) {
       return new CommonShipView();
     }
-
-    if (entity instanceof MotherShip){
-      return new MotherShipView();
-    }
     
     return null;
   }
@@ -78,17 +71,7 @@ public class GameView implements View {
       }
     });
   }
-
-  private void movementHandler() {
-    getParent().setOnKeyPressed(keyEvent -> {
-      if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
-        //   TODO: Player right
-      }
-      if (keyEvent.getCode().equals(KeyCode.LEFT)) {
-        //   TODO: Player left
-      }
-    });
-  }
+  
   private void updateCommonShip() {
     GameLoop timer = new GameLoop() {
       @Override

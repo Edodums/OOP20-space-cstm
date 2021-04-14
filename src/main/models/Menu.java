@@ -1,21 +1,19 @@
 package main.models;
 
-import main.utils.enums.CurrentScene;
+import main.utils.CurrentScene;
 
 public class Menu extends ObservableModel{
 
     private CurrentScene currentScene;
 
     public Menu(CurrentScene currentScene){
-        setCurrentScene(currentScene);
+        this.currentScene = currentScene;
     }
 
     public CurrentScene getCurrentScene(){
         return currentScene;
     }
-
     public void setCurrentScene(CurrentScene currentScene){
         this.currentScene = currentScene;
-        firePropertyChange("currentScene", this.currentScene, currentScene);
     }
 }
