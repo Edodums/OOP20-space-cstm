@@ -1,5 +1,6 @@
 package main.models.components;
 
+import main.models.EntityImage;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
 import main.utils.Pair;
@@ -14,19 +15,22 @@ import static java.awt.image.ImageObserver.WIDTH;
 
 public class MotherShip extends Collider implements Entity, Collidable {
 
-
-    private static final double COLUMNS = 1;
-    private static final double ROWS = 1;
+    private static final double POINTS = 100;
+    private static final double SPAWN_NUMBER = 1;
+    private static final double WIDTH = 4.0;
+    private static final double HEIGHT = 2.5;
     private static final Pair<Double,Double> STARTING_POINT = new Pair<>(0.0, 0.0);
 
-    public MotherShip(){}
+    private final EntityImage entityImage;
+
+    public MotherShip(EntityImage entityImage) {
+        super();
+        this.entityImage = entityImage;
+    }
 
     @Override
-    public Map<Pair<Double, Double>, Optional<Entity>> create(double newHashMap) {
-        MotherShip motherShip = this ;
-
-        return Collections.unmodifiableMap(new HashMap<>(){{
-            put(STARTING_POINT, Optional.of(motherShip)); }});
+    public Map<Pair<Double, Double>, Optional<Entity>> create() {
+        return Map.of(STARTING_POINT, Optional.of(this));
     }
 
     @Override
@@ -40,7 +44,9 @@ public class MotherShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public Pair<Double, Double> getPosition() { return STARTING_POINT; }
+    public Pair<Double, Double> getPosition() {
+        return STARTING_POINT;
+    }
 
     @Override
     public void fire() { }
@@ -49,11 +55,14 @@ public class MotherShip extends Collider implements Entity, Collidable {
     public void die() {System.out.println("Mothership is dead!");}
 
     @Override
-    public double getSpawnNumber() { return getMotherShipColumns() * getMotherShipRows(); }
+    public double getPointsValue() {
+        return POINTS;
+    }
 
-    private double getMotherShipRows() { return ROWS; }
-
-    private double getMotherShipColumns() {return COLUMNS; }
+    @Override
+    public double getSpawnNumber() {
+        return SPAWN_NUMBER ;
+    }
 
     public Pair<Double, Double> getStartingPoint() {
         return STARTING_POINT;
