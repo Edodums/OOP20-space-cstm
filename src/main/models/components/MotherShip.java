@@ -1,12 +1,13 @@
 package main.models.components;
 
-import main.models.EntityImage;
-import main.models.components.interfaces.Collidable;
+import main.views.entities.interfaces.EntitySprite;
 import main.models.components.interfaces.Entity;
+import main.models.EntityImage;
 import main.utils.Pair;
-
 import java.util.Map;
 import java.util.Optional;
+import javafx.scene.image.ImageView;
+
 
 public class MotherShip extends Collider implements Entity, Collidable {
 
