@@ -1,13 +1,15 @@
 package main.models;
 
 import main.utils.enums.CurrentScene;
+import java.beans.PropertyChangeSupport;
 
-public class Menu extends ObservableModel{
+public class Menu implements ObservableModel{
 
     private CurrentScene currentScene;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    public Menu(CurrentScene currentScene){
-        setCurrentScene(currentScene);
+    public Menu(){
+        //empty
     }
 
     public CurrentScene getCurrentScene(){
@@ -15,7 +17,12 @@ public class Menu extends ObservableModel{
     }
 
     public void setCurrentScene(CurrentScene currentScene){
-        this.currentScene = currentScene;
         firePropertyChange("currentScene", this.currentScene, currentScene);
+        this.currentScene = currentScene;
+    }
+
+    @Override
+    public PropertyChangeSupport getSupport() {
+        return this.support;
     }
 }

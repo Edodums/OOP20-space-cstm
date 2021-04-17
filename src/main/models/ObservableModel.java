@@ -3,24 +3,22 @@ package main.models;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public abstract class ObservableModel {
-    private PropertyChangeSupport support;
+public interface ObservableModel {
+     PropertyChangeSupport getSupport();
 
-    protected void setSupport(PropertyChangeSupport support) {
-        this.support = support;
-    }
-
-    public void firePropertyChange(String propertyName, Object field, Object value) {
-        if (field.getClass() == value.getClass() && !propertyName.trim().isEmpty()) {
-            this.support.firePropertyChange(propertyName, field, value);
+    default void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+            getSupport().firePropertyChange(propertyName, oldValue, newValue);
         }
+
+    default void addPropertyChangeListener(PropertyChangeListener listener) {
+        getSupport().addPropertyChangeListener(listener);
     }
 
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        this.support.addPropertyChangeListener(propertyName, listener);
+    default void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        getSupport().addPropertyChangeListener(propertyName, listener);
     }
 
-    public void removePropertyChangeLister(PropertyChangeListener pcl) {
-        this.support.removePropertyChangeListener(pcl);
+    default void removePropertyChangeLister(PropertyChangeListener pcl) {
+        getSupport().removePropertyChangeListener(pcl);
     }
 }
