@@ -5,13 +5,8 @@ import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
 import main.utils.Pair;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.awt.image.ImageObserver.HEIGHT;
-import static java.awt.image.ImageObserver.WIDTH;
 
 public class MotherShip extends Collider implements Entity, Collidable {
 
@@ -49,10 +44,17 @@ public class MotherShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public void fire() { }
+    public void fire() {
+        //empty
+    }
 
     @Override
     public void die() {System.out.println("Mothership is dead!");}
+
+    @Override
+    public EntityImage getEntityImage(){
+        return this.entityImage;
+    }
 
     @Override
     public double getPointsValue() {
@@ -67,6 +69,5 @@ public class MotherShip extends Collider implements Entity, Collidable {
     public Pair<Double, Double> getStartingPoint() {
         return STARTING_POINT;
     }
-
 }
 
