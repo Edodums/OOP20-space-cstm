@@ -1,18 +1,22 @@
 package main.views;
 
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import main.controllers.RankingController;
-import org.w3c.dom.Text;
+import main.models.Ranking;
 
 import java.beans.PropertyChangeEvent;
 
 public class RankingView implements View{
     private static final double BOUND_FACTOR = 2.0;
     private GridPane parent;
-    private final RankingController model;
+    private final Ranking model;
     private final RankingController controller;
 
 
-    public RankingView(RankingController model, RankingController controller){
+    public RankingView(Ranking model, RankingController controller){
         this.model = model;
         this.controller = controller;
 
