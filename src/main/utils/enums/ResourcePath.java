@@ -1,7 +1,7 @@
 package main.utils.enums;
 
 public enum ResourcePath {
-    VIEWS_PATH("../views/"),
+    VIEWS_PATH("../../resources/layout/"),
     IMAGES_PATH("../../resources/assets/images/");
 
     private final String path;
