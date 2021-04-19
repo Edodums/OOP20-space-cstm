@@ -1,5 +1,7 @@
 package main.utils.enums;
 
+import java.io.File;
+
 public enum ResourcePath {
     VIEWS_PATH("../../resources/layout/"),
     IMAGES_PATH("../../resources/assets/images/");
@@ -10,6 +12,6 @@ public enum ResourcePath {
 
     @Override
     public String toString() {
-        return path;
+        return path.replaceAll("\\\\/", File.separator);
     }
 }
