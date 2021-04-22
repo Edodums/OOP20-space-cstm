@@ -2,18 +2,17 @@ package main.views;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.controllers.*;
-import main.models.Game;
 import main.models.Menu;
-import main.models.Ranking;
 import main.utils.enums.CurrentScene;
 import main.utils.enums.Fxml;
 
@@ -23,7 +22,9 @@ public class MenuView implements View {
     private static final Menu model = new Menu();
     private static final MenuController controller = new MenuController(model);
 
-    private Stage stage;
+    private static Map<CurrentScene, View> views = new HashMap<>();
+
+    private static Stage stage;
     private Scene scene;
     private FXMLLoader loader;
 
@@ -66,7 +67,7 @@ public class MenuView implements View {
     }
 
     @Override
-    public Parent getParent() {
+    public Pane getParent() {
         return this.parent;
     }
 
@@ -82,13 +83,19 @@ public class MenuView implements View {
         return Fxml.valueOf(currentScene.toString()).getFilePath();
     }
 
-    private View getViewInstance(CurrentScene scene) {
-        return switch (scene) {
-            case GAME -> new GameView(new Game(), (GameController) getController());
-            // case SETTINGS -> new SettingsView();
-            case RANKING -> new RankingView(new Ranking(), (RankingController) getController());
-            case MENU -> new MenuView(this.stage);
-        };
+    private void getViewInstance(CurrentScene scene) {
+        View view = views.get(scene);
+
+        if (view == null) {
+            switch (scene) {
+                case GAME -> view = (GameView) getViewController();
+                case SETTINGS -> view = (SettingsView) getViewController();
+                case RANKING -> view = (RankingView) getViewController();
+                case MENU -> view = this;
+            };
+
+            views.put(scene, view);
+        }
     }
 
     private void setNewScene(CurrentScene newScene) {
@@ -104,7 +111,7 @@ public class MenuView implements View {
         getStage().show();
     }
 
-    private Controller getController() {
+    private View getViewController() {
         return this.loader.getController();
     }
 
@@ -125,10 +132,10 @@ public class MenuView implements View {
     }
 
     private void setStage(final Stage stage) {
-        this.stage = stage;
+        MenuView.stage = stage;
     }
 
-    private Stage getStage() {
-        return this.stage;
+    public static Stage getStage() {
+        return stage;
     }
 }
