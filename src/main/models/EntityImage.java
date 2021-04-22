@@ -1,5 +1,7 @@
 package main.models;
 
+import main.models.settings.Grid;
+import main.models.settings.Type;
 import main.utils.enums.EntityType;
 import main.utils.enums.WeaponType;
 
