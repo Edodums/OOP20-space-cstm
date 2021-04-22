@@ -44,18 +44,21 @@ public class YamlService {
     }
 
     private File getFile(String filename){
+        String completeFilename = filename.concat(".").concat(FileType.YAML.toString());
         String yamlPath = ResourcePath.DATA_PATH.toString();
-        
-        if (JarService.runningFromJar()) {
+
+        if (JarService.runningFromJar())  {
+            String defaultYamlPath = yamlPath;
             yamlPath = ResourcePath.EXTERNAL_DATA_PATH.toString();
-            
+
             try {
-                FileService.createDirectoryIfNotExist(ResourcePath.EXTERNAL_DATA_PATH.toString());
-            } catch (DirectoryNotCreated directoryNotCreated) {
+                FileService.createDirectoryIfNotExist(yamlPath);
+                FileService.copyFile(defaultYamlPath.concat(completeFilename), yamlPath.concat(completeFilename));
+            } catch (DirectoryNotCreated | IOException directoryNotCreated) {
                 directoryNotCreated.printStackTrace();
             }
         }
-        
-        return new File(yamlPath.concat(filename).concat(".").concat(FileType.YAML.toString()));
+
+        return new File(yamlPath.concat(completeFilename));
     }
 }
