@@ -1,13 +1,13 @@
 package main.views;
 
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 
 import java.beans.PropertyChangeListener;
 
 public interface View extends PropertyChangeListener {
-  Parent getParent();
+  Pane getParent();
   
   double getBoundFactor();
   

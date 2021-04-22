@@ -1,7 +1,8 @@
 package main.utils.enums;
 
 public enum FileType {
-    FXML("fxml");
+    FXML("fxml"),
+    YAML("yaml");
 
     private final String type;
 
