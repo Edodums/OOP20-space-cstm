@@ -4,15 +4,13 @@ import main.models.ObservableModel;
 import main.models.Ranking;
 import main.services.YamlService;
 
-import java.util.Map;
-
 public class RankingController implements Controller {
 
+    private static final YamlService yamlService = new YamlService();
     private Ranking model;
-    private final YamlService yamlService = new YamlService();
 
-    public RankingController() {
-        setModel(new Ranking());
+    public RankingController(Ranking ranking) {
+        setModel(ranking);
     }
 
     @Override
@@ -20,9 +18,16 @@ public class RankingController implements Controller {
         this.model = (Ranking) model;
     }
 
-    public Map<String, Double> load() {
-        Ranking ranking = (Ranking) this.yamlService.readFile("ranking", model);
+    public static Ranking load() {
+        return (Ranking) yamlService.readFile("ranking", Ranking.class);
+    }
 
-        return ranking.getRankingList();
+    public void write() {
+        yamlService.writeFile("ranking", getModel());
+    }
+
+    public Ranking getModel() {
+        return this.model;
     }
 }
+
