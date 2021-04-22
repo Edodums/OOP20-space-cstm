@@ -8,15 +8,14 @@ public enum Fxml {
 
     private final String filename;
 
-    Fxml(String filename) {
+    Fxml(String filename){
         this.filename = filename;
     }
 
-    @Override
-    public String toString() {
+    public String getFilePath(){
         return ResourcePath.VIEWS_PATH.toString()
-                       .concat(filename)
-                       .concat(".")
-                       .concat(FileType.FXML.toString());
+                .concat(filename)
+                .concat(".")
+                .concat(FileType.FXML.toString());
     }
 }
