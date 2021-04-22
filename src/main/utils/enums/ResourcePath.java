@@ -3,6 +3,7 @@ package main.utils.enums;
 import java.io.File;
 import java.util.regex.Pattern;
 
+
 public enum ResourcePath {
     HOME_PATH(System.getProperty("user.home")),
     VIEWS_PATH("../../resources/layout/"),

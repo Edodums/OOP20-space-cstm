@@ -17,8 +17,9 @@ public class Menu implements ObservableModel{
     }
 
     public void setCurrentScene(CurrentScene currentScene){
-        firePropertyChange("currentScene", this.currentScene, currentScene);
+        CurrentScene oldValue = this.currentScene;
         this.currentScene = currentScene;
+        firePropertyChange("currentScene", oldValue, currentScene);
     }
 
     @Override

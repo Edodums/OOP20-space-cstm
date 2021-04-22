@@ -8,6 +8,7 @@ import main.utils.Pair;
 import java.util.Map;
 import java.util.Optional;
 
+
 public class MotherShip extends Collider implements Entity, Collidable {
 
     private static final double POINTS = 100;
