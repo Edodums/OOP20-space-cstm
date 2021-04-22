@@ -7,6 +7,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -70,5 +73,11 @@ public class FileService {
     int i = name.lastIndexOf('.');
   
     return i > 0 ? name.substring(i + 1) : "";
+  }
+
+  public static void copyFile(String pathCopy, String pathPaste) throws IOException {
+    if (!Files.exists(Path.of(pathPaste))) {
+      Files.copy(Paths.get(pathCopy), Paths.get(pathPaste));
+    }
   }
 }
