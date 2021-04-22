@@ -2,35 +2,33 @@ package main.controllers;
 
 
 import main.models.ObservableModel;
-import main.models.Settings;
+import main.models.settings.Settings;
 import main.services.YamlService;
-import main.views.View;
-
-
 
 public class SettingsController implements Controller {
 
-    private final YamlService yamlService = new YamlService();
+    private static final YamlService yamlService = new YamlService();
     private Settings model;
 
-    public SettingsController(){
-        setModel(new Settings());
+    public SettingsController(Settings settings) {
+        setModel(settings);
+        getModel().loadDefault();
     }
-
-
+    
     @Override
     public void setModel(ObservableModel model) {
         this.model = (Settings) model;
     }
 
-    public Settings load() {
-        return (Settings) this.yamlService.readFile("settings", model);
+    public static Settings load() {
+         return (Settings) yamlService.readFile("settings", Settings.class);
     }
-
-
-
-    @Override
-    public void setView(View view) {
-
+    
+    public void write() {
+        yamlService.writeFile("settings", getModel());
+    }
+  
+    public Settings getModel() {
+        return this.model;
     }
 }
