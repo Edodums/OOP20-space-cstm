@@ -10,6 +10,9 @@ import java.util.WeakHashMap;
 import main.models.ObservableModel;
 import main.utils.enums.Orientations;
 
+/**
+ *
+ */
 public class Settings implements ObservableModel {
     @JsonIgnore
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);

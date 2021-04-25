@@ -1,5 +1,10 @@
 package main.models.settings;
 
+
+import main.utils.enums.EntityType;
+import main.utils.enums.Orientations;
+import main.utils.enums.ResourcePath;
+import main.utils.enums.WeaponType;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Map;
@@ -9,6 +14,9 @@ import main.utils.enums.Orientations;
 import main.utils.enums.ResourcePath;
 import main.utils.enums.WeaponType;
 
+/**
+ * I take the fields of the class i am in through the use of interface
+ */
 public class CustomizeDefaults {
   private static final Orientations orientation = Orientations.VERTICAL;
   private static final TypeImage weaponNpc = new TypeImage(ResourcePath.IMAGES_PATH + "enemy_laser.png", WeaponType.NPC, new Grid(3,5,1,1));
@@ -18,14 +26,23 @@ public class CustomizeDefaults {
   private static final TypeImage entityMotherShip = new TypeImage(ResourcePath.IMAGES_PATH + "mother_ship_sprites.png", EntityType.MOTHERSHIP, new Grid(6,2,3,0));
 
   private CustomizeDefaults() {}
-  
+
+    /**
+     * Check if at least one of the field in settings is null
+     * @param settings
+     * @return
+     */
   public static boolean areDefaultsNeeded(final Settings settings) {
     Map<String, TypeImage> typeImages = settings.getTypeImages();
     Orientations orientation = settings.getOrientation();
     
     return orientation == null || typeImages.entrySet().stream().anyMatch(entry -> entry.getValue() == null);
   }
-  
+
+    /**
+     * In this method i make the comparison between the fields of this class and the fields of the settings class , by checking that they have the same names.
+     * @param settings
+     */
   public static void loadDefaults(final Settings settings)  {
     final Field[] fields = getFields();
     final Map<String, TypeImage> typeImages = settings.getTypeImages();
@@ -34,13 +51,15 @@ public class CustomizeDefaults {
     if (orientation == null) {
       settings.setOrientation(CustomizeDefaults.orientation);
     }
-    
+      /**
+       * through the couple entrySet() and stream() i can make the filter for the objects that are not null
+       */
     typeImages
           .entrySet()
           .stream()
           .filter(Objects::nonNull)
           .forEach(entry ->
-            Arrays.stream(fields).forEach(field -> {
+            Arrays.stream(fields).forEach(field -> { // check if the file is not static
               if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
                 return;
               }
@@ -50,15 +69,15 @@ public class CustomizeDefaults {
               }
   
               try {
-                TypeImage fieldTypeImage = (TypeImage) field.get(0);
-                typeImages.putIfAbsent(entry.getKey(), fieldTypeImage);
+                TypeImage fieldTypeImage = (TypeImage) field.get(0); //keep the right field
+                typeImages.putIfAbsent(entry.getKey(), fieldTypeImage);//key of the entry
               } catch (IllegalAccessException e) {
                 e.printStackTrace();
               }
             })
           );
     
-    settings.setTypeImages(typeImages);
+    settings.setTypeImages(typeImages);//takes the new type image and puts it into settings
   }
   
   private static Field[] getFields() {
