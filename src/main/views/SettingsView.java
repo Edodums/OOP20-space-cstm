@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -20,7 +21,9 @@ import main.views.customization.interfaces.Customizable;
 import main.views.customization.interfaces.CustomizableOrientation;
 import main.views.customization.interfaces.CustomizableTypeImage;
 
-
+/**
+ * The view part of settings
+ */
 public class SettingsView implements View, Initializable {
     private static final double BOUND_FACTOR = 1.4;
     private static final SettingsController controller = new SettingsController(SettingsController.load());
@@ -48,6 +51,7 @@ public class SettingsView implements View, Initializable {
     public void propertyChange(PropertyChangeEvent evt) {
         // empty
     }
+
     
     @Override
     public void setStage(Stage stage) {
@@ -59,11 +63,22 @@ public class SettingsView implements View, Initializable {
         return this.stage;
     }
     
+
+
+    /**
+     * call the interface method , setDefaults
+     * @param event
+     */
+
     @FXML
     public void cancelSettings(ActionEvent event) {
         CustomizableComponentFactory.components.forEach(Customizable::setDefaults);
     }
-    
+
+    /**
+     *
+     * @param event
+     */
     @FXML
     public void saveSettings(ActionEvent event) {
         CustomizableComponentFactory
@@ -92,9 +107,24 @@ public class SettingsView implements View, Initializable {
         
         controller.write();
     }
-    
+
+    /**
+     * Add a parent the components through the factory (static factory method) which makes use of static methods
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        getParent().getChildren().addAll(CustomizableComponentFactory.getCustomizableComponents(controller.getModel()));
+
+        ScrollPane scrollPane = new ScrollPane();
+        //Rectangle rectangle = new Rectangle(800,600);
+        scrollPane.setPrefSize(600, 400);
+        //scrollPane.setContent(rectangle);
+        CustomizableComponentFactory.getCustomizableComponents(controller.getModel()).forEach(scrollPane::setContent);
+        scrollPane.fitToWidthProperty().set(true);
+        scrollPane.pannableProperty().set(true);
+        getParent().getChildren().add(scrollPane);
+
+        //getParent().getChildren().addAll(CustomizableComponentFactory.getCustomizableComponents(controller.getModel()));
     }
 }

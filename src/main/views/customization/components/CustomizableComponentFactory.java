@@ -16,12 +16,20 @@ import main.views.customization.interfaces.Customizable;
 import main.views.customization.interfaces.CustomizableOrientation;
 import main.views.customization.interfaces.CustomizableTypeImage;
 
+/**
+ * A static Factory methods class for fxml components binding with the class that implements customizable.
+ */
 public class CustomizableComponentFactory {
   public static final Set<Customizable> components = new HashSet<>();
   private static final Set<File> files = FileService.getAllFilesInDirectory(ResourcePath.SETTINGS_COMPONENTS.toString());
   
   private CustomizableComponentFactory() {}
-  
+
+  /**
+   * This method get all the files in the directory.
+   * @param settings
+   * @return
+   */
   public static Set<Group> getCustomizableComponents(final Settings settings) {
     final Orientations orientation = settings.getOrientation();
     final Map<String, TypeImage> typeImages = settings.getTypeImages();
@@ -30,9 +38,9 @@ public class CustomizableComponentFactory {
   
     files.forEach(file -> {
       try {
-        final FXMLLoader loader = new FXMLLoader(file.toURI().toURL());
-        final Group group = loader.load();
-        final Customizable component = loader.getController();
+        final FXMLLoader loader = new FXMLLoader(file.toURI().toURL()); // Get files with FXMLLoader
+        final Group group = loader.load(); // load files in group
+        final Customizable component = loader.getController(); // get the controller from fx:controller in the file fxml. GetController call also the method Initialize of the components
         
         if (component instanceof CustomizableOrientation)  {
            ((CustomizableOrientation) component).setOrientationValue(orientation);
@@ -43,14 +51,14 @@ public class CustomizableComponentFactory {
           ((CustomizableTypeImage) component).setTypeImage(typeImage);
         }
   
-        component.setDefaults();
+        component.setDefaults(); // set default for each file
         components.add(component);
-        customizableSet.add(group);
+        customizableSet.add(group); // add the group in the file to customizableSet
       } catch (IOException e) {
         e.printStackTrace();
       }
     });
   
-    return customizableSet;
+    return customizableSet; // Add customizableSet (that is a set of the group) to parent that is in Settings.
   }
 }
