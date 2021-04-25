@@ -12,10 +12,18 @@ public enum WeaponType implements Type {
     PLAYER;
     
     public static Type getType(String value) {
-        return switch (value) {
-            case "weaponPlayer" -> WeaponType.PLAYER;
-            case "weaponNpc" -> WeaponType.NPC;
-            default -> throw new IllegalStateException("Unexpected type value: " + value);
+        Type type;
+        
+        switch (value) {
+            case "weaponPlayer":
+                type = WeaponType.PLAYER;
+                break;
+            case "weaponNpc":
+                type = WeaponType.NPC;
+                break;
+            default: throw new IllegalStateException("Unexpected type value: " + value);
         };
+        
+        return type;
     }
 }
