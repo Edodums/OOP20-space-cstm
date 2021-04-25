@@ -10,11 +10,21 @@ public enum EntityType implements Type {
    MOTHERSHIP;
    
    public static Type getType(String value) {
-      return switch (value) {
-        case "entityPlayer" -> EntityType.PLAYER;
-        case "entityCommonShip" -> EntityType.COMMONSHIP;
-        case "entityMotherShip" -> EntityType.MOTHERSHIP;
-        default -> throw new IllegalStateException("Unexpected type value: " + value);
-      };
+     Type type;
+     
+     switch (value) {
+       case "entityPlayer":
+         type = EntityType.PLAYER;
+         break;
+       case "entityCommonShip":
+         type = EntityType.COMMONSHIP;
+         break;
+       case "entityMotherShip":
+         type = EntityType.MOTHERSHIP;
+         break;
+       default: throw new IllegalStateException("Unexpected type value: " + value);
+     };
+     
+     return type;
    }
 }
