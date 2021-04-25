@@ -2,15 +2,19 @@ package main.views;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import main.controllers.*;
 import main.models.Menu;
 import main.utils.enums.CurrentScene;
@@ -22,12 +26,12 @@ public class MenuView implements View {
     private static final Menu model = new Menu();
     private static final MenuController controller = new MenuController(model);
 
-    private static Map<CurrentScene, View> views = new HashMap<>();
+        private final Map<CurrentScene, View> views = new HashMap<>();
 
-    private static Stage stage;
+    private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-
+    
     @FXML
     private Pane parent;
 
@@ -70,6 +74,16 @@ public class MenuView implements View {
     public Pane getParent() {
         return this.parent;
     }
+    
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+    
+    @Override
+    public Stage getStage() {
+        return this.stage;
+    }
 
     private Scene getScene() {
         return this.scene;
@@ -83,40 +97,33 @@ public class MenuView implements View {
         return Fxml.valueOf(currentScene.toString()).getFilePath();
     }
 
-    private void getViewInstance(CurrentScene scene) {
-        View view = views.get(scene);
-
-        if (view == null) {
-            switch (scene) {
-                case GAME -> view = (GameView) getViewController();
-                case SETTINGS -> view = (SettingsView) getViewController();
-                case RANKING -> view = (RankingView) getViewController();
-                case MENU -> view = this;
-            };
-
-            views.put(scene, view);
-        }
+    private View getViewInstance(CurrentScene scene) {
+        return this.views.get(scene);
     }
 
     private void setNewScene(CurrentScene newScene) {
         setLoader(getFxmlFromCurrentScene(newScene));
+        setLoaderFactory(newScene);
         setParent();
-        getViewInstance(newScene);
-        setScene();
+        
+        final View view = getViewInstance(newScene);
+        
+        setScene(view);
         setUpdatedStage();
+        view.setStage(getStage());
+        
+        if (view instanceof MovementHandler) {
+            ((MovementHandler) view).movementHandler();
+        }
     }
 
     private void setUpdatedStage() {
         getStage().setScene(getScene());
         getStage().show();
     }
-
-    private View getViewController() {
-        return this.loader.getController();
-    }
-
-    private void setScene() {
-        this.scene = new Scene(getParent(), getWidth(), getHeight());
+    
+    private void setScene(View viewInstance) {
+        this.scene = new Scene(viewInstance.getParent(), viewInstance.getWidth(), viewInstance.getHeight());
     }
 
     private void setParent() {
@@ -130,12 +137,27 @@ public class MenuView implements View {
     private void setLoader(String filename) {
         this.loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(filename)));
     }
-
-    private void setStage(final Stage stage) {
-        MenuView.stage = stage;
-    }
-
-    public static Stage getStage() {
-        return stage;
+    
+    private void setLoaderFactory(CurrentScene currentScene)
+    {
+        this.loader.setControllerFactory(clazz -> {
+            try {
+                View view = views.get(currentScene);
+    
+                if (view != null) {
+                    return view;
+                }
+                
+                view = (View) clazz.getConstructor().newInstance();
+                
+                views.put(currentScene, view);
+                
+                return view;
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            
+            return null;
+        });
     }
 }
