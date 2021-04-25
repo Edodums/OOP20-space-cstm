@@ -1,5 +1,6 @@
 package main.services;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,7 +23,7 @@ public class YamlService {
         try {
             this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
             this.objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-            
+            this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             this.objectMapper.writeValue(getFile(filename), model);
         } catch (IOException e) {
             e.printStackTrace();
