@@ -1,12 +1,12 @@
-package main.models.components;
-
-import main.models.EntityImage;
-import main.models.components.interfaces.Collidable;
-import main.models.components.interfaces.Entity;
-import main.utils.Pair;
+package main.models.components.entities;
 
 import java.util.Map;
 import java.util.Optional;
+import main.models.components.Collider;
+import main.models.components.interfaces.Collidable;
+import main.models.components.interfaces.Entity;
+import main.models.settings.TypeImage;
+import main.utils.Pair;
 
 
 public class MotherShip extends Collider implements Entity, Collidable {
@@ -17,11 +17,11 @@ public class MotherShip extends Collider implements Entity, Collidable {
     private static final double HEIGHT = 2.5;
     private static final Pair<Double,Double> STARTING_POINT = new Pair<>(0.0, 0.0);
 
-    private final EntityImage entityImage;
+    private final TypeImage typeImage;
 
-    public MotherShip(EntityImage entityImage) {
+    public MotherShip(TypeImage typeImage) {
         super();
-        this.entityImage = entityImage;
+        this.typeImage = typeImage;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class MotherShip extends Collider implements Entity, Collidable {
 
     @Override
     public void die() {System.out.println("Mothership is dead!");}
-
+  
     @Override
-    public EntityImage getEntityImage(){
-        return this.entityImage;
+    public TypeImage getTypeImages() {
+      return this.typeImage;
     }
-
+  
     @Override
     public double getPointsValue() {
         return POINTS;

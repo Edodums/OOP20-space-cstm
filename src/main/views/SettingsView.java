@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import main.controllers.SettingsController;
 import main.models.settings.Grid;
 import main.models.settings.Type;
@@ -23,6 +24,8 @@ import main.views.customization.interfaces.CustomizableTypeImage;
 public class SettingsView implements View, Initializable {
     private static final double BOUND_FACTOR = 1.4;
     private static final SettingsController controller = new SettingsController(SettingsController.load());
+    
+    private Stage stage;
     
     @FXML
     private AnchorPane parent;
@@ -44,6 +47,16 @@ public class SettingsView implements View, Initializable {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         // empty
+    }
+    
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+    
+    @Override
+    public Stage getStage() {
+        return this.stage;
     }
     
     @FXML

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="382.0" minWidth="606.0" prefHeight="382.0" prefWidth="606.0" styleClass="anchor" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.views.MenuView">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="382.0" minWidth="606.0" prefHeight="382.0" prefWidth="606.0" styleClass="anchor" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.views.MenuView" fx:id="parent">
    <stylesheets>
       <URL value="@../../resources/assets/css/menu.css" />
    </stylesheets>

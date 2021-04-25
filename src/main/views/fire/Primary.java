@@ -9,6 +9,6 @@ public class Primary extends FireCommand {
 
     @Override
     public void execute() {
-        game.primaryFire();
+        getGame().primaryFire();
     }
 }

@@ -7,8 +7,8 @@ public interface ObservableModel {
      PropertyChangeSupport getSupport();
 
     default void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-            getSupport().firePropertyChange(propertyName, oldValue, newValue);
-        }
+        getSupport().firePropertyChange(propertyName, oldValue, newValue);
+    }
 
     default void addPropertyChangeListener(PropertyChangeListener listener) {
         getSupport().addPropertyChangeListener(listener);

@@ -3,8 +3,8 @@
 <?import java.net.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane styleClass="gameBackground" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="main.controllers.GameController">
+<AnchorPane styleClass="gameBackground" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="main.views.GameView" fx:id="parent">
     <stylesheets>
         <URL value="@../../resources/assets/css/game.css" />
     </stylesheets>
-</GridPane>
+</AnchorPane>

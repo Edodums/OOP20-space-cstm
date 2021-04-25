@@ -9,11 +9,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import main.controllers.RankingController;
 
 public class RankingView implements View, Initializable {
     private static final double BOUND_FACTOR = 2.0;
     private static final RankingController controller = new RankingController(RankingController.load());
+    
+    private Stage stage;
 
     @FXML
     private VBox rankingVBox;
@@ -32,7 +35,17 @@ public class RankingView implements View, Initializable {
     public double getBoundFactor() {
         return BOUND_FACTOR;
     }
-
+    
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+    
+    @Override
+    public Stage getStage() {
+        return this.stage;
+    }
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         // empty because read-only
