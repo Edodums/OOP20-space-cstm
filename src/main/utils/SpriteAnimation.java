@@ -11,64 +11,40 @@ import javafx.util.Duration;
  * Taken from here: https://netopyr.com/2012/03/09/creating-a-sprite-animation-with-javafx/
  */
 public class SpriteAnimation extends Transition {
-  private static final Integer OFFSET_X = 6;
-  private static final Integer OFFSET_Y = 4;
-  private static final Duration DURATION = new Duration(2.0);
+  private static final Duration DURATION = new Duration(400.0);
 
   private final ImageView imageView;
-  private final int count;
-  private final int columns;
-  private final int rows;
-  private final int width;
-  private final int height;
+  private final double count;
+  private final double columns;
+  private final double width;
+  private final double height;
 
-  private int lastIndex;
+  private double lastIndex;
 
   /**
-    * Pass imageView and it's data, probably will use reflection.
-    *
-    * @param imageView
-    *
-    * @param count
-    *
-    * @param columns
-    *
-    * @param rows
-    *
-    * @param width
-    *
-    * @param height
+    * Pass the imageView, set duration of animation and a linear interpolator
+    *  @param imageView
+    *  @param count
+    *  @param columns
    *
   */
-  public SpriteAnimation(
-       ImageView imageView,
-        int count,
-        int columns,
-        int rows,
-        int width,
-        int height
-  ) {
+  public SpriteAnimation(ImageView imageView, double count, double columns) {
     this.imageView = imageView;
-    this.count     = count;
-    this.columns   = columns;
-    this.rows   = rows;
-    this.width     = width;
-    this.height    = height;
+    this.count = count;
+    this.columns = columns;
+    this.width = imageView.getImage().getWidth();
+    this.height = imageView.getImage().getHeight();
 
     setCycleDuration(DURATION);
     setInterpolator(Interpolator.LINEAR);
   }
 
   protected void interpolate(double k) {
-    final int index = Math.min((int) Math.floor(k * count), count - 1);
+    final double index = Math.floor(k * count);
 
     if (index != lastIndex) {
-      final int columnIndex = index % columns;
-      final int rowIndex = index % rows;
-      final int x =  columnIndex * (width  + OFFSET_X);
-      final int y = rowIndex * height + OFFSET_Y;
-
-      imageView.setViewport(new Rectangle2D(x, y, width, height));
+      final double x = index % columns * (width / columns);
+      imageView.setViewport(new Rectangle2D(x, 0, width / columns, height));
 
       lastIndex = index;
     }
