@@ -6,15 +6,26 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class EventManager {
-  private final Game gameModel = new Game();
+  private final Game gameModel;
   
-  public EventManager() {
+  public EventManager(final Game gameModel) {
+    this.gameModel = gameModel;
     EventBus.getDefault().register(this);
   }
   
+  @Subscribe
   public void onPlayerShoot(PlayerShootEvent playerShootEvent) {
     // TODO: check if this implementation makes sense and if it works
     gameModel.collisionHandler();
+  }
+  @Subscribe
+  public void onPlayerGoRight(PlayerGoRightEvent playerGoRightEvent) {
+    playerGoRightEvent.goRight();
+  }
+  
+  @Subscribe
+  public void onPlayerGoLeft(PlayerGoLeftEvent playerGoLeftEvent) {
+    playerGoLeftEvent.goLeft();
   }
    
   @Subscribe
