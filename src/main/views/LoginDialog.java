@@ -6,28 +6,35 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import main.controllers.GameController;
 
-public class LoginDialog extends Dialog<String> {
+public class LoginDialog extends Dialog<String>  {
     private static final String SAVE = "Save";
     private static final String PLAYER_LABEL = "Player Name";
     private static final String PLAYER_PROMPT_TEXT = "Player Name here";
     private static final String TITLE_TEXT = "Set the Player name";
     private static final String HEADER_TEXT = "If you don't put one, how we'll know who's the best?";
 
-    private static final Integer MIN_LENGHT_PLAYER_NAME = 3;
+    private static final Integer MIN_LENGTH_PLAYER_NAME = 3;
 
     private final Label userLabel = new Label(PLAYER_LABEL);
-    private final ButtonType saveButtonType = new ButtonType(SAVE, ButtonBar.ButtonData.OK_DONE);
     private final TextField playerName = new TextField();
-    private final Button saveButton = (Button) this.getDialogPane().lookupButton(saveButtonType);
+    
 
     LoginDialog(GameController controller) {
         setDialogTexts();
-
+    
+        final ButtonType saveButtonType = new ButtonType(SAVE, ButtonBar.ButtonData.OK_DONE);
+        
+        getDialogPane().getButtonTypes().addAll( saveButtonType, ButtonType.CANCEL );
+        getDialogPane().setContent( createVBox() );
+        
+        final Button saveButton = (Button) this.getDialogPane().lookupButton(saveButtonType);
         saveButton.setDisable(true);
 
         playerName.textProperty().addListener((observable, oldValue, newValue ) ->
-                saveButton.setDisable(newValue.trim().isEmpty() && newValue.length() > MIN_LENGHT_PLAYER_NAME)
+                saveButton.setDisable(newValue.trim().isEmpty() && newValue.length() > MIN_LENGTH_PLAYER_NAME)
         );
+    
+        
 
         Platform.runLater(playerName::requestFocus);
 
@@ -40,10 +47,6 @@ public class LoginDialog extends Dialog<String> {
         });
 
         showAndWait().ifPresent(controller::setPlayerName);
-
-        DialogPane dialogPane = getDialogPane();
-        dialogPane.getButtonTypes().addAll( saveButtonType, ButtonType.CANCEL );
-        dialogPane.setContent( createVBox() );
     }
 
     private void setDialogTexts()  {
