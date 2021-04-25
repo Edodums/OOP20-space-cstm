@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import main.events.CommonShipHitEvent;
-import main.models.EntityImage;
+import main.models.settings.TypeImage;
 import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
@@ -15,12 +15,12 @@ import static main.models.Game.*;
 
 public class CommonShip extends Collider implements Entity, Collidable {
   private static final Pair<Double, Double> STARTING_POINT = new Pair<>(3.0, 1.0);
-  private static final double WIDTH = 3.0;
-  private static final double HEIGHT = 2.0;
+  private static final double WIDTH = 10.0;
+  private static final double HEIGHT = 4.0;
   
-  private final EntityImage entityImage;
+  private final TypeImage entityImage;
   
-  public CommonShip(EntityImage entityImage) {
+  public CommonShip(TypeImage entityImage) {
     super();
     this.entityImage = entityImage;
   }
@@ -41,7 +41,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
   }
   
   @Override
-  public EntityImage getEntityImage() {
+  public TypeImage getTypeImages() {
     return entityImage;
   }
   
@@ -50,15 +50,17 @@ public class CommonShip extends Collider implements Entity, Collidable {
     Map<Pair<Double, Double>, Optional<Entity>> army = new HashMap<>();
     
     IntStream.range(0, (int) getEnemiesColumns())
-            .boxed()
-            .flatMap(x -> IntStream.range(0, (int) getEnemiesRows())
-                                  .mapToObj(y -> {
-                                    double positionX = x + getStartingPoint().getX();
-                                    double positionY = y + getStartingPoint().getY();
-                      
-                                    return new Pair<>(positionX, positionY);
-                                  }))
-            .forEach(pair -> army.put(pair, Optional.of(this)));
+          .boxed()
+          .flatMap(x -> IntStream.range(0, (int) getEnemiesRows()).mapToObj(y -> {
+            final double positionX = x + STARTING_POINT.getX();
+            final double positionY = y + STARTING_POINT.getY();
+            final Pair<Double, Double> position = new Pair<>(positionX, positionY);
+            
+            setPosition(position);
+            
+            return position;
+           }))
+          .forEach(pair -> army.put(pair, Optional.of(new CommonShip(getTypeImages()))));
     
     return army;
   }
