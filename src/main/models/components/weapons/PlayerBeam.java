@@ -4,43 +4,67 @@ import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
 import main.models.components.interfaces.Weapon;
+import main.models.settings.TypeImage;
 import main.utils.Pair;
 
+
 public class PlayerBeam extends Collider implements Weapon, Collidable {
-  private static final double WIDTH = 2.5;
-  private static final double HEIGHT = 5.0;
+  private static final float WIDTH = 0.15625f;
+  private static final float HEIGHT = 0.3125f;
+  
+  private final TypeImage entityImage;
+  
+  public PlayerBeam(TypeImage entityImage) {
+    super();
+    this.entityImage = entityImage;
+  }
   
   @Override
-  public void deploy(Pair<Double, Double> startingPoint) {
-    double translateYUnit = 0.01;
-    double currentY;
+  public void deploy(Pair<Float, Float> startingPoint) {
+    final float translateYUnit = 0.002f;
+    final float translateXUnit = 0.66f;
+    final float currentX = startingPoint.getX() + translateXUnit;
+    final float currentY = startingPoint.getY() - translateYUnit;
     
-    // TODO: CHECK IF MAKES SENSE
-    if (getPosition() != null)  {
-      currentY = getPosition().getY() - translateYUnit;
-    } else {
-      currentY = startingPoint.getY() - translateYUnit;
-    }
-    
-    // TODO: CHECK IF THE DELAY IS REALISTIC
-    while (getPosition().getY() > 0) {
-      setPosition(new Pair<>(startingPoint.getX(), currentY));
+    setPosition(new Pair<>(currentX, currentY));
+  }
+  
+  @Override
+  public void move() {
+    if (getPosition() != null && getPosition().getY() > 0) {
+      final float translateYUnit = 0.028f;
+      setPosition(new Pair<>(getPosition().getX(), getPosition().getY() - translateYUnit));
     }
   }
   
-  public void checkCollision(Collider entityToCheck) {
+  @Override
+  public boolean checkCollision(Collider entityToCheck) {
     if (hit(entityToCheck, this) && entityToCheck instanceof Entity) {
-      ((Entity) entityToCheck).die();
+      ((Entity) entityToCheck).die(this);
+      
+      return true;
     }
+    
+    return false;
   }
   
   @Override
-  public double getWidth() {
+  public TypeImage getTypeImages() {
+    return entityImage;
+  }
+  
+  @Override
+  public float getWidth() {
     return WIDTH;
   }
   
   @Override
-  public double getHeight() {
+  public float getHeight() {
     return HEIGHT;
+  }
+  
+  @Override
+  public Pair<Float, Float> getStartingPoint() {
+    return null;
   }
 }
