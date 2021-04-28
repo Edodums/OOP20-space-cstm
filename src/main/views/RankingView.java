@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import main.controllers.RankingController;
 
 public class RankingView implements View, Initializable {
-    private static final double BOUND_FACTOR = 2.0;
+    private static final float BOUND_FACTOR = 2.0f;
     private static final RankingController controller = new RankingController(RankingController.load());
     
     private Stage stage;
@@ -32,7 +32,7 @@ public class RankingView implements View, Initializable {
     }
 
     @Override
-    public double getBoundFactor() {
+    public float getBoundFactor() {
         return BOUND_FACTOR;
     }
     
@@ -53,11 +53,7 @@ public class RankingView implements View, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Map<String, Double> rankingList = controller.getModel().getRankingList();
-
-        for (int i = 1; i < 5; i++) {
-            controller.getModel().addToRankingList("aa__" + i, (double) (i * 10));
-        }
+        Map<String, Float> rankingList = controller.getModel().getRankingList();
 
         controller.write();
 

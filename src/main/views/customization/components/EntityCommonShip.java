@@ -78,7 +78,7 @@ public class EntityCommonShip implements CustomizableTypeImage, Initializable {
     this.entityCommonShipSelectedRow.setDisable(!value);
     this.entityCommonShipSelectedColumn.setDisable(!value);
     
-    final double opacityValue = value ? 1.0 : 0.0;
+    final float opacityValue = value ? 1.0f : 0.0f;
     
     this.entityCommonShipRows.setOpacity(opacityValue);
     this.entityCommonShipColumns.setOpacity(opacityValue);

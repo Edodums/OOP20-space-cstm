@@ -78,7 +78,7 @@ public class EntityMotherShip implements CustomizableTypeImage, Initializable {
     this.entityMotherShipSelectedRow.setDisable(!value);
     this.entityMotherShipSelectedColumn.setDisable(!value);
     
-    final double opacityValue = value ? 1.0 : 0.0;
+    final float opacityValue = value ? 1.0f : 0.0f;
     
     this.entityMotherShipRows.setOpacity(opacityValue);
     this.entityMotherShipColumns.setOpacity(opacityValue);

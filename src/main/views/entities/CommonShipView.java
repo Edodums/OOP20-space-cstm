@@ -4,7 +4,7 @@ import javafx.scene.image.ImageView;
 import main.models.components.interfaces.Entity;
 import main.utils.Pair;
 import main.views.entities.interfaces.Animated;
-import main.views.entities.interfaces.EntitySprite;
+import main.views.sprite.EntitySprite;
 
 public class CommonShipView implements EntitySprite, Animated  {
   private ImageView commonShip;
@@ -20,7 +20,7 @@ public class CommonShipView implements EntitySprite, Animated  {
   }
   
   @Override
-  public void create(Pair<Double, Double> position, Entity entity, double unit) {
+  public void create(Pair<Float, Float> position, Entity entity, float unit) {
     EntitySprite.super.create(position, entity, unit);
     animate(get());
   }
