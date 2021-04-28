@@ -11,18 +11,18 @@ public class Ranking implements ObservableModel {
     @JsonIgnore
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     @JsonSerialize
-    private Map<String, Double> rankingList = new HashMap<>();
+    private Map<String, Float> rankingList = new HashMap<>();
 
     public Ranking() {
         // empty
     }
 
-    public Map<String, Double> getRankingList(){
+    public Map<String, Float> getRankingList(){
         return this.rankingList;
     }
 
-    public void addToRankingList(final String playerName, final Double gamePoints) {
-        Map<String, Double> oldMap = this.rankingList;
+    public void addToRankingList(final String playerName, final Float gamePoints) {
+        Map<String, Float> oldMap = this.rankingList;
 
         this.rankingList.put(playerName, gamePoints);
 
