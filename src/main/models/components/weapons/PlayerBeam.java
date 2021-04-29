@@ -4,7 +4,7 @@ import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
 import main.models.components.interfaces.Weapon;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 
 
@@ -12,9 +12,9 @@ public class PlayerBeam extends Collider implements Weapon, Collidable {
   private static final float WIDTH = 0.15625f;
   private static final float HEIGHT = 0.3125f;
   
-  private final TypeImage entityImage;
+  private final CustomizableTypeImage entityImage;
   
-  public PlayerBeam(TypeImage entityImage) {
+  public PlayerBeam(CustomizableTypeImage entityImage) {
     super();
     this.entityImage = entityImage;
   }
@@ -40,8 +40,7 @@ public class PlayerBeam extends Collider implements Weapon, Collidable {
   @Override
   public boolean checkCollision(Collider entityToCheck) {
     if (hit(entityToCheck, this) && entityToCheck instanceof Entity) {
-      ((Entity) entityToCheck).die(this);
-      
+      ((Entity) entityToCheck).die(entityToCheck);
       return true;
     }
     
@@ -49,7 +48,7 @@ public class PlayerBeam extends Collider implements Weapon, Collidable {
   }
   
   @Override
-  public TypeImage getTypeImages() {
+  public CustomizableTypeImage getTypeImages() {
     return entityImage;
   }
   
