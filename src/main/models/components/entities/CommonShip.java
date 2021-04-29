@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import main.events.CommonShipHitEvent;
-import main.models.components.interfaces.Weapon;
-import main.models.settings.TypeImage;
 import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 import org.greenrobot.eventbus.EventBus;
 import static main.models.Game.*;
@@ -19,16 +18,16 @@ public class CommonShip extends Collider implements Entity, Collidable {
   private static final float WIDTH = 10.0f;
   private static final float HEIGHT = 4.0f;
   
-  private final TypeImage entityImage;
+  private final CustomizableTypeImage entityImage;
   
-  public CommonShip(TypeImage entityImage) {
+  public CommonShip(CustomizableTypeImage entityImage) {
     super();
     this.entityImage = entityImage;
   }
   
   @Override
-  public void die(Weapon weapon) {
-    EventBus.getDefault().post(new CommonShipHitEvent(this, weapon));
+  public void die(Collider entityToCheck) {
+    EventBus.getDefault().post(new CommonShipHitEvent((CommonShip) entityToCheck));
   }
   
   @Override
@@ -37,7 +36,7 @@ public class CommonShip extends Collider implements Entity, Collidable {
   }
   
   @Override
-  public TypeImage getTypeImages() {
+  public CustomizableTypeImage getTypeImages() {
     return entityImage;
   }
   

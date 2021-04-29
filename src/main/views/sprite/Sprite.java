@@ -5,8 +5,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
-import main.models.settings.Grid;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.GridImage;
 import main.utils.Pair;
 
 import java.util.LinkedHashMap;
@@ -24,7 +24,6 @@ public interface Sprite {
     final ImageView imageView = get();
   
     if (position != null && imageView != null) {
-      // System.out.println(position.getY());
       imageView.setTranslateX(position.getX() * unit);
       imageView.setTranslateY(position.getY() * unit);
     }
@@ -37,7 +36,7 @@ public interface Sprite {
     }
   }
   
-  default void handleSpriteImage(Grid grid, Pair<Float, Float> position, Image[] images, float unit) {
+  default void handleSpriteImage(GridImage grid, Pair<Float, Float> position, Image[] images, float unit) {
     if (!hasSpriteInternalColumns(grid)) {
       set(new ImageView(images[0]));
     } else {
@@ -48,8 +47,8 @@ public interface Sprite {
     update(position, unit);
   }
   
-  default Image[] getImages(TypeImage typeImage) {
-    final Grid grid = typeImage.getGrid();
+  default Image[] getImages(CustomizableTypeImage typeImage) {
+    final GridImage grid = typeImage.getGrid();
     
     return getPartFromGrid(
           typeImage.getName(),
@@ -122,11 +121,11 @@ public interface Sprite {
     return gridPortions;
   }
   
-  default boolean hasSpriteInternalColumns(final Grid grid) {
+  default boolean hasSpriteInternalColumns(final GridImage grid) {
     return grid.getInternalColumns() > 0;
   }
   
-  default boolean isSpriteDividedIntoGrid(final Grid grid) {
+  default boolean isSpriteDividedIntoGrid(final GridImage grid) {
     return grid.getColumns() <= 0 || grid.getRows() <= 0;
   }
 }

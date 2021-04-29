@@ -47,8 +47,8 @@ public class GameController implements Controller {
     getModel().removeLaserInstance(weapon);
   }
   
-  public void collisionHandler(Weapon weapon) {
-    getModel().collisionHandler(weapon);
+  public boolean collisionHandler(Weapon weapon) {
+    return getModel().collisionHandler(weapon);
   }
   
   public void initGrid() {

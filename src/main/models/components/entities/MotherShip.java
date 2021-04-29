@@ -6,8 +6,7 @@ import main.events.MotherShipHitEvent;
 import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
 import main.models.components.interfaces.Entity;
-import main.models.components.interfaces.Weapon;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,9 +19,9 @@ public class MotherShip extends Collider implements Entity, Collidable {
     private static final float HEIGHT = 2.5f;
     private static final Pair<Float, Float> STARTING_POINT = new Pair<>(0.0f, 0.0f);
 
-    private final TypeImage typeImage;
+    private final CustomizableTypeImage typeImage;
 
-    public MotherShip(TypeImage typeImage) {
+    public MotherShip(CustomizableTypeImage typeImage) {
         super();
         this.typeImage = typeImage;
     }
@@ -54,12 +53,12 @@ public class MotherShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public void die(Weapon weapon) {
-        EventBus.getDefault().post(new MotherShipHitEvent(this, weapon));
+    public void die(Collider entityToCheck) {
+        EventBus.getDefault().post(new MotherShipHitEvent((MotherShip) entityToCheck));
     }
   
     @Override
-    public TypeImage getTypeImages() {
+    public CustomizableTypeImage getTypeImages() {
       return this.typeImage;
     }
   

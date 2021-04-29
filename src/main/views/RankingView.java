@@ -24,7 +24,9 @@ public class RankingView implements View, Initializable {
     @FXML
     private AnchorPane parent;
 
-    public RankingView() {}
+    public RankingView() {
+        addListenerToModel(controller.getModel());
+    }
 
     @Override
     public Pane getParent() {

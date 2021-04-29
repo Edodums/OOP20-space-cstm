@@ -5,10 +5,10 @@ import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Optional;
 import main.models.components.entities.PlayerShip;
-import main.models.settings.TypeImage;
 import main.models.components.Collider;
 import main.models.components.entities.MotherShip;
 import main.models.components.entities.CommonShip;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 
 import static main.models.Game.*;
@@ -18,9 +18,9 @@ public interface Entity {
     
     Map<Pair<Float, Float>, Optional<Entity>> create();
 
-    void die(Weapon weapon);
+    void die(Collider entityToCheck);
 
-    TypeImage getTypeImages();
+    CustomizableTypeImage getTypeImages();
 
     float getPointsValue();
 

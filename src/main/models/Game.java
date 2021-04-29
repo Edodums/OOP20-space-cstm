@@ -3,36 +3,45 @@ package main.models;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import main.models.components.Collider;
 import main.models.components.entities.EntityFactory;
 import main.models.components.interfaces.Entity;
+import main.models.components.interfaces.GameWorld;
 import main.models.components.interfaces.Weapon;
+import main.models.components.weapons.EnemyBeam;
+import main.models.components.weapons.PlayerBeam;
 import main.models.components.weapons.WeaponFactory;
 import main.models.settings.Settings;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
+import main.utils.enums.EntityType;
 import main.utils.enums.WeaponType;
 
 /**
  *
  */
-public class Game implements ObservableModel {
-  private static final double MAX_X = 14;
-  private static final double MAX_Y = 12;
+public class Game implements ObservableModel, GameWorld {
+  private static final float MAX_X = 14;
+  private static final float MAX_Y = 9;
   
-  private static final double ENEMIES_COLUMNS = 8;
-  private static final double ENEMIES_ROWS = 3;
-  private static final double ENEMIES_NEXT_ROWS = 6;
+  private static final float ENEMIES_COLUMNS = 8;
+  private static final float ENEMIES_ROWS = 3;
+  private static final float ENEMIES_NEXT_ROWS = 4;
   
   private final PropertyChangeSupport support = new PropertyChangeSupport(this);
   private final WeaponFactory weaponFactory = new WeaponFactory();
   private final EntityFactory entityFactory = new EntityFactory();
+  private final Map<Pair<Float, Float>, Optional<Entity>> grid = new HashMap<>();
   
   private Set<Entity> entities = new HashSet<>();
-  private final Map<Pair<Double, Double>, Optional<Entity>> grid = new HashMap<>();
+  private Set<Weapon> weapons = new HashSet<>();
+  private Set<PlayerBeam> playerBeams = new HashSet<>();
+  private Set<EnemyBeam> enemyBeams = new HashSet<>();
   
-  private double gamePoints = 0.0;
-  private double aliveEnemies;
+  private float gamePoints = 0.0f;
+  private float aliveEnemies;
   private String playerName;
   
   /**
@@ -42,26 +51,25 @@ public class Game implements ObservableModel {
   public Game(Settings settings) {
     settings.loadDefault();
     
-    initEntities(settings);
-    initGrid();
+    Collection<CustomizableTypeImage> typeImageStream =  settings.getTypeImages().values();
     
-    setAliveEnemies((double) this.grid
-                                 .entrySet()
-                                 .stream()
-                                 .filter(entry -> entry.getValue().isPresent())
-                                 .filter(entry -> entry.getValue().get().isNPC())
-                                 .count());
+    initEntities(typeImageStream);
+    initWeapons(typeImageStream);
+  }
+  
+  private void initWeapons(Collection<CustomizableTypeImage> settings) {
+    this.weapons = settings.stream()
+                         .filter(typeImage -> !typeImage.getType().getClass().equals(EntityType.class))
+                         .map(weaponFactory::getWeapon)
+                         .collect(Collectors.toUnmodifiableSet());
   }
   
   /**
    *
    * @param settings
    */
-  public void initEntities(Settings settings) {
-    this.entities = settings
-                          .getTypeImages()
-                          .values()
-                          .stream()
+  private void initEntities(Collection<CustomizableTypeImage> settings) {
+    this.entities = settings.stream()
                           .filter(typeImage -> !typeImage.getType().getClass().equals(WeaponType.class))
                           .map(entityFactory::getEntity)
                           .collect(Collectors.toUnmodifiableSet());
@@ -70,8 +78,18 @@ public class Game implements ObservableModel {
   /**
    *
    */
+  @Override
+  public void initGrid() {
+    this.entities.forEach(entity -> entity.create().forEach(this.grid::put));
+    fireGridChange(this.grid);
+  }
+  
+  /**
+   *
+   */
+  @Override
   public void updateGrid() {
-    final Map<Pair<Double, Double>, Optional<Entity>> oldMap = new HashMap<>(getGrid());
+    final Map<Pair<Float, Float>, Optional<Entity>> oldMap = new HashMap<>(getGrid());
     
     oldMap.forEach((pair, entity) -> {
       if (entity.isEmpty() || !entity.get().isNPC()) {
@@ -81,135 +99,198 @@ public class Game implements ObservableModel {
       final Entity realEntity = entity.get();
       
       realEntity.move((Collider) realEntity, pair);
-      
-      this.grid.getOrDefault(realEntity, Optional.empty())
-            .ifPresentOrElse(
-                  _entity -> this.grid.replace(((Collider) realEntity).getPosition(), Optional.of(realEntity)),
-                  () -> this.grid.put(((Collider) realEntity).getPosition(), Optional.of(realEntity))
-            );
-      
     });
-  
+    
     fireGridChange(oldMap);
   }
   
   /**
    *
-   * @param position
    */
-  public void removeFromGrid(Pair<Double, Double> position) {
-    final Map<Pair<Double, Double>, Optional<Entity>> old = new HashMap<>(this.grid);
-    
-    if (this.grid.get(position).isPresent()) {
-      this.grid.remove(position);
-      fireGridChange(old);
-    }
-  
-    System.out.println("Not present"); // TODO: handle it happens during alpha TESTS
-  }
-  
-  /**
-   *
-   */
-  public void primaryFire() {
-    // TODO: change it with the current position of the player ( add a -1 to Y )
-    getPlayerWeapon().deploy(new Pair<>(1.0, 1.0));
-  }
-  
-  /**
-   *
-   */
-  public void collisionHandler() {
-    getSetOfNPCEntities()
-          .stream()
-          .filter(Optional::isPresent)
-          .forEach(entity -> getPlayerWeapon().checkCollision((Collider) entity.get()));
-  }
-  
-  /**
-   *
-   */
-  private void initGrid() {
-    IntStream.range(0, (int) getMaxX())
-          .boxed()
-          .flatMap(x -> IntStream.range(0, (int) getMaxY()).mapToObj(y -> new Pair<>((double) x, (double) y)))
-          .forEachOrdered(pair -> this.grid.put(pair, Optional.empty()));
-    
-    final Map<Pair<Double, Double>, Optional<Entity>> old = new HashMap<>(this.grid);
-    
-    this.entities.forEach(entity -> {
-      entity.create().forEach(this.grid::put);
-    });
-  
-    
-    fireGridChange(old);
-  }
-  
-  /**
-   *
-   */
-  private void fireGridChange(Map<Pair<Double, Double>, Optional<Entity>> old) {
+  private void fireGridChange(Map<Pair<Float, Float>, Optional<Entity>> old) {
     firePropertyChange("grid", old, this.grid);
   }
+
+  @Override
+  public void removeFromGrid(Entity entityToDelete) {
+    final Map<Pair<Float, Float>, Optional<Entity>> old = new HashMap<>(this.grid);
+    
+    old.forEach((floatFloatPair, entity) -> {
+      if (entity.isEmpty()) {
+        return;
+      }
+      
+      if (entity.get().equals(entityToDelete)) {
+        System.out.println("===  floatFloatPair:   " +  floatFloatPair  + "entity:   " +  entity  + " entityToDelete:   " +  entityToDelete + " ===");
+        
+        System.out.println(getAliveEnemies() +   "   ==  ALIVE ENEMIES   ==   ");
+        
+        grid.remove(floatFloatPair, entity);
+        
+        System.out.println("AAAAAA NEO " + this.grid  + " THIS GRID");
+        
+        setAliveEnemies(getAliveEnemies() - 1);
+        
+        firePropertyChange("removeFromGrid", null, entityToDelete);
+      }
+    });
+  }
+
+  @Override
+  public void removeLaserInstance(Weapon weapon) {
+    if (weapon instanceof PlayerBeam) {
+      this.playerBeams.remove(weapon);;
+    }
   
-  /**
-   *
-   * @return
-   */
-  public Weapon getPlayerWeapon() {
-    return weaponFactory.getWeapon(WeaponType.PLAYER);
+    if (weapon instanceof EnemyBeam) {
+      this.enemyBeams.remove(weapon);
+    }
+    
+    firePropertyChange("removeWeapon", null, weapon);
   }
   
   /**
    *
    * @return
    */
-  public Map<Pair<Double, Double>, Optional<Entity>> getGrid() {
+  @Override
+  public Weapon primaryFire() {
+    if (getPlayer().isPresent())  {
+      final PlayerBeam playerBeam = new PlayerBeam(getPlayerWeapon().getTypeImages());
+      final Pair<Float, Float> beamInitialPosition = new Pair<>(getPlayerPosition().getX(), getPlayerPosition().getY() - 1);
+      
+      this.playerBeams.add(playerBeam);
+      
+      playerBeam.deploy(beamInitialPosition);
+      
+      return playerBeam;
+    }
+    
+    return null;
+  }
+
+  @Override
+  public Weapon enemyFire() {
+    final Optional<Map.Entry<Pair<Float, Float>, Optional<Entity>>> enemyEntry = getEnemies().findAny();
+    
+    if (enemyEntry.isEmpty()) {
+      return null;
+    }
+    
+    final Optional<Entity> enemy = enemyEntry.get().getValue();
+    final Pair<Float, Float> enemyPosition = enemyEntry.get().getKey();
+    
+    if (enemy.isPresent())  {
+      final EnemyBeam enemyBeam = new EnemyBeam(getEnemyWeapon().getTypeImages());
+      final Pair<Float, Float> beamInitialPosition = new Pair<>(enemyPosition.getX(), enemyPosition.getY() + 1);
+      
+      this.enemyBeams.add(enemyBeam);
+      
+      enemyBeam.deploy(beamInitialPosition);
+      
+      return enemyBeam;
+    }
+    
+    return null;
+  }
+
+  @Override
+  public void moveLasers() {
+    this.playerBeams.stream().distinct().filter(Objects::nonNull).forEach(playerBeam -> {
+      playerBeam.move();
+      firePropertyChange("weapon", null, playerBeam);
+    });
+  
+    this.enemyBeams.stream().distinct().filter(Objects::nonNull).forEach(enemyBeam -> {
+      enemyBeam.move();
+      firePropertyChange("weapon", null, enemyBeam);
+    });
+  }
+  
+  /**
+   *
+   * @return
+   */
+  @Override
+  public boolean collisionHandler(Weapon weapon) {
+    if (weapon instanceof PlayerBeam) {
+      final Set<Entity> enemies = new HashSet<>(getEnemiesSetFromGrid());
+      
+      for (Entity entity : enemies)  {
+        if (weapon.checkCollision((Collider) entity)) {
+          removeFromGrid(entity); //  SIDE EFFECT: written to avoid duplication
+          return true;
+        }
+      }
+    }
+    
+    
+    if (weapon instanceof EnemyBeam) {
+      return getPlayer().isPresent() && weapon.checkCollision((Collider) getPlayer().get());
+    }
+    
+    return false;
+  }
+
+  @Override
+  public Stream<Map.Entry<Pair<Float, Float>, Optional<Entity>>> getEnemies() {
+    return this.grid.entrySet()
+                 .stream()
+                 .filter(entry -> entry.getValue().isPresent())
+                 .filter(entry -> entry.getValue().get().isNPC());
+  }
+  
+  public Set<Entity> getEnemiesSetFromGrid() {
+    final Set<Entity> enemies = new HashSet<>();
+    
+    for (Map.Entry<Pair<Float, Float>, Optional<Entity>> entry :  getGrid().entrySet()) {
+        if (entry.getValue().isPresent() && entry.getValue().get().isNPC()) {
+          enemies.add(entry.getValue().get());
+        }
+    }
+    
+    return enemies;
+  }
+  
+  /**
+   *
+   * @return
+   */
+  @Override
+  public Optional<Entity> getPlayer() {
+    return this.entities.stream().filter(Entity::isPlayer).findFirst();
+  }
+  
+  /**
+   *
+   * @return
+   */
+  private Weapon getPlayerWeapon() {
+    return weapons.stream().filter(weapon -> weapon.getTypeImages().getType() != WeaponType.NPC).findFirst().get();
+  }
+  
+  /**
+   *
+   * @return
+   */
+  private Weapon getEnemyWeapon() {
+    return weapons.stream().filter(weapon -> weapon.getTypeImages().getType() == WeaponType.NPC).findFirst().get();
+  }
+  
+  /**
+   *
+   * @return
+   */
+  @Override
+  public Map<Pair<Float, Float>, Optional<Entity>> getGrid() {
     return this.grid;
   }
   
   /**
    *
-   * @param entityFilter
    * @return
    */
-  public Map<Pair<Double, Double>, Optional<Entity>> getFilteredEntitiesInGrid(Entity entityFilter) {
-    return getGrid()
-                 .entrySet()
-                 .stream()
-                 .filter(entry -> entry.getValue().isPresent())
-                 .filter(entry -> Optional.of(entityFilter).equals(entry.getValue()))
-                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-  }
-  
-  /**
-   *
-   * @return
-   */
-  public Set<Optional<Entity>> getSetOfNPCEntities() {
-    Set<Optional<Entity>> npcSet = new HashSet<>(Collections.emptySet());
-    
-    getEntitySet()
-          .stream()
-          .filter(Entity::isNPC)
-          .forEach(entity -> npcSet.addAll(getFilteredEntitiesInGrid(entity).values()));
-    
-    return npcSet;
-  }
-  
-  /**
-   *
-   * @return
-   */
-  public Set<Entity> getEntitySet() {
-    return Collections.unmodifiableSet(this.entities);
-  }
-  
-  /**
-   *
-   * @return
-   */
-  public static double getEnemiesColumns(){
+  public static float getEnemiesColumns(){
     return ENEMIES_COLUMNS;
   }
   
@@ -217,7 +298,7 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public static double getEnemiesRows(){
+  public static float getEnemiesRows(){
     return ENEMIES_ROWS;
   }
   
@@ -225,7 +306,7 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public static double getEnemiesNextRows() {
+  public static float getEnemiesNextRows() {
     return ENEMIES_NEXT_ROWS;
   }
   
@@ -233,7 +314,7 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public static double getMaxX() {
+  public static float getMaxX() {
     return MAX_X;
   }
   
@@ -241,7 +322,7 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public static double getMaxY() {
+  public static float getMaxY() {
     return MAX_Y;
   }
   
@@ -249,7 +330,7 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public double getGamePoints() {
+  public float getGamePoints() {
     return gamePoints;
   }
   
@@ -257,14 +338,37 @@ public class Game implements ObservableModel {
    *
    * @return
    */
-  public double getAliveEnemies() {
+  public float getAliveEnemies() {
     return aliveEnemies;
+  }
+  
+  /**
+   *
+   * @return
+   */
+  @Override
+  public Pair<Float, Float> getPlayerPosition() {
+    if (getPlayer().isPresent()) {
+      return ((Collider) getPlayer().get()).getPosition();
+    }
+    
+    return new Pair<>(0f, 0f);
+  }
+  
+  /**
+   *
+   * @return
+   */
+  @Override
+  public PropertyChangeSupport getSupport() {
+    return this.support;
   }
   
   /**
    *
    * @param playerName
    */
+  @Override
   public void setPlayerName(String playerName) {
     String oldPlayerName = this.playerName;
     this.playerName = playerName;
@@ -276,8 +380,9 @@ public class Game implements ObservableModel {
    *
    * @param gamePoints
    */
-  public void setGamePoints(double gamePoints) {
-    double oldGamePoints = this.gamePoints;
+  @Override
+  public void setGamePoints(float gamePoints) {
+    float oldGamePoints = this.gamePoints;
     this.gamePoints = gamePoints;
     
     firePropertyChange("gamePoints", oldGamePoints, gamePoints);
@@ -287,20 +392,21 @@ public class Game implements ObservableModel {
    *
    * @param aliveEnemies
    */
-  public void setAliveEnemies(double aliveEnemies) {
-    double oldAliveEnemies = this.aliveEnemies;
+  @Override
+  public void setAliveEnemies(float aliveEnemies) {
+    float oldAliveEnemies = this.aliveEnemies;
     this.aliveEnemies = aliveEnemies;
     
     firePropertyChange("aliveEnemies", oldAliveEnemies, aliveEnemies);
   }
   
-  /**
-   *
-   * @return
-   */
+  public void createMotherShip() {
+    // empty
+  }
+
   @Override
-  public PropertyChangeSupport getSupport() {
-    return this.support;
+  public String getPlayerName() {
+    return this.playerName;
   }
 }
 

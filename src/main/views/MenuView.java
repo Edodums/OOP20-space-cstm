@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import javafx.event.ActionEvent;
@@ -38,7 +37,7 @@ public class MenuView implements View {
 
     public MenuView(Stage stage) {
         setStage(stage);
-        model.addPropertyChangeListener(this);
+        addListenerToModel(model);
         controller.setCurrentScene(CurrentScene.MENU);
     }
 
@@ -102,7 +101,7 @@ public class MenuView implements View {
     
     public static void goToScene(Stage stage, CurrentScene newScene) {
         final Scene scene = scenes.get(newScene);
-        System.out.println(scene);
+
         if (newScene != null) {
             stage.setScene(scene);
             stage.show();
@@ -124,6 +123,7 @@ public class MenuView implements View {
         view.setStage(getStage());
         
         if (view instanceof KeyEventListener) {
+            ((KeyEventListener) view).addKeyEventHandler();
             ((KeyEventListener) view).keyListener();
         }
     }
