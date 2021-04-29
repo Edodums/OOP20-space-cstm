@@ -1,7 +1,7 @@
 package main.utils.enums;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import main.models.settings.Type;
+import main.models.settings.interfaces.Type;
 
 @JsonDeserialize(as = EntityType.class)
 public enum EntityType implements Type {
