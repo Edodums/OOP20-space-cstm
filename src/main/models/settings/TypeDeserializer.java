@@ -5,19 +5,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import main.models.settings.interfaces.Type;
 import main.utils.enums.EntityType;
 import main.utils.enums.WeaponType;
 
 import java.io.IOException;
 
 public class TypeDeserializer extends JsonDeserializer<Type> {
-  /**
-   *
-   * @param jp
-   * @param context
-   * @return
-   * @throws IOException
-   */
+
   @Override
   public Type deserialize(JsonParser jp, DeserializationContext context) throws IOException {
     final ObjectMapper mapper = (ObjectMapper) jp.getCodec();
