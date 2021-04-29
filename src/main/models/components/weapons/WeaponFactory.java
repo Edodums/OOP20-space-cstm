@@ -1,23 +1,44 @@
 package main.models.components.weapons;
 
+import java.util.EnumMap;
+import java.util.Map;
 import main.exceptions.WeaponNotFoundException;
 import main.models.components.interfaces.Weapon;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.enums.WeaponType;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class WeaponFactory {
-    private static final Map<WeaponType, Weapon> weaponTypes = new HashMap<>();
+    private static final Map<WeaponType, Weapon> weaponTypes = new EnumMap<>(WeaponType.class);
 
-    public Weapon getWeapon(WeaponType weaponType) {
-        return weaponTypes.computeIfAbsent(weaponType, WeaponFactory::getWeaponClass);
+    public Weapon getWeapon(CustomizableTypeImage typeImage) {
+        final WeaponType weaponType = (WeaponType) typeImage.getType();
+        
+        if (weaponTypes.containsKey(weaponType)) {
+            return weaponTypes.get(weaponType);
+        }
+        
+        final Weapon weapon = getWeaponClass(typeImage);
+        
+        weaponTypes.put(weaponType, weapon);
+        
+        return weapon;
     }
 
-    private static Weapon getWeaponClass(WeaponType weaponType) {
-        return switch (weaponType) {
-            case PLAYER -> new PlayerBeam();
-            default -> throw new WeaponNotFoundException(); // TODO: delete this after you have made the NPC class
-        };
+    private Weapon getWeaponClass(CustomizableTypeImage typeImage) {
+        final WeaponType weaponType = (WeaponType) typeImage.getType();
+        final Weapon weapon;
+        
+        switch (weaponType) {
+            case PLAYER :
+                weapon = new PlayerBeam(typeImage);
+                break;
+            
+            case NPC :
+                weapon = new EnemyBeam(typeImage);
+                break;
+            default : throw new WeaponNotFoundException();
+        }
+        
+        return weapon;
     }
 }
