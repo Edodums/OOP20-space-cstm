@@ -3,6 +3,7 @@ package main.models.components.entities;
 import main.exceptions.EntityNotFoundException;
 import main.models.settings.TypeImage;
 import main.models.components.interfaces.Entity;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.enums.EntityType;
 
 public class EntityFactory {
@@ -26,4 +27,28 @@ public class EntityFactory {
     
     return entity;
   }
+
+    public static class EntityFactory {
+
+      public Entity getEntity(CustomizableTypeImage entityImage) {
+        final EntityType types = (EntityType) entityImage.getType();
+
+        Entity entity;
+
+        switch (types) {
+          case COMMONSHIP:
+                     entity = new CommonShip(entityImage);
+                     break;
+          case MOTHERSHIP:
+                     entity = new MotherShip(entityImage);
+                     break;
+          case PLAYER:
+                     entity = new PlayerShip.PlayerShip(entityImage);
+                     break;
+          default:   throw new EntityNotFoundException();
+        }
+
+        return entity;
+      }
+    }
 }
