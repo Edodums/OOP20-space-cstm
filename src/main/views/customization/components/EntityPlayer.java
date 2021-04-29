@@ -9,19 +9,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import main.exceptions.DirectoryNotCreated;
-import main.models.settings.Grid;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.GridImage;
 import main.services.FileService;
 import main.utils.enums.ResourcePath;
-import main.views.customization.interfaces.CustomizableTypeImage;
+import main.views.customization.interfaces.CustomizableViewTypeImage;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class EntityPlayer implements CustomizableTypeImage, Initializable {
-    private TypeImage current;
+public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
+    private CustomizableTypeImage current;
 
     @FXML
     private TextField entityPlayerFilename;
@@ -78,7 +78,7 @@ public class EntityPlayer implements CustomizableTypeImage, Initializable {
         this.entityPlayerSelectedRow.setDisable(!value);
         this.entityPlayerSelectedColumn.setDisable(!value);
 
-        final double opacityValue = value ? 1.0 : 0.0;
+        final float opacityValue = value ? 1.0f : 0.0f;
 
         this.entityPlayerRows.setOpacity(opacityValue);
         this.entityPlayerColumns.setOpacity(opacityValue);
@@ -147,12 +147,12 @@ public class EntityPlayer implements CustomizableTypeImage, Initializable {
     }
 
     @Override
-    public void setTypeImage(TypeImage typeImage) {
+    public void setTypeImage(CustomizableTypeImage typeImage) {
         this.current = typeImage;
     }
 
     @Override
-    public TypeImage getTypeImage() {
+    public CustomizableTypeImage getTypeImage() {
         return this.current;
     }
 
@@ -173,7 +173,7 @@ public class EntityPlayer implements CustomizableTypeImage, Initializable {
 
     @Override
     public void setDefaults() {
-        final Grid grid = getTypeImage().getGrid();
+        final GridImage grid = getTypeImage().getGrid();
 
         this.entityPlayerFilename.setText(getTypeImage().getName());
         this.entityPlayerImage.setImage(new Image(getTypeImage().getName()));
