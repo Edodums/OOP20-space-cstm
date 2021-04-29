@@ -10,18 +10,20 @@ import java.beans.PropertyChangeListener;
 public interface View extends PropertyChangeListener {
   Pane getParent();
   
-  double getBoundFactor();
+  float getBoundFactor();
   
   void setStage(Stage stage);
   
   Stage getStage();
   
-  default double getWidth() {
-    return getPrimaryScreenBounds().getWidth() / getBoundFactor();
+  default float getWidth() {
+    return (float) getParent().getPrefWidth();
+    // return getPrimaryScreenBounds().getWidth() / getBoundFactor();
   }
   
-  default double getHeight() {
-    return getPrimaryScreenBounds().getHeight() / getBoundFactor();
+  default float getHeight() {
+    return (float) getParent().getPrefHeight();
+    // return getPrimaryScreenBounds().getHeight() / getBoundFactor();
   }
   
   /* Primary Screen (useful if the user has multiple monitors bounds */

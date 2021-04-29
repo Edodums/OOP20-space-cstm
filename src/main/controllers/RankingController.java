@@ -7,15 +7,15 @@ import main.services.YamlService;
 public class RankingController implements Controller {
 
     private static final YamlService yamlService = new YamlService();
-    private Ranking model;
+    private static Ranking model;
 
     public RankingController(Ranking ranking) {
         setModel(ranking);
     }
 
     @Override
-    public void setModel(ObservableModel model) {
-        this.model = (Ranking) model;
+    public void setModel(ObservableModel ranking) {
+        model = (Ranking) ranking;
     }
 
     public static Ranking load() {
@@ -25,9 +25,17 @@ public class RankingController implements Controller {
     public void write() {
         yamlService.writeFile("ranking", getModel());
     }
+    
+    public static void addToRanking(String playerName, float gamePoints) {
+        Ranking ranking = load();
+        
+        ranking.addToRankingList(playerName, gamePoints);
+        
+        yamlService.writeFile("ranking", ranking);
+    }
 
     public Ranking getModel() {
-        return this.model;
+        return model;
     }
 }
 

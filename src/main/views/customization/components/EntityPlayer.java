@@ -78,7 +78,7 @@ public class EntityPlayer implements CustomizableTypeImage, Initializable {
         this.entityPlayerSelectedRow.setDisable(!value);
         this.entityPlayerSelectedColumn.setDisable(!value);
 
-        final double opacityValue = value ? 1.0 : 0.0;
+        final float opacityValue = value ? 1.0f : 0.0f;
 
         this.entityPlayerRows.setOpacity(opacityValue);
         this.entityPlayerColumns.setOpacity(opacityValue);

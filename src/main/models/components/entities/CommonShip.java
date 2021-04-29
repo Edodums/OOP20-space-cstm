@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import main.events.CommonShipHitEvent;
+import main.models.components.interfaces.Weapon;
 import main.models.settings.TypeImage;
 import main.models.components.Collider;
 import main.models.components.interfaces.Collidable;
@@ -14,9 +15,9 @@ import org.greenrobot.eventbus.EventBus;
 import static main.models.Game.*;
 
 public class CommonShip extends Collider implements Entity, Collidable {
-  private static final Pair<Double, Double> STARTING_POINT = new Pair<>(3.0, 1.0);
-  private static final double WIDTH = 10.0;
-  private static final double HEIGHT = 4.0;
+  private static final Pair<Float, Float> STARTING_POINT = new Pair<>(3.0f, 1.0f);
+  private static final float WIDTH = 10.0f;
+  private static final float HEIGHT = 4.0f;
   
   private final TypeImage entityImage;
   
@@ -26,17 +27,12 @@ public class CommonShip extends Collider implements Entity, Collidable {
   }
   
   @Override
-  public void fire() {
-    // empty
+  public void die(Weapon weapon) {
+    EventBus.getDefault().post(new CommonShipHitEvent(this, weapon));
   }
   
   @Override
-  public void die() {
-    EventBus.getDefault().post(new CommonShipHitEvent(this));
-  }
-  
-  @Override
-  public double getPointsValue() {
+  public float getPointsValue() {
     return getPosition().getY() % getEnemiesRows() * 10;
   }
   
@@ -46,41 +42,44 @@ public class CommonShip extends Collider implements Entity, Collidable {
   }
   
   @Override
-  public Map<Pair<Double, Double>, Optional<Entity>> create() {
-    Map<Pair<Double, Double>, Optional<Entity>> army = new HashMap<>();
+  public Map<Pair<Float, Float>, Optional<Entity>> create() {
+    Map<Pair<Float, Float>, Optional<Entity>> army = new HashMap<>();
     
     IntStream.range(0, (int) getEnemiesColumns())
           .boxed()
           .flatMap(x -> IntStream.range(0, (int) getEnemiesRows()).mapToObj(y -> {
-            final double positionX = x + STARTING_POINT.getX();
-            final double positionY = y + STARTING_POINT.getY();
-            final Pair<Double, Double> position = new Pair<>(positionX, positionY);
+            final float positionX = x + STARTING_POINT.getX();
+            final float positionY = y + STARTING_POINT.getY();
             
-            setPosition(position);
-            
-            return position;
+            return new Pair<>(positionX, positionY);
            }))
-          .forEach(pair -> army.put(pair, Optional.of(new CommonShip(getTypeImages()))));
+          .forEach(pair -> {
+            CommonShip ship = new CommonShip(getTypeImages());
+            
+            ship.setPosition(pair);
+            
+            final Pair<Float, Float> startingPosition = new Pair<>(pair.getX(), pair.getY());
+            
+            ship.setStartingPosition(startingPosition);
+            
+            army.put(pair, Optional.of(ship));
+          });
     
     return army;
   }
   
   @Override
-  public double getWidth() {
+  public float getWidth() {
     return WIDTH;
   }
   
   @Override
-  public double getHeight() {
+  public float getHeight() {
     return HEIGHT;
   }
   
   @Override
-  public double getSpawnNumber() {
+  public float getSpawnNumber() {
     return getEnemiesColumns() * getEnemiesNextRows();
-  }
-  
-  public Pair<Double, Double> getStartingPoint() {
-    return STARTING_POINT;
   }
 }

@@ -9,6 +9,7 @@ public class EntityFactory {
   
   public Entity getEntity(TypeImage entityImage) {
     final EntityType types = (EntityType) entityImage.getType();
+    
     Entity entity;
   
     switch (types) {
