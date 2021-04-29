@@ -1,10 +1,14 @@
 package main.views;
 
 
+
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.util.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
@@ -12,6 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.controllers.GameController;
 import main.controllers.RankingController;
 import main.controllers.SettingsController;
@@ -27,6 +32,7 @@ import main.utils.enums.CurrentScene;
 import main.views.entities.CommonShipView;
 import main.views.entities.MotherShipView;
 import main.views.entities.PlayerShipView;
+import main.views.fire.EnemyFireView;
 import main.views.sprite.EntitySprite;
 import main.views.fire.PrimaryFireView;
 import main.views.sprite.WeaponSprite;
@@ -38,6 +44,8 @@ public class GameView implements View, Initializable, KeyEventListener {
   private static final float BOUND_FACTOR = 1.6f;
   
   private GameLoop timer;
+  private Task<Void> task;
+  private Thread thread;
   private Stage stage;
   private EventHandler<KeyEvent> keyHandler;
   private float unit;
@@ -59,6 +67,8 @@ public class GameView implements View, Initializable, KeyEventListener {
     }
     
     update();
+    setTask();
+    startThread();
   }
 
   @SuppressWarnings("unchecked")
@@ -262,7 +272,40 @@ public class GameView implements View, Initializable, KeyEventListener {
   public void setStage(Stage stage)  {
     this.stage = stage;
   }
-  
+
+  public void enemyFireHandler() {
+    final Weapon enemyWeapon = controller.enemyFire();
+
+    if (enemyWeapon != null) {
+      final EnemyFireView enemyFireView = new EnemyFireView();
+
+      enemyFireView.create(((Collider) enemyWeapon).getPosition(), enemyWeapon, this.unit);
+
+      beamsSprites.put(enemyWeapon, enemyFireView);
+
+      enemyFireView.add(getParent());
+    }
+  }
+
+  private void setTask() {
+    this.task = new Task<>() {
+      @Override public Void call() {
+        timer.start();
+
+        final Timeline sleepFourSeconds = new Timeline(new KeyFrame(Duration.seconds(1), (actionEvent) -> enemyFireHandler()));
+        sleepFourSeconds.setCycleCount(Timeline.INDEFINITE);
+        sleepFourSeconds.play();
+
+        return null;
+      }
+    };
+  }
+
+  private void startThread() {
+    this.thread = new Thread(task);
+    this.thread.start();
+  }
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.unit = getUnit();
@@ -289,18 +332,24 @@ public class GameView implements View, Initializable, KeyEventListener {
   }
   
   public void endGame() {
+    this.task.cancel();
+
     this.timer.stop();
-    
-    this.eventManager.cleanup();
-  
-    getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-  
-    controller.getModel().removePropertyChangeLister(this);
-  
-    getParent().getChildren().clear();
-  
-    MenuView.goToScene(getStage(), CurrentScene.MENU);
-  
-    RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
+
+    this.thread.interrupt();
+
+    if (this.thread.isInterrupted()) {
+      this.eventManager.cleanup();
+
+      getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+
+      controller.getModel().removePropertyChangeLister(this);
+
+      getParent().getChildren().clear();
+
+      MenuView.goToScene(getStage(), CurrentScene.MENU);
+
+      RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
+    }
   }
 }
