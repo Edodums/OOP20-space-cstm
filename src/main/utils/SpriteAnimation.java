@@ -11,15 +11,15 @@ import javafx.util.Duration;
  * Taken from here: https://netopyr.com/2012/03/09/creating-a-sprite-animation-with-javafx/
  */
 public class SpriteAnimation extends Transition {
-  private static final Duration DURATION = new Duration(400.0);
+  private static final Duration DURATION = new Duration(600.0);
 
   private final ImageView imageView;
-  private final double count;
-  private final double columns;
-  private final double width;
-  private final double height;
+  private final float count;
+  private final float columns;
+  private final float width;
+  private final float height;
 
-  private double lastIndex;
+  private float lastIndex;
 
   /**
     * Pass the imageView, set duration of animation and a linear interpolator
@@ -28,22 +28,22 @@ public class SpriteAnimation extends Transition {
     *  @param columns
    *
   */
-  public SpriteAnimation(ImageView imageView, double count, double columns) {
+  public SpriteAnimation(ImageView imageView, float count, float columns) {
     this.imageView = imageView;
     this.count = count;
     this.columns = columns;
-    this.width = imageView.getImage().getWidth();
-    this.height = imageView.getImage().getHeight();
+    this.width = (float) imageView.getImage().getWidth();
+    this.height = (float) imageView.getImage().getHeight();
 
     setCycleDuration(DURATION);
     setInterpolator(Interpolator.LINEAR);
   }
 
   protected void interpolate(double k) {
-    final double index = Math.floor(k * count);
+    final float index = (float) Math.floor(k * count);
 
     if (index != lastIndex) {
-      final double x = index % columns * (width / columns);
+      final float x = index % columns * (width / columns);
       imageView.setViewport(new Rectangle2D(x, 0, width / columns, height));
 
       lastIndex = index;

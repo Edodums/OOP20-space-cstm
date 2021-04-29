@@ -5,9 +5,16 @@ import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 
 public interface Weapon {
-    void deploy(Pair<Double, Double> startingPoint);
+    
+    void deploy(Pair<Float, Float> startingPoint);
+    
+    void move();
+    
+    boolean checkCollision(Collider entityToCheck);
 
-    void checkCollision(Collider entityToCheck);
+    default String getFilename(){
+        return getTypeImages().getName();
+    }
 
     CustomizableTypeImage getTypeImages();
 }

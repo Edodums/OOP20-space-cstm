@@ -3,18 +3,26 @@ package main.models.components;
 import main.utils.Pair;
 
 public abstract class Collider {
-    private Pair<Double, Double> position;
-
-    public abstract double getWidth();
-    public abstract double getHeight();
+    private Pair<Float, Float> position;
+    private Pair<Float, Float> startingPosition;
     
-    public abstract Pair<Double, Double> getStartingPoint();
-
-    public Pair<Double, Double> getPosition()  {
+    public abstract float getWidth();
+    
+    public abstract float getHeight();
+    
+    public Pair<Float, Float> getStartingPoint() {
+        return this.startingPosition;
+    }
+    
+    public void setStartingPosition(final Pair<Float, Float> position)  {
+        this.startingPosition = position;
+    }
+    
+    public Pair<Float, Float> getPosition()  {
         return this.position;
     }
 
-    public void setPosition(Pair<Double, Double> currentPosition) {
+    public void setPosition(final Pair<Float, Float> currentPosition) {
         this.position = currentPosition;
     }
 }

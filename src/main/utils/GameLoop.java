@@ -1,8 +1,8 @@
 package main.utils;
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleFloatProperty;
 
 /**
  * Taken Here:
@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 public abstract class GameLoop extends AnimationTimer {
   long pauseStart;
   long animationStart;
-  DoubleProperty animationDuration = new SimpleDoubleProperty(0L);
+  FloatProperty animationDuration = new SimpleFloatProperty(0L);
   
   long lastFrameTimeNanos;
   
@@ -30,7 +30,7 @@ public abstract class GameLoop extends AnimationTimer {
     return isActive;
   }
   
-  public DoubleProperty animationDurationProperty() {
+  public FloatProperty animationDurationProperty() {
     return animationDuration;
   }
   
@@ -89,7 +89,7 @@ public abstract class GameLoop extends AnimationTimer {
     if (!isPaused) {
       long animDuration = now - animationStart;
       
-      animationDuration.set(animDuration / 1e9);
+      animationDuration.set((float) (animDuration / 1e9));
       
       float secondsSinceLastFrame = (float) ((now - lastFrameTimeNanos) / 1e9);
       
@@ -106,7 +106,7 @@ public abstract class GameLoop extends AnimationTimer {
     this.animationStart = animationStart;
   }
   
-  public void setAnimationDuration(double animationDuration) {
+  public void setAnimationDuration(float animationDuration) {
     this.animationDuration.set(animationDuration);
   }
   
