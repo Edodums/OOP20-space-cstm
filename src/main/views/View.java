@@ -4,10 +4,12 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import main.models.ObservableModel;
 
 import java.beans.PropertyChangeListener;
 
 public interface View extends PropertyChangeListener {
+
   Pane getParent();
   
   float getBoundFactor();
@@ -29,5 +31,9 @@ public interface View extends PropertyChangeListener {
   /* Primary Screen (useful if the user has multiple monitors bounds */
   default Rectangle2D getPrimaryScreenBounds() {
     return Screen.getPrimary().getVisualBounds();
+  }
+
+  default void addListenerToModel(ObservableModel model) {
+    model.addPropertyChangeListener(this);
   }
 }
