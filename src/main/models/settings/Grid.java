@@ -1,8 +1,9 @@
 package main.models.settings;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import main.models.settings.interfaces.GridImage;
 
-public class Grid {
+public class Grid implements GridImage {
     @JsonSerialize
     private final int rows;
     @JsonSerialize
@@ -31,29 +32,34 @@ public class Grid {
     }
 
     public Grid() {
-        this.rows = 1;
-        this.columns = 1;
-        this.selectedRow = 1;
-        this.selectedColumn = 1;
+        this.rows = 0;
+        this.columns = 0;
+        this.selectedRow = 0;
+        this.selectedColumn = 0;
         this.internalColumns = 0;
     }
 
+    @Override
     public int getRows() {
         return rows;
     }
 
+    @Override
     public int getColumns() {
         return columns;
     }
 
+    @Override
     public int getSelectedColumn() {
         return selectedColumn;
     }
 
+    @Override
     public int getSelectedRow() {
         return selectedRow;
     }
     
+    @Override
     public int getInternalColumns() {
         return internalColumns;
     }

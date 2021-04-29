@@ -1,17 +1,19 @@
 package main.models.settings;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.GridImage;
+import main.models.settings.interfaces.Type;
 
 
-public class TypeImage {
+public class TypeImage implements CustomizableTypeImage {
   
   @JsonSerialize
   private String name;
   @JsonSerialize
   private Type type;
   @JsonSerialize
-  private Grid grid;
+  private GridImage grid;
 
   public TypeImage() {}
   
@@ -20,27 +22,33 @@ public class TypeImage {
        this.type = type;
        this.grid = grid;
   }
-  
+
+  @Override
   public String getName() {
       return this.name;
   }
-  
+
+  @Override
   public Type getType() {
       return this.type;
   }
-  
-  public Grid getGrid() {
+
+  @Override
+  public GridImage getGrid() {
     return this.grid;
   }
-  
-  public void setGrid(Grid grid) {
+
+  @Override
+  public void setGrid(GridImage grid) {
     this.grid = grid;
   }
-  
+
+  @Override
   public void setType(Type type) {
     this.type = type;
   }
-  
+
+  @Override
   public void setName(String name) {
     this.name = name;
   }

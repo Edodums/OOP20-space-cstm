@@ -2,9 +2,10 @@ package main.views.customization.interfaces;
 
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
 
-public interface CustomizableTypeImage extends Customizable {
+public interface CustomizableViewTypeImage extends CustomizableView {
   
   void toggleGridTextFields(boolean value);
   
@@ -32,9 +33,9 @@ public interface CustomizableTypeImage extends Customizable {
   
   void setSelectedColumn(String value);
   
-  void setTypeImage(TypeImage typeImage);
+  void setTypeImage(CustomizableTypeImage typeImage);
   
-  TypeImage getTypeImage();
+  CustomizableTypeImage getTypeImage();
   
   void setImage(Image image);
   

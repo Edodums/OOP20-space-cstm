@@ -2,7 +2,7 @@ package main.views.customization.interfaces;
 
 import main.utils.enums.Orientations;
 
-public interface CustomizableOrientation extends Customizable {
+public interface CustomizableViewOrientation extends CustomizableView {
   
   void handleSelectOrientation();
   

@@ -2,7 +2,7 @@ package main.utils.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import main.models.settings.Type;
+import main.models.settings.interfaces.Type;
 
 @JsonDeserialize(as = WeaponType.class)
 public enum WeaponType implements Type {

@@ -10,9 +10,9 @@ import javafx.scene.Group;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import main.utils.enums.Orientations;
-import main.views.customization.interfaces.CustomizableOrientation;
+import main.views.customization.interfaces.CustomizableViewOrientation;
 
-public class Orientation implements CustomizableOrientation, Initializable {
+public class Orientation implements CustomizableViewOrientation, Initializable {
   private final ObservableList<Orientations> orientations = FXCollections.observableArrayList(Orientations.values());
   
   private Orientations orientationValue;
