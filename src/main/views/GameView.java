@@ -1,97 +1,222 @@
 package main.views;
 
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import main.controllers.GameController;
-import main.controllers.SettingsController;
-import main.events.EventManager;
-import main.events.PlayerGoLeftEvent;
-import main.events.PlayerGoRightEvent;
-import main.events.PlayerShootEvent;
-import main.exceptions.SettingsNotLoaded;
-import main.models.Game;
-import main.models.components.interfaces.Entity;
-import main.utils.GameLoop;
-import main.utils.Pair;
-import main.views.entities.CommonShipView;
-import main.views.entities.MotherShipView;
-import main.views.entities.PlayerShipView;
-import main.views.entities.interfaces.EntitySprite;
-import main.views.fire.Primary;
-import org.greenrobot.eventbus.EventBus;
-
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.util.*;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import main.controllers.GameController;
+import main.controllers.RankingController;
+import main.controllers.SettingsController;
+import main.events.EventManager;
+import main.exceptions.SettingsNotLoaded;
+import main.models.Game;
+import main.models.components.Collider;
+import main.models.components.interfaces.Entity;
+import main.models.components.interfaces.Weapon;
+import main.utils.GameLoop;
+import main.utils.Pair;
+import main.utils.enums.CurrentScene;
+import main.views.entities.CommonShipView;
+import main.views.entities.MotherShipView;
+import main.views.entities.PlayerShipView;
+import main.views.sprite.EntitySprite;
+import main.views.fire.PrimaryFireView;
+import main.views.sprite.WeaponSprite;
 
-public class GameView implements View, Initializable, MovementHandler {
-  private static final GameController controller = new GameController(new Game(SettingsController.load()));
+public class GameView implements View, Initializable, KeyEventListener {
+  private static final GameController controller = new GameController(new Game(SettingsController.load()) );
   private static final Map<Entity, EntitySprite> entitiesSprites = new HashMap<>();
-  private static final double BOUND_FACTOR = 1.6;
-  private static final double UNIT = 50;
+  private static final Map<Weapon, WeaponSprite> beamsSprites = new HashMap<>();
+  private static final float BOUND_FACTOR = 1.6f;
   
+  private GameLoop timer;
   private Stage stage;
-  private EventManager eventManager = new EventManager(controller.getModel());
+  private EventHandler<KeyEvent> keyHandler;
+  private float unit;
   
+  private final EventManager eventManager = new EventManager(controller.getModel(), this);
+ 
   @FXML
   private AnchorPane parent;
-  
+
   public GameView() {
     try {
-      controller.getModel().addPropertyChangeListener(this);
+      addListenerToModel(controller.getModel());
+      controller.initGrid();
+      controller.setAliveEnemies();
       
       new LoginDialog(controller);
     } catch (SettingsNotLoaded e) {
       e.printStackTrace();
     }
-  
     
-    updateGrid();
+    update();
   }
-  
+
+  @SuppressWarnings("unchecked")
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     switch (evt.getPropertyName()) {
-      case "grid": updateGridView((Map<Pair<Double, Double>, Optional<Entity>>) evt.getNewValue());
+      case "weapon":
+        updateLasers((Weapon) evt.getNewValue());
+        break;
+      case "removeWeapon":
+        removeBeam((Weapon) evt.getNewValue());
+        break;
+      case "grid":
+        updateGridView((Map<Pair<Float, Float>, Optional<Entity>>) evt.getNewValue());
+        break;
+      case "removeFromGrid":
+        removeFromGridView((Entity) evt.getNewValue());
+        break;
     }
-   // System.out.println("evt.getPropertyName()" +  evt.getPropertyName() + "evt.getNewValue()" +  evt.getNewValue() );
   }
   
-  private void updateGridView(Map<Pair<Double, Double>, Optional<Entity>> grid) {
+  private void removeFromGridView(Entity entityToDelete) {
+   Map<Entity, EntitySprite> spriteMap = new HashMap<>(entitiesSprites);
+  
+    spriteMap.forEach((entity, sprite) -> {
+      if (entityToDelete.equals(entity)) {
+        entitiesSprites.remove(entity, sprite);
+        sprite.remove(getParent());
+      }
+    });
+  }
+  
+  private void updateLasers(Weapon weapon) {
+    final Pair<Float, Float> position = ((Collider) weapon).getPosition();
+    final WeaponSprite beamSprite = beamsSprites.get(weapon);
+    
+    if (position != null && beamSprite != null) {
+      final float positionY = position.getY();
+      final ImageView beam = beamSprite.get();
+      
+      beam.translateYProperty().set(positionY * unit);
+    }
+  }
+  
+  private void updateGridView(Map<Pair<Float, Float>, Optional<Entity>> grid) {
     grid
         .entrySet()
         .stream()
         .filter(entry -> entry.getValue().isPresent())
         .forEachOrdered((entry) -> {
                 final Entity entity = entry.getValue().get();
-                final Pair<Double, Double> position = entry.getKey();
+                final Pair<Float, Float> position = entry.getKey();
                 final EntitySprite entitySprite = getStrategy(entity);
-              
-                entitySprite.update(position, UNIT);
+                
+                entitySprite.update(position, this.unit);
               }
         );
   }
   
+  private void update() {
+    this.timer = new GameLoop() {
+      @Override
+      public void tick(float secondsSinceLastFrame) {
+        controller.updateGrid();
+        controller.moveLasers();
+        
+        final Map<Weapon, WeaponSprite> beamsSpritesCopy = new HashMap<>(beamsSprites);
+        
+        beamsSpritesCopy.forEach((weapon, weaponSprite) -> {
+          final float beamYPosition = (float) weaponSprite.get().getBoundsInParent().getMinY();
+          final float beamHeight = (float) weaponSprite.get().getFitHeight();
+          
+          if (beamYPosition <= beamHeight || controller.collisionHandler(weapon)) {
+            controller.removeLaserInstance(weapon);
+          }
+        });
+      }
+    };
+  }
+  
+
   @Override
-  public AnchorPane getParent() {
-    return this.parent;
+  public void addKeyEventHandler() {
+    this.keyHandler = keyEvent -> {
+
+      if (keyEvent.getCode().equals(KeyCode.SPACE)) {
+        primaryFireHandler();
+      } else {
+        movementHandler(keyEvent.getCode());
+      }
+    };
   }
   
   @Override
-  public double getBoundFactor() {
-    return BOUND_FACTOR;
+  public void keyListener() {
+    getStage().getScene().setOnKeyPressed(this.keyHandler);
   }
   
-  public Stage getStage() {
-    return this.stage;
+  public void primaryFireHandler() {
+    final Weapon primaryWeapon = controller.primaryFire();
+    
+    if (primaryWeapon != null) {
+      final PrimaryFireView primaryView = new PrimaryFireView();
+  
+      primaryView.create(((Collider) primaryWeapon).getPosition(), primaryWeapon, this.unit);
+  
+      beamsSprites.put(primaryWeapon, primaryView);
+  
+      primaryView.add(getParent());
+    }
   }
   
-  public void setStage(Stage stage)  {
-    this.stage = stage;
+  public void movementHandler(KeyCode code) {
+    final ImageView view = getPlayerNode();
+    final Pair<Float, Float> playerPosition = controller.getPlayerPosition();
+    final float windowWidth = (float) getStage().getScene().getWindow().widthProperty().get();
+
+    if (view != null) {
+      final boolean hasReachedMinX = view.getLayoutX() - this.unit < 0;
+      final boolean hasReachedMaxX = view.getLayoutX() + this.unit >= windowWidth - view.getFitWidth();
+
+      if (code.equals(KeyCode.RIGHT) && !hasReachedMaxX) {
+        playerPosition.setX(playerPosition.getX() + 1);
+      }
+
+      if (code.equals(KeyCode.LEFT) && !hasReachedMinX) {
+        playerPosition.setX(playerPosition.getX() - 1);
+      }
+
+      view.setLayoutX(playerPosition.getX() * this.unit);
+    }
+  }
+  
+  private void removeBeam(Weapon weapon) {
+    final Map<Weapon, WeaponSprite> beamsSpriteTemp = new HashMap<>(beamsSprites);
+    final WeaponSprite weaponSprite = beamsSpriteTemp.get(weapon);
+    
+    if (weaponSprite != null) {
+      weaponSprite.remove(getParent());
+      beamsSprites.remove(weapon, weaponSprite);
+    }
+  }
+  
+  private static float gcd(float a, float b) {
+    if (b == 0) {
+      return a;
+    }
+    
+    return gcd(b, a%b);
+  }
+  
+  /* https://www.geeksforgeeks.org/minimum-squares-to-evenly-cut-a-rectangle/ */
+  private float getUnit() {
+    return gcd(getHeight(), getWidth());
+  }
+  
+  private ImageView getPlayerNode() {
+    return (ImageView) getParent().lookup("#player");
   }
   
   private EntitySprite getStrategy(Entity entity) {
@@ -120,56 +245,27 @@ public class GameView implements View, Initializable, MovementHandler {
     return entitiesSprites.get(entity);
   }
   
-  private void primaryFireEvent() {
-    getParent().setOnKeyPressed(keyEvent -> {
-      if (keyEvent.getCode().equals(KeyCode.SPACE)) {
-        new Primary(controller.getModel());
-        
-        EventBus.getDefault().post(new PlayerShootEvent());
-      }
-    });
+  @Override
+  public AnchorPane getParent() {
+    return this.parent;
   }
   
   @Override
-  public void movementHandler() {
-    getStage().getScene().setOnKeyPressed(keyEvent -> {
-      final PlayerShipView view = (PlayerShipView) entitiesSprites
-                                                 .values()
-                                                 .stream()
-                                                 .filter(entity -> entity.getClass().equals(PlayerShipView.class))
-                                                 .findFirst()
-                                                 .get();
-      
-      if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
-        EventBus.getDefault().post(new PlayerGoRightEvent(view, UNIT));
-      }
-      
-      if (keyEvent.getCode().equals(KeyCode.LEFT)) {
-        EventBus.getDefault().post(new PlayerGoLeftEvent(view, UNIT));
-      }
-      
-    });
+  public float getBoundFactor() {
+    return BOUND_FACTOR;
   }
   
-  private void updateGrid() {
-    GameLoop timer = new GameLoop() {
-      @Override
-      public void tick(float secondsSinceLastFrame) {
-        try {
-          Thread.sleep(300);
-          controller.updateGrid();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    };
-    
-    timer.start();
+  public Stage getStage() {
+    return this.stage;
+  }
+  
+  public void setStage(Stage stage)  {
+    this.stage = stage;
   }
   
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // make setStage in interface so it can be set from the switch in MEnuview
+    this.unit = getUnit();
     
     controller
           .getModel()
@@ -179,19 +275,32 @@ public class GameView implements View, Initializable, MovementHandler {
           .filter(entry -> entry.getValue().isPresent())
           .forEachOrdered((entry) -> {
             final Entity entity = entry.getValue().get();
-            final Pair<Double, Double> position = entry.getKey();
+            final Pair<Float, Float> position = entry.getKey();
             final EntitySprite entitySprite = getStrategy(entity);
             
-            entitySprite.create(position, entity, UNIT);
+            entitySprite.create(position, entity, this.unit);
             entitySprite.add(getParent());
           }
     );
+  
+    AnchorPane.setBottomAnchor(getPlayerNode(),0.0);
     
     getParent().requestFocus();
-    primaryFireEvent();
+  }
   
-    /*for (int i = 0; i < 5; i++) {
-      controller.updateGrid();
-    }*/
+  public void endGame() {
+    this.timer.stop();
+    
+    this.eventManager.cleanup();
+  
+    getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+  
+    controller.getModel().removePropertyChangeLister(this);
+  
+    getParent().getChildren().clear();
+  
+    MenuView.goToScene(getStage(), CurrentScene.MENU);
+  
+    RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
   }
 }
