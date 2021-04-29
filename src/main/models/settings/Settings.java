@@ -8,12 +8,11 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import main.models.ObservableModel;
+import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.Setting;
 import main.utils.enums.Orientations;
 
-/**
- *
- */
-public class Settings implements ObservableModel {
+public class Settings implements ObservableModel, Setting {
     @JsonIgnore
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     
@@ -21,14 +20,16 @@ public class Settings implements ObservableModel {
     private Orientations orientation;
     
     @JsonSerialize
-    private Map<String, TypeImage> typeImages = Collections.synchronizedMap(new WeakHashMap<>());
+    private Map<String, CustomizableTypeImage> typeImages = Collections.synchronizedMap(new WeakHashMap<>());
     
     public Settings() {}
-    
-    public Map<String, TypeImage> getTypeImages() {
+
+    @Override
+    public Map<String, CustomizableTypeImage> getTypeImages() {
         return this.typeImages;
     }
-    
+
+    @Override
     public Orientations getOrientation() {
         return this.orientation;
     }
@@ -37,30 +38,34 @@ public class Settings implements ObservableModel {
     public PropertyChangeSupport getSupport() {
         return this.support;
     }
-    
+
+    @Override
     public void setOrientation(final Orientations orientation) {
         Orientations oldValue = this.orientation;
         this.orientation = orientation;
         
         firePropertyChange("orientation", oldValue, orientation);
     }
-    
-    public void setTypeImages(final Map<String, TypeImage> typeImages) {
-        Map<String, TypeImage> oldMap = this.typeImages;
+
+    @Override
+    public void setTypeImages(final Map<String, CustomizableTypeImage> typeImages) {
+        Map<String, CustomizableTypeImage> oldMap = this.typeImages;
         
         this.typeImages = typeImages;
         
         firePropertyChange("typeImages", oldMap, typeImages);
     }
-    
-    public void replaceTypeImage(final String key, final TypeImage typeImage) {
-        Map<String, TypeImage> oldMap = this.typeImages;
+
+    @Override
+    public void replaceTypeImage(final String key, final CustomizableTypeImage typeImage) {
+        Map<String, CustomizableTypeImage> oldMap = this.typeImages;
         
         this.typeImages.replace(key, typeImage);
     
         firePropertyChange("typeImages", oldMap, this.typeImages);
     }
-    
+
+    @Override
     public void loadDefault() {
         if (CustomizeDefaults.areDefaultsNeeded(this)) {
             CustomizeDefaults.loadDefaults(this);

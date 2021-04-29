@@ -1,6 +1,6 @@
 package main.views.customization.interfaces;
 
-public interface Customizable {
+public interface CustomizableView {
   
   String getLabel();
   

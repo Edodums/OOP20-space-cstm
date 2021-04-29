@@ -1,7 +1,7 @@
 package main.models.components.interfaces;
 
 import main.models.components.Collider;
-import main.models.settings.TypeImage;
+import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
 
 public interface Weapon {
@@ -11,11 +11,10 @@ public interface Weapon {
     void move();
     
     boolean checkCollision(Collider entityToCheck);
-    
-    TypeImage getTypeImages();
-    
+
     default String getFilename(){
         return getTypeImages().getName();
     }
-    
+
+    CustomizableTypeImage getTypeImages();
 }
