@@ -24,7 +24,6 @@ public class MenuView implements View {
     private static final MenuController controller = new MenuController(model);
 
     private final Map<CurrentScene, View> views = new HashMap<>();
-    public final static Map<CurrentScene, Scene> scenes = new HashMap<>();
 
     private Stage stage;
     private Scene scene;
@@ -98,14 +97,9 @@ public class MenuView implements View {
     private View getViewInstance(CurrentScene scene) {
         return this.views.get(scene);
     }
-    
-    public static void goToScene(Stage stage, CurrentScene newScene) {
-        final Scene scene = scenes.get(newScene);
 
-        if (newScene != null) {
-            stage.setScene(scene);
-            stage.show();
-        }
+    public static void goToScene(CurrentScene newScene) {
+        controller.setCurrentScene(newScene);
     }
     
     private void setNewScene(CurrentScene newScene) {
@@ -116,8 +110,6 @@ public class MenuView implements View {
         final View view = getViewInstance(newScene);
         
         setScene(view);
-        
-        scenes.put(newScene, scene);
         
         setUpdatedStage();
         view.setStage(getStage());
