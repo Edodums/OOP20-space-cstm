@@ -6,21 +6,22 @@ import java.util.Map;
 import java.util.Objects;
 
 import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.Orientable;
 import main.utils.enums.EntityType;
 import main.utils.enums.Orientations;
 import main.utils.enums.ResourcePath;
 import main.utils.enums.WeaponType;
 
 public class CustomizeDefaults {
-  private static final Orientations orientation = Orientations.VERTICAL;
-  private static final TypeImage weaponNpc = new TypeImage(ResourcePath.IMAGES_PATH + "enemy_laser.png", WeaponType.NPC, new Grid(3,5,1,1));
-  private static final TypeImage weaponPlayer = new TypeImage(ResourcePath.IMAGES_PATH + "player_laser_default.png", WeaponType.PLAYER, new Grid(8,1,5,1));
-  private static final TypeImage entityPlayer = new TypeImage(ResourcePath.IMAGES_PATH + "default_player_sprite.png", EntityType.PLAYER, new Grid());
-  private static final TypeImage entityCommonShip = new TypeImage(ResourcePath.IMAGES_PATH + "space_invaders_sprite.png", EntityType.COMMONSHIP, new Grid(6,2,0,0,3));
-  private static final TypeImage entityMotherShip = new TypeImage(ResourcePath.IMAGES_PATH + "mother_ship_sprites.png", EntityType.MOTHERSHIP, new Grid(6,2,3,0));
+  private static final Orientable orientation = Orientations.VERTICAL;
+  private static final CustomizableTypeImage weaponNpc = new TypeImage(ResourcePath.IMAGES_PATH + "enemy_laser.png", WeaponType.NPC, new Grid(3,5,1,1));
+  private static final CustomizableTypeImage weaponPlayer = new TypeImage(ResourcePath.IMAGES_PATH + "player_laser_default.png", WeaponType.PLAYER, new Grid(8,1,5,1));
+  private static final CustomizableTypeImage entityPlayer = new TypeImage(ResourcePath.IMAGES_PATH + "default_player_sprite.png", EntityType.PLAYER, new Grid());
+  private static final CustomizableTypeImage entityCommonShip = new TypeImage(ResourcePath.IMAGES_PATH + "space_invaders_sprite.png", EntityType.COMMONSHIP, new Grid(6,2,0,0,3));
+  private static final CustomizableTypeImage entityMotherShip = new TypeImage(ResourcePath.IMAGES_PATH + "mother_ship_sprites.png", EntityType.MOTHERSHIP, new Grid(6,2,3,0));
 
     /**
-     * I take the fields of the class i am in through the use of interface
+     * Take the fields of the class i am in, through the use of interface
      */
   private CustomizeDefaults() {}
 
@@ -31,7 +32,7 @@ public class CustomizeDefaults {
      */
   public static boolean areDefaultsNeeded(final Settings settings) {
     Map<String, CustomizableTypeImage> typeImages = settings.getTypeImages();
-    Orientations orientation = settings.getOrientation();
+    Orientable orientation = settings.getOrientation();
     
     return orientation == null || typeImages.entrySet().stream().anyMatch(entry -> entry.getValue() == null);
   }
@@ -42,7 +43,7 @@ public class CustomizeDefaults {
   public static void loadDefaults(final Settings settings)  {
     final Field[] fields = getFields();
     final Map<String, CustomizableTypeImage> typeImages = settings.getTypeImages();
-    final Orientations orientation = settings.getOrientation();
+    final Orientable orientation = settings.getOrientation();
     
     if (orientation == null) {
       settings.setOrientation(CustomizeDefaults.orientation);
@@ -50,12 +51,13 @@ public class CustomizeDefaults {
       /**
        * through the couple entrySet() and stream() i can make the filter for the objects that are not null
        */
+
     typeImages
           .entrySet()
           .stream()
           .filter(Objects::nonNull)
           .forEach(entry ->
-            Arrays.stream(fields).forEach(field -> {  // check if the file is not static
+            Arrays.stream(fields).forEach(field -> {  // check if the field is not static
               if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
                 return;
               }

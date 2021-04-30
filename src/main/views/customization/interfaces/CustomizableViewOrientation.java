@@ -1,6 +1,6 @@
 package main.views.customization.interfaces;
 
-import main.utils.enums.Orientations;
+import main.models.settings.interfaces.Orientable;
 
 public interface CustomizableViewOrientation extends CustomizableView {
   
@@ -8,8 +8,8 @@ public interface CustomizableViewOrientation extends CustomizableView {
   
   void setSelectedOrientation(int index);
   
-  void setOrientationValue(Orientations value);
+  void setOrientationValue(final Orientable value);
   
-  Orientations getSelectedOrientation();
+  Orientable getSelectedOrientation();
   
 }

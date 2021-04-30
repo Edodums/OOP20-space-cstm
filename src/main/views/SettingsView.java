@@ -14,6 +14,7 @@ import main.models.settings.Grid;
 import main.models.settings.TypeImage;
 import main.models.settings.interfaces.Type;
 import main.models.settings.interfaces.CustomizableTypeImage;
+import main.utils.enums.CurrentScene;
 import main.utils.enums.EntityType;
 import main.utils.enums.WeaponType;
 import main.views.customization.components.CustomizableComponentFactory;
@@ -101,6 +102,12 @@ public class SettingsView implements View, Initializable {
         
         controller.write();
     }
+
+    @FXML
+    public void goBack(ActionEvent actionEvent) {
+        MenuView.goToScene(getStage(), CurrentScene.MENU);
+    }
+
     /**
      * Add a parent the components through the factory (static factory method) which makes use of static methods
      * @param url

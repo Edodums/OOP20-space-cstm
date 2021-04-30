@@ -9,9 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import main.models.settings.Settings;
 import main.models.settings.interfaces.CustomizableTypeImage;
-import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.Orientable;
 import main.services.FileService;
-import main.utils.enums.Orientations;
 import main.utils.enums.ResourcePath;
 import main.views.customization.interfaces.CustomizableView;
 import main.views.customization.interfaces.CustomizableViewOrientation;
@@ -24,7 +23,7 @@ public class CustomizableComponentFactory {
   private CustomizableComponentFactory() {}
   
   public static Set<Group> getCustomizableComponents(final Settings settings) {
-    final Orientations orientation = settings.getOrientation();
+    final Orientable orientation = settings.getOrientation();
     final Map<String, CustomizableTypeImage> typeImages = settings.getTypeImages();
     
     Set<Group> customizableSet = new HashSet<>();

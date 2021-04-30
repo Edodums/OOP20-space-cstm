@@ -1,6 +1,7 @@
 package main.models.settings;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.beans.PropertyChangeSupport;
 import java.util.Collections;
@@ -9,15 +10,16 @@ import java.util.WeakHashMap;
 
 import main.models.ObservableModel;
 import main.models.settings.interfaces.CustomizableTypeImage;
+import main.models.settings.interfaces.Orientable;
 import main.models.settings.interfaces.Setting;
-import main.utils.enums.Orientations;
+import main.models.settings.interfaces.Type;
 
 public class Settings implements ObservableModel, Setting {
     @JsonIgnore
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     
     @JsonSerialize
-    private Orientations orientation;
+    private Orientable orientation;
     
     @JsonSerialize
     private Map<String, CustomizableTypeImage> typeImages = Collections.synchronizedMap(new WeakHashMap<>());
@@ -30,7 +32,7 @@ public class Settings implements ObservableModel, Setting {
     }
 
     @Override
-    public Orientations getOrientation() {
+    public Orientable getOrientation() {
         return this.orientation;
     }
     
@@ -40,8 +42,9 @@ public class Settings implements ObservableModel, Setting {
     }
 
     @Override
-    public void setOrientation(final Orientations orientation) {
-        Orientations oldValue = this.orientation;
+    public void setOrientation(final Orientable orientation) {
+        Orientable oldValue = this.orientation;
+        
         this.orientation = orientation;
         
         firePropertyChange("orientation", oldValue, orientation);
