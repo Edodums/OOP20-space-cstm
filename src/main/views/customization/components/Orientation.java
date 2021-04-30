@@ -9,20 +9,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import main.models.settings.interfaces.Orientable;
 import main.utils.enums.Orientations;
 import main.views.customization.interfaces.CustomizableViewOrientation;
 
 public class Orientation implements CustomizableViewOrientation, Initializable {
-  private final ObservableList<Orientations> orientations = FXCollections.observableArrayList(Orientations.values());
+  private final ObservableList<Orientable> orientations = FXCollections.observableArrayList(Orientations.values());
   
-  private Orientations orientationValue;
+  private Orientable orientationValue;
   
   @FXML
   private Group orientation;
   @FXML
   private Label orientationLabel;
   @FXML
-  private ChoiceBox<Orientations> orientationsChoices;
+  private ChoiceBox<Orientable> orientationsChoices;
   
   public Orientation() {}
   
@@ -61,11 +62,12 @@ public class Orientation implements CustomizableViewOrientation, Initializable {
   }
   
   @Override
-  public Orientations getSelectedOrientation() {
+  public Orientable getSelectedOrientation() {
     return this.orientationsChoices.getValue();
   }
   
-  public void setOrientationValue(Orientations value) {
+  @Override
+  public void setOrientationValue(Orientable value) {
     this.orientationValue = value;
   }
 }
