@@ -15,4 +15,9 @@
             <Font size="24.0" />
         </font>
     </Button>
+    <Button layoutX="636.0" layoutY="910.0" mnemonicParsing="false" onAction="#goBack" text="Menu" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="740.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Button>
 </AnchorPane>
