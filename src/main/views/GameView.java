@@ -347,7 +347,7 @@ public class GameView implements View, Initializable, KeyEventListener {
 
       getParent().getChildren().clear();
 
-      MenuView.goToScene(getStage(), CurrentScene.MENU);
+      MenuView.goToScene(CurrentScene.MENU);
 
       RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
     }

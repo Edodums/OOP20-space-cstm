@@ -3,9 +3,14 @@ package main.views;
 import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -33,6 +38,9 @@ public class SettingsView implements View, Initializable {
     
     @FXML
     private AnchorPane parent;
+
+    @FXML
+    private ScrollPane scrollPane;
     
     public SettingsView() {
         addListenerToModel(controller.getModel());
@@ -105,7 +113,7 @@ public class SettingsView implements View, Initializable {
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        MenuView.goToScene(getStage(), CurrentScene.MENU);
+        MenuView.goToScene(CurrentScene.MENU);
     }
 
     /**
@@ -115,6 +123,16 @@ public class SettingsView implements View, Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        getParent().getChildren().addAll(CustomizableComponentFactory.getCustomizableComponents(controller.getModel()));
+        scrollPane.setPannable(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setPadding(new Insets(18.0));
+
+        final Set<Group> groups = CustomizableComponentFactory.getCustomizableComponents(controller.getModel());
+        final Group group = new Group();
+
+        group.getChildren().addAll(groups);
+
+        scrollPane.setContent(group);
     }
 }
