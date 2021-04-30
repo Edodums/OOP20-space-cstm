@@ -131,7 +131,7 @@ public class GameView implements View, Initializable, KeyEventListener {
           final float beamYPosition = (float) weaponSprite.get().getBoundsInParent().getMinY();
           final float beamHeight = (float) weaponSprite.get().getFitHeight();
           
-          if (beamYPosition <= beamHeight || controller.collisionHandler(weapon)) {
+          if (beamYPosition <= beamHeight || controller.collisionHandler(weapon) || beamYPosition > getHeight()) {
             controller.removeLaserInstance(weapon);
           }
         });
