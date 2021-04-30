@@ -48,11 +48,6 @@ public class MotherShip extends Collider implements Entity, Collidable {
     }
 
     @Override
-    public Pair<Float, Float> getPosition() {
-        return STARTING_POINT;
-    }
-
-    @Override
     public void die(Collider entityToCheck) {
         EventBus.getDefault().post(new MotherShipHitEvent((MotherShip) entityToCheck));
     }
