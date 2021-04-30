@@ -23,6 +23,7 @@ public class EventManager {
     final CommonShip commonShip = commonShipHitEvent.commonShip;
 
     gameModel.setGamePoints(gameModel.getGamePoints() + commonShip.getPointsValue());
+    gameModel.setAliveEnemies(gameModel.getAliveEnemies() - 1);
     
     if (gameModel.getAliveEnemies() == 0) {
       gameView.endGame();
@@ -34,6 +35,7 @@ public class EventManager {
     final MotherShip motherShip = motherShipHitEvent.motherShip;
     
     gameModel.setGamePoints(gameModel.getGamePoints() + motherShip.getPointsValue());
+    gameModel.setAliveEnemies(gameModel.getAliveEnemies() - 1);
     
     if (gameModel.getAliveEnemies() == 0) {
       gameView.endGame();
@@ -45,9 +47,8 @@ public class EventManager {
     final PlayerShip playerShip = playerShipHitEvent.playerShip;
     
     gameModel.setGamePoints(gameModel.getGamePoints() - playerShip.getPointsValue());
-    System.out.println(playerShip.getCurrentLives()  +  "  === CURRENT LIVES ===");
+    
     if (playerShip.getCurrentLives() <= 0) {
-      
       gameModel.removeFromGrid(playerShip);
       gameView.endGame();
     } else {

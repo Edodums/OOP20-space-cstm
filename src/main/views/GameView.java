@@ -65,9 +65,9 @@ public class GameView implements View, Initializable, KeyEventListener {
     } catch (SettingsNotLoaded e) {
       e.printStackTrace();
     }
-    
-    update();
+  
     setTask();
+    update();
     startThread();
   }
 

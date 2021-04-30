@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Optional;
+
+import main.events.PlayerShipHitEvent;
 import main.models.components.entities.PlayerShip;
 import main.models.components.Collider;
 import main.models.components.entities.MotherShip;
 import main.models.components.entities.CommonShip;
 import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
+import org.greenrobot.eventbus.EventBus;
 
 import static main.models.Game.*;
 
@@ -40,21 +43,18 @@ public interface Entity {
     
     default void move(Pair<Float, Float> pair, boolean isRight) {}
 
-    default void move(Collider entity, Pair<Float, Float> pair) {
+    default void move(Collider entity, Pair<Float, Float> pair, Optional<Entity> player) {
         final float unit = 0.014f;
         final float accelerationFactor = getAccelerationFactor(pair);
         final float minX = 1 + unit;
         final float minY = entity.getStartingPoint().getY();
         final float maxX = getMaxX() - unit;
         final float maxY = minY + getEnemiesNextRows() + getEnemiesRows();
-    
-        // System.out.println("INIT: " + pair);
         
-        final Pair<Float, Float> pair1 = new Pair<>(pair.getX(), pair.getY());
         
         /* 1. if you've reach the end you set take away 1 life from player counter. */
-        if (pair.getY() >= maxY) {
-            //TODO: probably I'll handle it with an Event ( if so, @Arianna have to create an Event Manager )
+        if (pair.getY() >= maxY  && player.isPresent()) {
+            EventBus.getDefault().post(new PlayerShipHitEvent((PlayerShip) player.get()));
             System.out.println("REACHING END");
         }
 

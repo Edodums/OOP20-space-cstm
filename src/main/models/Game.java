@@ -98,7 +98,7 @@ public class Game implements ObservableModel, GameWorld {
       
       final Entity realEntity = entity.get();
       
-      realEntity.move((Collider) realEntity, pair);
+      realEntity.move((Collider) realEntity, pair, getPlayer());
     });
     
     fireGridChange(oldMap);
@@ -113,27 +113,8 @@ public class Game implements ObservableModel, GameWorld {
 
   @Override
   public void removeFromGrid(Entity entityToDelete) {
-    final Map<Pair<Float, Float>, Optional<Entity>> old = new HashMap<>(this.grid);
-    
-    old.forEach((floatFloatPair, entity) -> {
-      if (entity.isEmpty()) {
-        return;
-      }
-      
-      if (entity.get().equals(entityToDelete)) {
-        System.out.println("===  floatFloatPair:   " +  floatFloatPair  + "entity:   " +  entity  + " entityToDelete:   " +  entityToDelete + " ===");
-        
-        System.out.println(getAliveEnemies() +   "   ==  ALIVE ENEMIES   ==   ");
-        
-        grid.remove(floatFloatPair, entity);
-        
-        System.out.println("AAAAAA NEO " + this.grid  + " THIS GRID");
-        
-        setAliveEnemies(getAliveEnemies() - 1);
-        
-        firePropertyChange("removeFromGrid", null, entityToDelete);
-      }
-    });
+    this.grid.entrySet().removeIf(entry -> entry.getValue().isPresent() && entry.getValue().get().equals(entityToDelete));
+    firePropertyChange("removeFromGrid", null, entityToDelete);
   }
 
   @Override
