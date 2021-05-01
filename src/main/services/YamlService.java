@@ -34,7 +34,6 @@ public class YamlService {
         try {
             this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
             this.objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-            this.objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
             
             return this.objectMapper.readValue(getFile(filename), modelClass);
         } catch (IOException e) {
