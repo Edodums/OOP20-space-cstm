@@ -333,18 +333,16 @@ public class GameView implements View, Initializable, KeyEventListener {
   
   public void endGame() {
     this.task.cancel();
-
     this.timer.stop();
-
     this.thread.interrupt();
-
+  
     if (this.thread.isInterrupted()) {
       this.eventManager.cleanup();
-
-      getStage().getScene().addEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
-
+      
+      getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+  
       controller.getModel().removePropertyChangeLister(this);
-
+  
       getParent().getChildren().clear();
 
       MenuView.goToScene(CurrentScene.MENU);

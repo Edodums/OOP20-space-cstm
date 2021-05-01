@@ -8,7 +8,6 @@ public class MenuController implements Controller {
     private Menu model;
 
     public MenuController(Menu model) {
-
         this.model = model;
     }
 

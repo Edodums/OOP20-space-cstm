@@ -55,40 +55,31 @@ public interface Entity {
         /* 1. if you've reach the end you set take away 1 life from player counter. */
         if (pair.getY() >= maxY  && player.isPresent()) {
             EventBus.getDefault().post(new PlayerShipHitEvent((PlayerShip) player.get()));
-            System.out.println("REACHING END");
         }
 
         final float addX = pair.getX() + unit + accelerationFactor;
         
         /* 2. if you've to go right then check if the current number (x) is lower than the next one */
         if (addX <= maxX  && isGoingRight(pair.getY(), minY)) {
-            // System.out.println("GOING RIGHT: " + pair + " CLASS:" + entity);
             pair.setX(addX);
         }
     
         final float minusX = pair.getX() - unit - accelerationFactor;
-    
-       // System.out.println((minusX >= minX)  + " xoxo  " + (!isGoingRight(pair.getY(), minY)));
+        
         /* 3. if you've to go left then check if the current number (x) is greater than the next one */
         if (minusX >= minX && !isGoingRight(pair.getY(), minY)) {
-            // System.out.println("COMING RIGHT: " + pair + " CLASS:" + entity);
             pair.setX(minusX);
         }
         
         /* 4. if you reach the last column and you're coming from right go down  */
         if (round(pair.getX(), 1 , true) >= maxX && isGoingRight(pair.getY(), minY))  {
-            // System.out.println("LAST COLUMN GOING RIGHT: " + pair + " CLASS:" + entity);
             pair.setY(pair.getY() + 0.2f);
         }
-    
         
-        // System.out.println("pair getx: " + pair.getX() + " minx: " + minX + " !isGoingRight: " + !isGoingRight(pair.getY(), minY) + " pairgetY: " +  pair.getY() + "  round: " + round(pair.getX(), 1, false));
         /* 5. if you reach the first column and you're coming from left then go down */
         if  (round(pair.getX(), 1, false) <= minX && !isGoingRight(pair.getY(), minY)) {
-            // System.out.println("FIRST COLUMN GOING RIGHT: " + pair + " CLASS:" + entity);
             pair.setY(pair.getY() + 0.2f);
         }
-        
         
         entity.setPosition(pair);
     }
