@@ -73,7 +73,6 @@ public interface Sprite {
     final int imageWidth = (int) Math.round(image.getWidth());
     final int imageHeight = (int) Math.round(image.getHeight());
     
-    // TODO: fix urgently
     if (totalRows == 1) {
       totalRows = 2;
     }

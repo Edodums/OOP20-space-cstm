@@ -11,6 +11,7 @@ import main.models.components.Collider;
 import main.models.components.entities.MotherShip;
 import main.models.components.entities.CommonShip;
 import main.models.settings.interfaces.CustomizableTypeImage;
+import main.utils.ModelConstants;
 import main.utils.Pair;
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,9 +45,9 @@ public interface Entity {
     default void move(Pair<Float, Float> pair, boolean isRight) {}
 
     default void move(Collider entity, Pair<Float, Float> pair, Optional<Entity> player) {
-        final float unit = 0.014f;
+        final float unit = ModelConstants.ENTITY_MOVE_X_UNIT;
         final float accelerationFactor = getAccelerationFactor(pair);
-        final float minX = 1 + unit;
+        final float minX = ModelConstants.ENTITY_MIN_UNIT + unit;
         final float minY = entity.getStartingPoint().getY();
         final float maxX = getMaxX() - unit;
         final float maxY = minY + getEnemiesNextRows() + getEnemiesRows();
@@ -72,13 +73,13 @@ public interface Entity {
         }
         
         /* 4. if you reach the last column and you're coming from right go down  */
-        if (round(pair.getX(), 1 , true) >= maxX && isGoingRight(pair.getY(), minY))  {
-            pair.setY(pair.getY() + 0.2f);
+        if (round(pair.getX(), ModelConstants.ENTITY_SCALE_UNIT , true) >= maxX && isGoingRight(pair.getY(), minY))  {
+            pair.setY(pair.getY() + ModelConstants.ENTITY_MOVE_Y_UNIT);
         }
         
         /* 5. if you reach the first column and you're coming from left then go down */
-        if  (round(pair.getX(), 1, false) <= minX && !isGoingRight(pair.getY(), minY)) {
-            pair.setY(pair.getY() + 0.2f);
+        if  (round(pair.getX(), ModelConstants.ENTITY_SCALE_UNIT, false) <= minX && !isGoingRight(pair.getY(), minY)) {
+            pair.setY(pair.getY() + ModelConstants.ENTITY_MOVE_Y_UNIT);
         }
         
         entity.setPosition(pair);

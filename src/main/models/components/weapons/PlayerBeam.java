@@ -6,6 +6,7 @@ import main.models.components.interfaces.Entity;
 import main.models.components.interfaces.Weapon;
 import main.models.settings.interfaces.CustomizableTypeImage;
 import main.utils.Pair;
+import main.utils.ModelConstants;
 
 
 public class PlayerBeam extends Collider implements Weapon, Collidable {
@@ -21,8 +22,8 @@ public class PlayerBeam extends Collider implements Weapon, Collidable {
   
   @Override
   public void deploy(Pair<Float, Float> startingPoint) {
-    final float translateYUnit = 0.002f;
-    final float translateXUnit = 0.66f;
+    final float translateYUnit = ModelConstants.PLAYER_BEAM_TRANSLATE_Y_UNIT;
+    final float translateXUnit = ModelConstants.PLAYER_BEAM_TRANSLATE_X_UNIT;
     final float currentX = startingPoint.getX() + translateXUnit;
     final float currentY = startingPoint.getY() - translateYUnit;
     
@@ -32,7 +33,7 @@ public class PlayerBeam extends Collider implements Weapon, Collidable {
   @Override
   public void move() {
     if (getPosition() != null && getPosition().getY() > 0) {
-      final float translateYUnit = 0.028f;
+      final float translateYUnit = ModelConstants.PLAYER_BEAM_MOVE_Y_UNIT;
       setPosition(new Pair<>(getPosition().getX(), getPosition().getY() - translateYUnit));
     }
   }
