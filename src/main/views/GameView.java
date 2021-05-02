@@ -38,7 +38,7 @@ import main.views.fire.PrimaryFireView;
 import main.views.sprite.WeaponSprite;
 
 public class GameView implements View, Initializable, KeyEventListener {
-  private static final GameController controller = new GameController(new Game(SettingsController.load()) );
+  private final GameController controller = new GameController(new Game(SettingsController.load()) );
   private static final Map<Entity, EntitySprite> entitiesSprites = new HashMap<>();
   private static final Map<Weapon, WeaponSprite> beamsSprites = new HashMap<>();
   private static final float BOUND_FACTOR = 1.6f;
@@ -335,19 +335,16 @@ public class GameView implements View, Initializable, KeyEventListener {
     this.task.cancel();
     this.timer.stop();
     this.thread.interrupt();
+    this.eventManager.cleanup();
   
-    if (this.thread.isInterrupted()) {
-      this.eventManager.cleanup();
-      
-      getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
+    getStage().getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.keyHandler);
   
-      controller.getModel().removePropertyChangeLister(this);
+    controller.getModel().removePropertyChangeLister(this);
   
-      getParent().getChildren().clear();
-
-      MenuView.goToScene(CurrentScene.MENU);
-
-      RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
-    }
+    getParent().getChildren().clear();
+  
+    MenuView.goToScene(CurrentScene.MENU);
+  
+    RankingController.addToRanking(controller.getPlayerName(), controller.getGamePoints());
   }
 }

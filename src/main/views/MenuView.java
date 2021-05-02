@@ -3,9 +3,8 @@ package main.views;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +22,7 @@ public class MenuView implements View {
     private static final Menu model = new Menu();
     private static final MenuController controller = new MenuController(model);
 
-    private final Map<CurrentScene, View> views = new HashMap<>();
+    private final Set<View> views = new LinkedHashSet<>();
 
     private Stage stage;
     private Scene scene;
@@ -94,8 +93,15 @@ public class MenuView implements View {
         return Fxml.valueOf(currentScene.toString()).getFilePath();
     }
 
-    private View getViewInstance(CurrentScene scene) {
-        return this.views.get(scene);
+    private View getViewInstance() {
+        Iterator<View> it = this.views.iterator();
+        View view = null;
+    
+        while (it.hasNext()) {
+            view = it.next();
+        }
+        
+        return view;
     }
 
     public static void goToScene(CurrentScene newScene) {
@@ -104,10 +110,10 @@ public class MenuView implements View {
     
     private void setNewScene(CurrentScene newScene) {
         setLoader(getFxmlFromCurrentScene(newScene));
-        setLoaderFactory(newScene);
+        setLoaderFactory();
         setParent();
         
-        final View view = getViewInstance(newScene);
+        final View view = getViewInstance();
         
         setScene(view);
         
@@ -141,19 +147,13 @@ public class MenuView implements View {
         this.loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(filename)));
     }
     
-    private void setLoaderFactory(CurrentScene currentScene)
+    private void setLoaderFactory()
     {
         this.loader.setControllerFactory(clazz -> {
             try {
-                View view = views.get(currentScene);
-    
-                if (view != null) {
-                    return view;
-                }
+                View view = (View) clazz.getConstructor().newInstance();
                 
-                view = (View) clazz.getConstructor().newInstance();
-                
-                views.put(currentScene, view);
+                views.add(view);
                 
                 return view;
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

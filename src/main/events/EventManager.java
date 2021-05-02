@@ -4,6 +4,7 @@ import main.models.Game;
 import main.models.components.entities.CommonShip;
 import main.models.components.entities.MotherShip;
 import main.models.components.entities.PlayerShip;
+import main.models.components.interfaces.Entity;
 import main.views.GameView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,12 +48,10 @@ public class EventManager {
     final PlayerShip playerShip = playerShipHitEvent.playerShip;
     
     gameModel.setGamePoints(gameModel.getGamePoints() - playerShip.getPointsValue());
+    playerShip.setCurrentLives(playerShip.getCurrentLives() - 1);
     
-    if (playerShip.getCurrentLives() <= 0) {
-      gameModel.removeFromGrid(playerShip);
+    if (playerShip.getCurrentLives() == 0) {
       gameView.endGame();
-    } else {
-      playerShip.setCurrentLives(playerShip.getCurrentLives() - 1);
     }
   }
    
