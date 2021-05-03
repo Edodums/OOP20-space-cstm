@@ -17,11 +17,6 @@ public interface Sprite {
   void set(ImageView imageView);
   
   default void add(Pane pane) {
-    if (get().getImage().getWidth() > 400) {
-      get().setFitWidth(24);
-      get().setPreserveRatio(true);
-    }
-    
     pane.getChildren().add(get());
   }
   

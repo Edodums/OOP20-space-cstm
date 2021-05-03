@@ -1,6 +1,5 @@
 package space.cstm.views.customization.components;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;

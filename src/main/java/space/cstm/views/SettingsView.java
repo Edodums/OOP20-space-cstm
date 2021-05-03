@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -33,7 +34,7 @@ import space.cstm.views.customization.interfaces.CustomizableViewTypeImage;
 public class SettingsView implements View, Initializable {
     private static final float BOUND_FACTOR = 1.4f;
     private static final SettingsController controller = new SettingsController(SettingsController.load());
-    
+
     private Stage stage;
     
     @FXML
@@ -41,6 +42,15 @@ public class SettingsView implements View, Initializable {
 
     @FXML
     private ScrollPane scrollPane;
+
+    @FXML
+    public Button save;
+
+    @FXML
+    public Button cancel;
+
+    @FXML
+    public Button goBack;
     
     public SettingsView() {
         addListenerToModel(controller.getModel());
@@ -132,6 +142,7 @@ public class SettingsView implements View, Initializable {
         final Group group = new Group();
 
         group.getChildren().addAll(groups);
+        group.getChildren().addAll(save, cancel, goBack);
 
         scrollPane.setContent(group);
     }

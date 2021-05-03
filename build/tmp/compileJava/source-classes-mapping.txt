@@ -1,5 +1,5 @@
-space/cstm/views/entities/CommonShipView.java
- space.cstm.views.entities.CommonShipView
+space/cstm/views/sprite/EntitySprite.java
+ space.cstm.views.sprite.EntitySprite
 space/cstm/utils/enums/FileType.java
  space.cstm.utils.enums.FileType
 space/cstm/models/settings/TypeImage.java
@@ -34,10 +34,10 @@ space/cstm/utils/enums/WeaponType.java
  space.cstm.utils.enums.WeaponType
 space/cstm/views/KeyEventListener.java
  space.cstm.views.KeyEventListener
-space/cstm/views/sprite/WeaponSprite.java
- space.cstm.views.sprite.WeaponSprite
-space/cstm/views/entities/PlayerShipView.java
- space.cstm.views.entities.PlayerShipView
+space/cstm/services/FileService.java
+ space.cstm.services.FileService
+space/cstm/views/customization/components/EntityPlayer.java
+ space.cstm.views.customization.components.EntityPlayer
 space/cstm/controllers/Controller.java
  space.cstm.controllers.Controller
 space/cstm/models/components/entities/EntityFactory.java
@@ -53,8 +53,8 @@ space/cstm/models/components/weapons/PlayerBeam.java
  space.cstm.models.components.weapons.PlayerBeam
 space/cstm/exceptions/DirectoryNotCreated.java
  space.cstm.exceptions.DirectoryNotCreated
-space/cstm/views/fire/EnemyFireView.java
- space.cstm.views.fire.EnemyFireView
+space/cstm/views/customization/components/WeaponNpc.java
+ space.cstm.views.customization.components.WeaponNpc
 space/cstm/events/CommonShipHitEvent.java
  space.cstm.events.CommonShipHitEvent
 space/cstm/models/components/interfaces/Entity.java
@@ -63,8 +63,8 @@ space/cstm/views/MenuView.java
  space.cstm.views.MenuView
 space/cstm/controllers/MenuController.java
  space.cstm.controllers.MenuController
-space/cstm/utils/SpriteAnimation.java
- space.cstm.utils.SpriteAnimation
+space/cstm/views/sprite/Sprite.java
+ space.cstm.views.sprite.Sprite
 space/cstm/models/settings/Settings.java
  space.cstm.models.settings.Settings
 space/cstm/models/ObservableModel.java
@@ -75,16 +75,16 @@ space/cstm/utils/Pair.java
  space.cstm.utils.Pair
 space/cstm/models/Ranking.java
  space.cstm.models.Ranking
-space/cstm/views/sprite/EntitySprite.java
- space.cstm.views.sprite.EntitySprite
+space/cstm/views/customization/components/WeaponPlayer.java
+ space.cstm.views.customization.components.WeaponPlayer
 space/cstm/services/JarService.java
  space.cstm.services.JarService
 space/cstm/models/settings/deserializers/CustomizableTypeImageDeserializer.java
  space.cstm.models.settings.deserializers.CustomizableTypeImageDeserializer
 space/cstm/models/settings/deserializers/TypeDeserializer.java
  space.cstm.models.settings.deserializers.TypeDeserializer
-space/cstm/views/sprite/Sprite.java
- space.cstm.views.sprite.Sprite
+space/cstm/views/customization/components/EntityCommonShip.java
+ space.cstm.views.customization.components.EntityCommonShip
 space/cstm/utils/enums/EntityType.java
  space.cstm.utils.enums.EntityType
 space/cstm/utils/enums/CurrentScene.java
@@ -119,12 +119,12 @@ space/cstm/models/settings/interfaces/Orientable.java
  space.cstm.models.settings.interfaces.Orientable
 space/cstm/controllers/RankingController.java
  space.cstm.controllers.RankingController
-space/cstm/views/entities/interfaces/Animated.java
- space.cstm.views.entities.interfaces.Animated
+space/cstm/views/fire/PrimaryFireView.java
+ space.cstm.views.fire.PrimaryFireView
 space/cstm/SpaceCstm.java
  space.cstm.SpaceCstm
-space/cstm/views/entities/MotherShipView.java
- space.cstm.views.entities.MotherShipView
+space/cstm/views/fire/EnemyFireView.java
+ space.cstm.views.fire.EnemyFireView
 space/cstm/Main.java
  space.cstm.Main
 space/cstm/models/settings/TypeDeserializer.java
@@ -141,8 +141,8 @@ space/cstm/controllers/SettingsController.java
  space.cstm.controllers.SettingsController
 space/cstm/views/customization/interfaces/CustomizableView.java
  space.cstm.views.customization.interfaces.CustomizableView
-space/cstm/views/fire/PrimaryFireView.java
- space.cstm.views.fire.PrimaryFireView
+space/cstm/views/customization/components/EntityMotherShip.java
+ space.cstm.views.customization.components.EntityMotherShip
 space/cstm/models/components/entities/CommonShip.java
  space.cstm.models.components.entities.CommonShip
 space/cstm/models/settings/deserializers/SettingDeserializer.java
@@ -163,21 +163,21 @@ space/cstm/views/customization/components/Orientation.java
  space.cstm.views.customization.components.Orientation
 space/cstm/views/RankingView.java
  space.cstm.views.RankingView
-space/cstm/views/SettingsView.java
- space.cstm.views.SettingsView
-space/cstm/views/customization/components/EntityCommonShip.java
- space.cstm.views.customization.components.EntityCommonShip
-space/cstm/views/customization/components/WeaponNpc.java
- space.cstm.views.customization.components.WeaponNpc
-space/cstm/views/customization/components/WeaponPlayer.java
- space.cstm.views.customization.components.WeaponPlayer
-space/cstm/views/customization/components/EntityMotherShip.java
- space.cstm.views.customization.components.EntityMotherShip
-space/cstm/views/customization/components/EntityPlayer.java
- space.cstm.views.customization.components.EntityPlayer
-space/cstm/services/FileService.java
- space.cstm.services.FileService
-space/cstm/views/customization/components/CustomizableComponentFactory.java
- space.cstm.views.customization.components.CustomizableComponentFactory
 space/cstm/services/YamlService.java
  space.cstm.services.YamlService
+space/cstm/views/entities/CommonShipView.java
+ space.cstm.views.entities.CommonShipView
+space/cstm/views/entities/MotherShipView.java
+ space.cstm.views.entities.MotherShipView
+space/cstm/views/sprite/WeaponSprite.java
+ space.cstm.views.sprite.WeaponSprite
+space/cstm/views/entities/PlayerShipView.java
+ space.cstm.views.entities.PlayerShipView
+space/cstm/views/SettingsView.java
+ space.cstm.views.SettingsView
+space/cstm/views/customization/components/CustomizableComponentFactory.java
+ space.cstm.views.customization.components.CustomizableComponentFactory
+space/cstm/utils/SpriteAnimation.java
+ space.cstm.utils.SpriteAnimation
+space/cstm/views/entities/interfaces/Animated.java
+ space.cstm.views.entities.interfaces.Animated
