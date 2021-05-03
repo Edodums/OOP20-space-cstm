@@ -1,3 +1,5 @@
 .idea/
 out/
 space-cstm.iml
+build/
+.gradle/
