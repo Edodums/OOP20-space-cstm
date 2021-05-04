@@ -3,3 +3,4 @@ out/
 space-cstm.iml
 build/
 .gradle/
+newJar.sh

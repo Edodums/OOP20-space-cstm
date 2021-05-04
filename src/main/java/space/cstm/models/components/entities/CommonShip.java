@@ -15,8 +15,8 @@ import static space.cstm.models.Game.*;
 
 public class CommonShip extends Collider implements Entity, Collidable {
   private static final Pair<Float, Float> STARTING_POINT = new Pair<>(3.0f, 1.0f);
-  private static final float WIDTH = 10.0f;
-  private static final float HEIGHT = 4.0f;
+  private static final float WIDTH = 1.1f;
+  private static final float HEIGHT = 0.7f;
   
   private final CustomizableTypeImage entityImage;
   

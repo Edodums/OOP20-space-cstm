@@ -15,8 +15,8 @@ public class MotherShip extends Collider implements Entity, Collidable {
 
     private static final float POINTS = 100;
     private static final float SPAWN_NUMBER = 1;
-    private static final float WIDTH = 4.0f;
-    private static final float HEIGHT = 2.5f;
+    private static final float WIDTH = 1.0f;
+    private static final float HEIGHT = 0.75f;
     private static final Pair<Float, Float> STARTING_POINT = new Pair<>(0.0f, 0.0f);
 
     private final CustomizableTypeImage typeImage;

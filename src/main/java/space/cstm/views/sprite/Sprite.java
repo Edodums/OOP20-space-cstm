@@ -5,6 +5,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
+import space.cstm.models.components.Collider;
+import space.cstm.models.components.interfaces.Entity;
+import space.cstm.models.components.interfaces.Weapon;
+import space.cstm.models.settings.TypeImage;
 import space.cstm.models.settings.interfaces.CustomizableTypeImage;
 import space.cstm.models.settings.interfaces.GridImage;
 import space.cstm.utils.Pair;
@@ -19,7 +23,7 @@ public interface Sprite {
   default void add(Pane pane) {
     pane.getChildren().add(get());
   }
-  
+
   default void update(Pair<Float, Float> position, float unit) {
     final ImageView imageView = get();
   

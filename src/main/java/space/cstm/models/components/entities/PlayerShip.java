@@ -16,8 +16,8 @@ public class PlayerShip extends Collider implements Entity, Collidable {
   private static final Pair<Float, Float> STARTING_POINT = new Pair<>(3.0f, getMaxY());
   private static final float POINTS = -50;
   private static final float SPAWN_NUMBER = 1;
-  private static final float WIDTH = 1.5f;
-  private static final float HEIGHT = 1.0f;
+  private static final float WIDTH = 2.0f;
+  private static final float HEIGHT = 1.8f;
   private static final int TOTAL_LIVES = 3;
 
   private final CustomizableTypeImage typeImage;

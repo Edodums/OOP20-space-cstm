@@ -1,11 +1,13 @@
-space/cstm/views/sprite/EntitySprite.java
- space.cstm.views.sprite.EntitySprite
+space/cstm/views/entities/interfaces/Animated.java
+ space.cstm.views.entities.interfaces.Animated
 space/cstm/utils/enums/FileType.java
  space.cstm.utils.enums.FileType
 space/cstm/models/settings/TypeImage.java
  space.cstm.models.settings.TypeImage
-space/cstm/models/components/entities/MotherShip.java
- space.cstm.models.components.entities.MotherShip
+space/cstm/views/GameView.java
+ space.cstm.views.GameView
+ space.cstm.views.GameView$1
+ space.cstm.views.GameView$2
 space/cstm/views/customization/interfaces/CustomizableViewOrientation.java
  space.cstm.views.customization.interfaces.CustomizableViewOrientation
 space/cstm/views/customization/interfaces/CustomizableViewTypeImage.java
@@ -20,8 +22,8 @@ space/cstm/exceptions/WeaponNotFoundException.java
  space.cstm.exceptions.WeaponNotFoundException
 space/cstm/utils/enums/ResourcePath.java
  space.cstm.utils.enums.ResourcePath
-space/cstm/models/components/entities/PlayerShip.java
- space.cstm.models.components.entities.PlayerShip
+space/cstm/views/sprite/Sprite.java
+ space.cstm.views.sprite.Sprite
 space/cstm/exceptions/SpriteEntityNotFoundException.java
  space.cstm.exceptions.SpriteEntityNotFoundException
 space/cstm/utils/ModelConstants.java
@@ -40,9 +42,8 @@ space/cstm/views/customization/components/EntityPlayer.java
  space.cstm.views.customization.components.EntityPlayer
 space/cstm/controllers/Controller.java
  space.cstm.controllers.Controller
-space/cstm/models/components/entities/EntityFactory.java
- space.cstm.models.components.entities.EntityFactory
- space.cstm.models.components.entities.EntityFactory$1
+space/cstm/views/entities/MotherShipView.java
+ space.cstm.views.entities.MotherShipView
 space/cstm/models/settings/CustomizeDefaults.java
  space.cstm.models.settings.CustomizeDefaults
 space/cstm/models/components/interfaces/Weapon.java
@@ -55,16 +56,16 @@ space/cstm/exceptions/DirectoryNotCreated.java
  space.cstm.exceptions.DirectoryNotCreated
 space/cstm/views/customization/components/WeaponNpc.java
  space.cstm.views.customization.components.WeaponNpc
-space/cstm/events/CommonShipHitEvent.java
- space.cstm.events.CommonShipHitEvent
-space/cstm/models/components/interfaces/Entity.java
- space.cstm.models.components.interfaces.Entity
+space/cstm/views/fire/PrimaryFireView.java
+ space.cstm.views.fire.PrimaryFireView
+space/cstm/views/sprite/WeaponSprite.java
+ space.cstm.views.sprite.WeaponSprite
 space/cstm/views/MenuView.java
  space.cstm.views.MenuView
 space/cstm/controllers/MenuController.java
  space.cstm.controllers.MenuController
-space/cstm/views/sprite/Sprite.java
- space.cstm.views.sprite.Sprite
+space/cstm/views/SettingsView.java
+ space.cstm.views.SettingsView
 space/cstm/models/settings/Settings.java
  space.cstm.models.settings.Settings
 space/cstm/models/ObservableModel.java
@@ -97,20 +98,18 @@ space/cstm/models/Menu.java
  space.cstm.models.Menu
 space/cstm/models/settings/deserializers/OrientableDeserializer.java
  space.cstm.models.settings.deserializers.OrientableDeserializer
-space/cstm/events/PlayerShipHitEvent.java
- space.cstm.events.PlayerShipHitEvent
+space/cstm/models/components/interfaces/WorldGrid.java
+ space.cstm.models.components.interfaces.WorldGrid
 space/cstm/exceptions/SettingsNotLoaded.java
  space.cstm.exceptions.SettingsNotLoaded
-space/cstm/events/EventManager.java
- space.cstm.events.EventManager
+space/cstm/views/customization/components/Orientation.java
+ space.cstm.views.customization.components.Orientation
 space/cstm/models/settings/interfaces/Setting.java
  space.cstm.models.settings.interfaces.Setting
 space/cstm/views/View.java
  space.cstm.views.View
-space/cstm/views/GameView.java
- space.cstm.views.GameView
- space.cstm.views.GameView$1
- space.cstm.views.GameView$2
+space/cstm/services/YamlService.java
+ space.cstm.services.YamlService
 module-info.java
  module-info
 space/cstm/models/settings/interfaces/GridImage.java
@@ -119,12 +118,12 @@ space/cstm/models/settings/interfaces/Orientable.java
  space.cstm.models.settings.interfaces.Orientable
 space/cstm/controllers/RankingController.java
  space.cstm.controllers.RankingController
-space/cstm/views/fire/PrimaryFireView.java
- space.cstm.views.fire.PrimaryFireView
+space/cstm/utils/SpriteAnimation.java
+ space.cstm.utils.SpriteAnimation
 space/cstm/SpaceCstm.java
  space.cstm.SpaceCstm
-space/cstm/views/fire/EnemyFireView.java
- space.cstm.views.fire.EnemyFireView
+space/cstm/views/customization/components/CustomizableComponentFactory.java
+ space.cstm.views.customization.components.CustomizableComponentFactory
 space/cstm/Main.java
  space.cstm.Main
 space/cstm/models/settings/TypeDeserializer.java
@@ -143,41 +142,42 @@ space/cstm/views/customization/interfaces/CustomizableView.java
  space.cstm.views.customization.interfaces.CustomizableView
 space/cstm/views/customization/components/EntityMotherShip.java
  space.cstm.views.customization.components.EntityMotherShip
-space/cstm/models/components/entities/CommonShip.java
- space.cstm.models.components.entities.CommonShip
+space/cstm/views/RankingView.java
+ space.cstm.views.RankingView
 space/cstm/models/settings/deserializers/SettingDeserializer.java
  space.cstm.models.settings.deserializers.SettingDeserializer
  space.cstm.models.settings.deserializers.SettingDeserializer$1
 space/cstm/utils/enums/Orientations.java
  space.cstm.utils.enums.Orientations
-space/cstm/models/components/interfaces/Collidable.java
- space.cstm.models.components.interfaces.Collidable
+space/cstm/views/fire/EnemyFireView.java
+ space.cstm.views.fire.EnemyFireView
 space/cstm/models/components/weapons/WeaponFactory.java
  space.cstm.models.components.weapons.WeaponFactory
  space.cstm.models.components.weapons.WeaponFactory$1
-space/cstm/models/components/interfaces/WorldGrid.java
- space.cstm.models.components.interfaces.WorldGrid
-space/cstm/events/MotherShipHitEvent.java
- space.cstm.events.MotherShipHitEvent
-space/cstm/views/customization/components/Orientation.java
- space.cstm.views.customization.components.Orientation
-space/cstm/views/RankingView.java
- space.cstm.views.RankingView
-space/cstm/services/YamlService.java
- space.cstm.services.YamlService
+space/cstm/views/sprite/EntitySprite.java
+ space.cstm.views.sprite.EntitySprite
 space/cstm/views/entities/CommonShipView.java
  space.cstm.views.entities.CommonShipView
-space/cstm/views/entities/MotherShipView.java
- space.cstm.views.entities.MotherShipView
-space/cstm/views/sprite/WeaponSprite.java
- space.cstm.views.sprite.WeaponSprite
 space/cstm/views/entities/PlayerShipView.java
  space.cstm.views.entities.PlayerShipView
-space/cstm/views/SettingsView.java
- space.cstm.views.SettingsView
-space/cstm/views/customization/components/CustomizableComponentFactory.java
- space.cstm.views.customization.components.CustomizableComponentFactory
-space/cstm/utils/SpriteAnimation.java
- space.cstm.utils.SpriteAnimation
-space/cstm/views/entities/interfaces/Animated.java
- space.cstm.views.entities.interfaces.Animated
+space/cstm/models/components/entities/MotherShip.java
+ space.cstm.models.components.entities.MotherShip
+space/cstm/events/MotherShipHitEvent.java
+ space.cstm.events.MotherShipHitEvent
+space/cstm/models/components/interfaces/Collidable.java
+ space.cstm.models.components.interfaces.Collidable
+space/cstm/models/components/entities/PlayerShip.java
+ space.cstm.models.components.entities.PlayerShip
+space/cstm/events/PlayerShipHitEvent.java
+ space.cstm.events.PlayerShipHitEvent
+space/cstm/events/EventManager.java
+ space.cstm.events.EventManager
+space/cstm/models/components/entities/CommonShip.java
+ space.cstm.models.components.entities.CommonShip
+space/cstm/events/CommonShipHitEvent.java
+ space.cstm.events.CommonShipHitEvent
+space/cstm/models/components/interfaces/Entity.java
+ space.cstm.models.components.interfaces.Entity
+space/cstm/models/components/entities/EntityFactory.java
+ space.cstm.models.components.entities.EntityFactory
+ space.cstm.models.components.entities.EntityFactory$1
