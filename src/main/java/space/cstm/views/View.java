@@ -1,38 +1,53 @@
 package space.cstm.views;
 
-import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import space.cstm.models.ObservableModel;
 
 import java.beans.PropertyChangeListener;
 
+/**
+ * The View of the MVC pattern has also the functionality to make a class an Observer
+ */
 public interface View extends PropertyChangeListener {
 
+  /**
+   *
+   * @return the parent of the fxml file that is currently loaded
+   */
   Pane getParent();
-  
-  float getBoundFactor();
-  
+
+  /**
+   *
+   * @param stage
+   */
   void setStage(Stage stage);
-  
+
+  /**
+   *
+   * @return the current stage of loaded view
+   */
   Stage getStage();
-  
+
+  /**
+   *
+   * @return pref width of the current loaded fxml file
+   */
   default float getWidth() {
     return (float) getParent().getPrefWidth();
-    // return getPrimaryScreenBounds().getWidth() / getBoundFactor();
-  }
-  
-  default float getHeight() {
-    return (float) getParent().getPrefHeight();
-    // return getPrimaryScreenBounds().getHeight() / getBoundFactor();
-  }
-  
-  /* Primary Screen (useful if the user has multiple monitors bounds */
-  default Rectangle2D getPrimaryScreenBounds() {
-    return Screen.getPrimary().getVisualBounds();
   }
 
+  /**
+   * @return pref width of the current loaded fxml file
+   */
+  default float getHeight() {
+    return (float) getParent().getPrefHeight();
+  }
+
+  /**
+   * Using the JavaBeans package this method can make a concrete View class an Observer
+   * @param model
+   */
   default void addListenerToModel(ObservableModel model) {
     model.addPropertyChangeListener(this);
   }

@@ -24,10 +24,12 @@
     <Button layoutX="44.0" layoutY="694.0" mnemonicParsing="false" text="Choose Image" onAction="#entityMotherShipChooseImage"/>
     <TextField fx:id="entityMotherShipRows" alignment="CENTER_RIGHT" disable="true" layoutX="44.0" layoutY="782.0" opacity="0.0"
                prefHeight="25.0" prefWidth="43.0" promptText="Rows"/>
-    <TextField fx:id="entityMotherShipColumns" alignment="CENTER_RIGHT" disable="true" layoutX="93.0" layoutY="782.0" opacity="0.0"
+    <TextField fx:id="entityMotherShipColumns" alignment="CENTER_RIGHT" disable="true" layoutX="94.0" layoutY="782.0" opacity="0.0"
                prefHeight="25.0" prefWidth="62.0" promptText="Columns"/>
-    <TextField fx:id="entityMotherShipSelectedRow" alignment="CENTER_RIGHT" disable="true" layoutX="163.0" layoutY="782.0" opacity="0.0"
+    <TextField fx:id="entityMotherShipSelectedRow" alignment="CENTER_RIGHT" disable="true" layoutX="164.0" layoutY="782.0" opacity="0.0"
                prefHeight="25.0" prefWidth="84.0" promptText="Row Selected"/>
     <TextField fx:id="entityMotherShipSelectedColumn" alignment="CENTER_RIGHT" disable="true" layoutX="256.0" layoutY="782.0" opacity="0.0"
                prefHeight="25.0" prefWidth="105.0" promptText="Column Selected"/>
+    <TextField fx:id="entityMotherShipInternalColumns" alignment="CENTER_RIGHT" disable="true" layoutX="404.0" layoutY="782.0" opacity="0.0"
+               prefHeight="25.0" prefWidth="105.0" promptText="Internal Columns"/>
 </Group>

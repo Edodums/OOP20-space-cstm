@@ -41,6 +41,8 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
     private TextField entityPlayerColumns;
     @FXML
     private TextField entityPlayerRows;
+    @FXML
+    private TextField entityPlayerInternalColumns;
 
     public EntityPlayer() {}
 
@@ -77,6 +79,7 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
         this.entityPlayerColumns.setDisable(!value);
         this.entityPlayerSelectedRow.setDisable(!value);
         this.entityPlayerSelectedColumn.setDisable(!value);
+        this.entityPlayerInternalColumns.setDisable(!value);
 
         final float opacityValue = value ? 1.0f : 0.0f;
 
@@ -84,6 +87,7 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
         this.entityPlayerColumns.setOpacity(opacityValue);
         this.entityPlayerSelectedRow.setOpacity(opacityValue);
         this.entityPlayerSelectedColumn.setOpacity(opacityValue);
+        this.entityPlayerInternalColumns.setOpacity(opacityValue);
     }
 
     @Override
@@ -107,6 +111,11 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
     }
 
     @Override
+    public void handleInternalColumns() {
+        this.entityPlayerInternalColumns.textProperty().addListener((observable, oldValue, newValue) -> setInternalColumns(getFormattedNumericValue(newValue)));
+    }
+
+    @Override
     public void setRows(String value) {
         this.entityPlayerRows.setText(value);
     }
@@ -124,6 +133,11 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
     @Override
     public void setSelectedColumn(String value) {
         this.entityPlayerSelectedColumn.setText(value);
+    }
+
+    @Override
+    public void setInternalColumns(String value) {
+        this.entityPlayerInternalColumns.setText(value);
     }
 
     @Override
@@ -147,12 +161,17 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
     }
 
     @Override
+    public Integer getInternalColumns() {
+        return getNumericValue(this.entityPlayerInternalColumns.getText());
+    }
+
+    @Override
     public void setTypeImage(CustomizableTypeImage typeImage) {
         this.current = typeImage;
     }
 
     @Override
-    public CustomizableTypeImage getTypeImage() {
+    public CustomizableTypeImage getTypeImages() {
         return this.current;
     }
 
@@ -173,15 +192,16 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
 
     @Override
     public void setDefaults() {
-        final GridImage grid = getTypeImage().getGrid();
+        final GridImage grid = getTypeImages().getGrid();
 
-        this.entityPlayerFilename.setText(getTypeImage().getName());
-        this.entityPlayerImage.setImage(new Image(getTypeImage().getName()));
+        this.entityPlayerFilename.setText(getTypeImages().getName());
+        this.entityPlayerImage.setImage(new Image(getTypeImages().getName()));
 
         this.entityPlayerRows.setText(String.valueOf(grid.getRows()));
         this.entityPlayerColumns.setText(String.valueOf(grid.getColumns()));
         this.entityPlayerSelectedRow.setText(String.valueOf(grid.getSelectedRow()));
         this.entityPlayerSelectedColumn.setText(String.valueOf(grid.getSelectedColumn()));
+        this.entityPlayerInternalColumns.setText(String.valueOf(grid.getInternalColumns()));
     }
 
     @Override
@@ -192,6 +212,7 @@ public class EntityPlayer implements CustomizableViewTypeImage, Initializable {
         handleColumns();
         handleSelectedRow();
         handleSelectedColumn();
+        handleInternalColumns();
     }
 }
 

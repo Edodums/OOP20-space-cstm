@@ -18,7 +18,6 @@ import space.cstm.utils.enums.Fxml;
 
 public class MenuView implements View {
     private static final String SCENE_PROPERTY = "currentScene";
-    private static final float BOUND_FACTOR = 1.8f;
     private static final Menu model = new Menu();
     private static final MenuController controller = new MenuController(model);
 
@@ -61,10 +60,6 @@ public class MenuView implements View {
         }
     }
 
-    @Override
-    public float getBoundFactor() {
-        return BOUND_FACTOR;
-    }
 
     @Override
     public Pane getParent() {

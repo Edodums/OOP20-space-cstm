@@ -9,7 +9,15 @@ import space.cstm.utils.Pair;
 
 
 public interface EntitySprite extends Sprite {
-    /* Duplicated code, I didn't model Eniity and Weapon to have common , that's what I get */
+
+    /**
+     * Duplicated code, I didn't model Entity and Weapon to have common ,
+     * that's what I get for not writing a good project
+     *
+     * @param position
+     * @param entity
+     * @param unit
+     */
     default void create(Pair<Float, Float> position, Entity entity, float unit) {
         final GridImage grid = entity.getTypeImages().getGrid();
 

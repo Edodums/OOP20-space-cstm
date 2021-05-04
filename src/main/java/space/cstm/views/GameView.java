@@ -37,11 +37,13 @@ import space.cstm.views.sprite.EntitySprite;
 import space.cstm.views.fire.PrimaryFireView;
 import space.cstm.views.sprite.WeaponSprite;
 
+/**
+ * UI Logic of the game stands here
+ */
 public class GameView implements View, Initializable, KeyEventListener {
-  private final GameController controller = new GameController(new Game(SettingsController.load()) );
-  private static final Map<Entity, EntitySprite> entitiesSprites = new HashMap<>();
-  private static final Map<Weapon, WeaponSprite> beamsSprites = new HashMap<>();
-  private static final float BOUND_FACTOR = 1.6f;
+  private final GameController controller = new GameController(new Game(SettingsController.load()) ); // loads the controller and pass the loaded settings
+  private static final Map<Entity, EntitySprite> entitiesSprites = new HashMap<>(); // Association between an Entity class and EntitySprite one
+  private static final Map<Weapon, WeaponSprite> beamsSprites = new HashMap<>(); // Association between an Weapon class and WeaponSprite one
   
   private GameLoop timer;
   private Task<Void> task;
@@ -260,11 +262,6 @@ public class GameView implements View, Initializable, KeyEventListener {
     return this.parent;
   }
   
-  @Override
-  public float getBoundFactor() {
-    return BOUND_FACTOR;
-  }
-  
   public Stage getStage() {
     return this.stage;
   }
@@ -330,7 +327,13 @@ public class GameView implements View, Initializable, KeyEventListener {
     
     getParent().requestFocus();
   }
-  
+
+  /**
+   * Ends the game while :
+   * - goes back to the Menu View;
+   * - deletes all the resources that are no longer used
+   * - add gamePoints and player nickname to the ranking stats
+   */
   public void endGame() {
     this.task.cancel();
     this.timer.stop();

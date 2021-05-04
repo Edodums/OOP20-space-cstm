@@ -30,4 +30,6 @@
                prefHeight="25.0" prefWidth="84.0" promptText="Row Selected"/>
     <TextField fx:id="entityPlayerSelectedColumn" alignment="CENTER_RIGHT" disable="true" layoutX="256.0" layoutY="582.0" opacity="0.0"
                prefHeight="25.0" prefWidth="105.0" promptText="Column Selected"/>
+    <TextField fx:id="entityPlayerInternalColumns" alignment="CENTER_RIGHT" disable="true" layoutX="404.0" layoutY="582.0" opacity="0.0"
+               prefHeight="25.0" prefWidth="105.0" promptText="Internal Columns"/>
 </Group>

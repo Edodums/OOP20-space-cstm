@@ -27,4 +27,6 @@
                prefWidth="84.0" promptText="Row Selected"/>
     <TextField fx:id="weaponPlayerSelectedColumn" alignment="CENTER_RIGHT" disable="true" layoutX="256.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
                prefWidth="105.0" promptText="Column Selected"/>
+    <TextField fx:id="weaponPlayerInternalColumns" alignment="CENTER_RIGHT" disable="true" layoutX="404.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="105.0" promptText="Internal Columns"/>
 </Group>

@@ -32,7 +32,6 @@ import space.cstm.views.customization.interfaces.CustomizableViewTypeImage;
  * The view part of settings
  */
 public class SettingsView implements View, Initializable {
-    private static final float BOUND_FACTOR = 1.4f;
     private static final SettingsController controller = new SettingsController(SettingsController.load());
 
     private Stage stage;
@@ -59,11 +58,6 @@ public class SettingsView implements View, Initializable {
     @Override
     public Pane getParent() {
         return this.parent;
-    }
-
-    @Override
-    public float getBoundFactor() {
-        return BOUND_FACTOR;
     }
 
     @Override
@@ -104,7 +98,7 @@ public class SettingsView implements View, Initializable {
                   if (customizable instanceof CustomizableViewTypeImage) {
                       final Type type;
                       final CustomizableViewTypeImage component =  ((CustomizableViewTypeImage) customizable);
-                      final Grid grid = component.getRows() == 0 ? new Grid() : new Grid(component.getRows(), component.getColumns(), component.getSelectedRow(), component.getSelectedColumn());
+                      final Grid grid = component.getRows() == 0 ? new Grid() : new Grid(component.getRows(), component.getColumns(), component.getSelectedRow(), component.getSelectedColumn(), component.getInternalColumns());
                       
                       if (component.getGroupId().contains("weapon"))  {
                           type = WeaponType.getType(component.getGroupId());

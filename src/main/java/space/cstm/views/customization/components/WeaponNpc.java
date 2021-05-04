@@ -40,6 +40,8 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
   private TextField weaponNpcColumns;
   @FXML
   private TextField weaponNpcRows;
+  @FXML
+  private TextField weaponNpcInternalColumns;
   
   public WeaponNpc() {}
   
@@ -76,6 +78,7 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
     this.weaponNpcColumns.setDisable(!value);
     this.weaponNpcSelectedRow.setDisable(!value);
     this.weaponNpcSelectedColumn.setDisable(!value);
+    this.weaponNpcInternalColumns.setDisable(!value);
     
     final float opacityValue = value ? 1.0f : 0.0f;
   
@@ -83,6 +86,7 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
     this.weaponNpcColumns.setOpacity(opacityValue);
     this.weaponNpcSelectedRow.setOpacity(opacityValue);
     this.weaponNpcSelectedColumn.setOpacity(opacityValue);
+    this.weaponNpcInternalColumns.setOpacity(opacityValue);
   }
   
   @Override
@@ -104,7 +108,12 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
   public void handleSelectedColumn() {
     this.weaponNpcSelectedColumn.textProperty().addListener((observable, oldValue, newValue) -> setSelectedColumn(getFormattedNumericValue(newValue)));
   }
-  
+
+  @Override
+  public void handleInternalColumns() {
+      this.weaponNpcInternalColumns.textProperty().addListener((observable, oldValue, newValue) -> setInternalColumns(getFormattedNumericValue(newValue)));
+  }
+
   @Override
   public void setRows(String value) {
     this.weaponNpcRows.setText(value);
@@ -124,7 +133,12 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
   public void setSelectedColumn(String value) {
     this.weaponNpcSelectedColumn.setText(value);
   }
-  
+
+  @Override
+  public void setInternalColumns(String value) {
+    this.weaponNpcInternalColumns.setText(value);
+  }
+
   @Override
   public Integer getRows() {
     return getNumericValue(this.weaponNpcRows.getText());
@@ -144,14 +158,19 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
   public Integer getSelectedColumn() {
     return getNumericValue(this.weaponNpcSelectedColumn.getText());
   }
-  
+
+  @Override
+  public Integer getInternalColumns() {
+    return getNumericValue(this.weaponNpcInternalColumns.getText());
+  }
+
   @Override
   public void setTypeImage(CustomizableTypeImage typeImage) {
     this.current = typeImage;
   }
 
   @Override
-  public CustomizableTypeImage getTypeImage() {
+  public CustomizableTypeImage getTypeImages() {
     return this.current;
   }
   
@@ -172,15 +191,16 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
   
   @Override
   public void setDefaults() {
-    final GridImage grid = getTypeImage().getGrid();
+    final GridImage grid = getTypeImages().getGrid();
   
-    this.weaponNpcFilename.setText(getTypeImage().getName());
-    this.weaponNpcImage.setImage(new Image(getTypeImage().getName()));
+    this.weaponNpcFilename.setText(getTypeImages().getName());
+    this.weaponNpcImage.setImage(new Image(getTypeImages().getName()));
   
     this.weaponNpcRows.setText(String.valueOf(grid.getRows()));
     this.weaponNpcColumns.setText(String.valueOf(grid.getColumns()));
     this.weaponNpcSelectedRow.setText(String.valueOf(grid.getSelectedRow()));
     this.weaponNpcSelectedColumn.setText(String.valueOf(grid.getSelectedColumn()));
+    this.weaponNpcInternalColumns.setText(String.valueOf(grid.getInternalColumns()));
   }
   
   @Override
@@ -191,5 +211,6 @@ public class WeaponNpc implements CustomizableViewTypeImage, Initializable {
     handleColumns();
     handleSelectedRow();
     handleSelectedColumn();
+    handleInternalColumns();
   }
 }

@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import space.cstm.controllers.RankingController;
 
 public class RankingView implements View, Initializable {
-    private static final float BOUND_FACTOR = 2.0f;
     private static final RankingController controller = new RankingController(RankingController.load());
     
     private Stage stage;
@@ -31,11 +30,6 @@ public class RankingView implements View, Initializable {
     @Override
     public Pane getParent() {
         return this.parent;
-    }
-
-    @Override
-    public float getBoundFactor() {
-        return BOUND_FACTOR;
     }
     
     @Override

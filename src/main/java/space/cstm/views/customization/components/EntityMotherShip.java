@@ -41,6 +41,8 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
   private TextField entityMotherShipColumns;
   @FXML
   private TextField entityMotherShipRows;
+  @FXML
+  private TextField entityMotherShipInternalColumns;
   
   public EntityMotherShip() {}
   
@@ -77,6 +79,7 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
     this.entityMotherShipColumns.setDisable(!value);
     this.entityMotherShipSelectedRow.setDisable(!value);
     this.entityMotherShipSelectedColumn.setDisable(!value);
+    this.entityMotherShipInternalColumns.setDisable(!value);
     
     final float opacityValue = value ? 1.0f : 0.0f;
     
@@ -84,6 +87,7 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
     this.entityMotherShipColumns.setOpacity(opacityValue);
     this.entityMotherShipSelectedRow.setOpacity(opacityValue);
     this.entityMotherShipSelectedColumn.setOpacity(opacityValue);
+    this.entityMotherShipInternalColumns.setOpacity(opacityValue);
   }
   
   @Override
@@ -105,7 +109,12 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
   public void handleSelectedColumn() {
     this.entityMotherShipSelectedColumn.textProperty().addListener((observable, oldValue, newValue) -> setSelectedColumn(getFormattedNumericValue(newValue)));
   }
-  
+
+  @Override
+  public void handleInternalColumns() {
+    this.entityMotherShipInternalColumns.textProperty().addListener((observable, oldValue, newValue) -> setInternalColumns(getFormattedNumericValue(newValue)));
+  }
+
   @Override
   public void setRows(String value) {
     this.entityMotherShipRows.setText(value);
@@ -125,7 +134,12 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
   public void setSelectedColumn(String value) {
     this.entityMotherShipSelectedColumn.setText(value);
   }
-  
+
+  @Override
+  public void setInternalColumns(String value) {
+    this.entityMotherShipInternalColumns.setText(value);
+  }
+
   @Override
   public Integer getRows() {
     return getNumericValue(this.entityMotherShipRows.getText());
@@ -145,14 +159,19 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
   public Integer getSelectedColumn() {
     return getNumericValue(this.entityMotherShipSelectedColumn.getText());
   }
-  
+
+  @Override
+  public Integer getInternalColumns() {
+    return getNumericValue(this.entityMotherShipInternalColumns.getText());
+  }
+
   @Override
   public void setTypeImage(CustomizableTypeImage typeImage) {
     this.current = typeImage;
   }
 
   @Override
-  public CustomizableTypeImage getTypeImage() {
+  public CustomizableTypeImage getTypeImages() {
     return this.current;
   }
   
@@ -173,15 +192,16 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
   
   @Override
   public void setDefaults() {
-    final GridImage grid = getTypeImage().getGrid();
+    final GridImage grid = getTypeImages().getGrid();
     
-    this.entityMotherShipFilename.setText(getTypeImage().getName());
-    this.entityMotherShipImage.setImage(new Image(getTypeImage().getName()));
+    this.entityMotherShipFilename.setText(getTypeImages().getName());
+    this.entityMotherShipImage.setImage(new Image(getTypeImages().getName()));
     
     this.entityMotherShipRows.setText(String.valueOf(grid.getRows()));
     this.entityMotherShipColumns.setText(String.valueOf(grid.getColumns()));
     this.entityMotherShipSelectedRow.setText(String.valueOf(grid.getSelectedRow()));
     this.entityMotherShipSelectedColumn.setText(String.valueOf(grid.getSelectedColumn()));
+    this.entityMotherShipInternalColumns.setText(String.valueOf(grid.getInternalColumns()));
   }
   
   @Override
@@ -192,5 +212,6 @@ public class EntityMotherShip implements CustomizableViewTypeImage, Initializabl
     handleColumns();
     handleSelectedRow();
     handleSelectedColumn();
+    handleInternalColumns();
   }
 }

@@ -16,6 +16,8 @@ public interface CustomizableViewTypeImage extends CustomizableView {
   Integer getSelectedRow();
   
   Integer getSelectedColumn();
+
+  Integer getInternalColumns();
   
   void handleRows();
   
@@ -24,6 +26,8 @@ public interface CustomizableViewTypeImage extends CustomizableView {
   void handleSelectedRow();
   
   void handleSelectedColumn();
+
+  void handleInternalColumns();
   
   void setRows(String value);
   
@@ -32,10 +36,12 @@ public interface CustomizableViewTypeImage extends CustomizableView {
   void setSelectedRow(String value);
   
   void setSelectedColumn(String value);
+
+  void setInternalColumns(String value);
   
   void setTypeImage(CustomizableTypeImage typeImage);
   
-  CustomizableTypeImage getTypeImage();
+  CustomizableTypeImage getTypeImages();
   
   void setImage(Image image);
   

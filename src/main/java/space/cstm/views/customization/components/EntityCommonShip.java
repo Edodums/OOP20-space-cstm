@@ -41,6 +41,8 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
   private TextField entityCommonShipColumns;
   @FXML
   private TextField entityCommonShipRows;
+  @FXML
+  private TextField entityCommonShipInternalColumns;
   
   public EntityCommonShip() {}
   
@@ -77,6 +79,7 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
     this.entityCommonShipColumns.setDisable(!value);
     this.entityCommonShipSelectedRow.setDisable(!value);
     this.entityCommonShipSelectedColumn.setDisable(!value);
+    this.entityCommonShipInternalColumns.setDisable(!value);
     
     final float opacityValue = value ? 1.0f : 0.0f;
     
@@ -84,6 +87,7 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
     this.entityCommonShipColumns.setOpacity(opacityValue);
     this.entityCommonShipSelectedRow.setOpacity(opacityValue);
     this.entityCommonShipSelectedColumn.setOpacity(opacityValue);
+    this.entityCommonShipInternalColumns.setOpacity(opacityValue);
   }
   
   @Override
@@ -105,7 +109,12 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
   public void handleSelectedColumn() {
     this.entityCommonShipSelectedColumn.textProperty().addListener((observable, oldValue, newValue) -> setSelectedColumn(getFormattedNumericValue(newValue)));
   }
-  
+
+  @Override
+  public void handleInternalColumns() {
+    this.entityCommonShipInternalColumns.textProperty().addListener((observable, oldValue, newValue) -> setInternalColumns(getFormattedNumericValue(newValue)));
+  }
+
   @Override
   public void setRows(String value) {
     this.entityCommonShipRows.setText(value);
@@ -125,7 +134,12 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
   public void setSelectedColumn(String value) {
     this.entityCommonShipSelectedColumn.setText(value);
   }
-  
+
+  @Override
+  public void setInternalColumns(String value) {
+    this.entityCommonShipInternalColumns.setText(value);
+  }
+
   @Override
   public Integer getRows() {
     return getNumericValue(this.entityCommonShipRows.getText());
@@ -145,14 +159,19 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
   public Integer getSelectedColumn() {
     return getNumericValue(this.entityCommonShipSelectedColumn.getText());
   }
-  
+
+  @Override
+  public Integer getInternalColumns() {
+    return getNumericValue(this.entityCommonShipInternalColumns.getText());
+  }
+
   @Override
   public void setTypeImage(CustomizableTypeImage typeImage) {
     this.current = typeImage;
   }
   
   @Override
-  public CustomizableTypeImage getTypeImage() {
+  public CustomizableTypeImage getTypeImages() {
     return this.current;
   }
   
@@ -173,15 +192,16 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
   
   @Override
   public void setDefaults() {
-    final GridImage grid = getTypeImage().getGrid();
+    final GridImage grid = getTypeImages().getGrid();
     
-    this.entityCommonShipFilename.setText(getTypeImage().getName());
-    this.entityCommonShipImage.setImage(new Image(getTypeImage().getName()));
+    this.entityCommonShipFilename.setText(getTypeImages().getName());
+    this.entityCommonShipImage.setImage(new Image(getTypeImages().getName()));
     
     this.entityCommonShipRows.setText(String.valueOf(grid.getRows()));
     this.entityCommonShipColumns.setText(String.valueOf(grid.getColumns()));
     this.entityCommonShipSelectedRow.setText(String.valueOf(grid.getSelectedRow()));
     this.entityCommonShipSelectedColumn.setText(String.valueOf(grid.getSelectedColumn()));
+    this.entityCommonShipInternalColumns.setText(String.valueOf(grid.getInternalColumns()));
   }
   
   @Override
@@ -192,5 +212,6 @@ public class EntityCommonShip implements CustomizableViewTypeImage, Initializabl
     handleColumns();
     handleSelectedRow();
     handleSelectedColumn();
+    handleInternalColumns();
   }
 }

@@ -41,6 +41,8 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
   private TextField weaponPlayerColumns;
   @FXML
   private TextField weaponPlayerRows;
+  @FXML
+  private TextField weaponPlayerInternalColumns;
   
   public WeaponPlayer() {}
 
@@ -91,13 +93,18 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
     return getNumericValue(this.weaponPlayerSelectedColumn.getText());
   }
 
-  
+  @Override
+  public Integer getInternalColumns() {
+    return getNumericValue(this.weaponPlayerInternalColumns.getText());
+  }
+
   @Override
   public void toggleGridTextFields(boolean value) {
     this.weaponPlayerRows.setDisable(!value);
     this.weaponPlayerColumns.setDisable(!value);
     this.weaponPlayerSelectedRow.setDisable(!value);
     this.weaponPlayerSelectedColumn.setDisable(!value);
+    this.weaponPlayerInternalColumns.setDisable(!value);
 
     final float opacityValue = value ? 1.0f : 0.0f;
 
@@ -105,6 +112,7 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
     this.weaponPlayerColumns.setOpacity(opacityValue);
     this.weaponPlayerSelectedRow.setOpacity(opacityValue);
     this.weaponPlayerSelectedColumn.setOpacity(opacityValue);
+    this.weaponPlayerInternalColumns.setOpacity(opacityValue);
   }
   
   @Override
@@ -126,7 +134,12 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
   public void handleSelectedColumn() {
     this.weaponPlayerSelectedColumn.textProperty().addListener((observable, oldValue, newValue) -> setSelectedColumn(getFormattedNumericValue(newValue)));
   }
-  
+
+  @Override
+  public void handleInternalColumns() {
+    this.weaponPlayerInternalColumns.textProperty().addListener((observable, oldValue, newValue) -> setInternalColumns(getFormattedNumericValue(newValue)));
+  }
+
   @Override
   public void setRows(String value) {
     this.weaponPlayerRows.setText(value);
@@ -146,14 +159,19 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
   public void setSelectedColumn(String value) {
     this.weaponPlayerSelectedColumn.setText(value);
   }
-  
+
+  @Override
+  public void setInternalColumns(String value) {
+    this.weaponPlayerInternalColumns.setText(value);
+  }
+
   @Override
   public void setTypeImage(CustomizableTypeImage typeImage) {
     this.current = typeImage;
   }
 
   @Override
-  public CustomizableTypeImage getTypeImage() {
+  public CustomizableTypeImage getTypeImages() {
     return this.current;
   }
   
@@ -174,15 +192,16 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
 
   @Override
   public void setDefaults() {
-    final GridImage grid = getTypeImage().getGrid();
+    final GridImage grid = getTypeImages().getGrid();
 
-    this.weaponPlayerFilename.setText(getTypeImage().getName());
-    this.weaponPlayerImage.setImage(new Image(getTypeImage().getName()));
+    this.weaponPlayerFilename.setText(getTypeImages().getName());
+    this.weaponPlayerImage.setImage(new Image(getTypeImages().getName()));
 
     this.weaponPlayerRows.setText(String.valueOf(grid.getRows()));
     this.weaponPlayerColumns.setText(String.valueOf(grid.getColumns()));
     this.weaponPlayerSelectedRow.setText(String.valueOf(grid.getSelectedRow()));
     this.weaponPlayerSelectedColumn.setText(String.valueOf(grid.getSelectedColumn()));
+    this.weaponPlayerInternalColumns.setText(String.valueOf(grid.getInternalColumns()));
   }
 
   @Override
@@ -193,5 +212,6 @@ public class WeaponPlayer implements CustomizableViewTypeImage, Initializable {
     handleColumns();
     handleSelectedRow();
     handleSelectedColumn();
+    handleInternalColumns();
   }
 }

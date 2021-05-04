@@ -51,7 +51,7 @@ public class PlayerShip extends Collider implements Entity, Collidable {
   }
 
   @Override
-  public void move(Pair<Float, Float> pair, boolean isRight) {
+  public void move(Pair<Float, Float> pair) {
     // empty
   }
 

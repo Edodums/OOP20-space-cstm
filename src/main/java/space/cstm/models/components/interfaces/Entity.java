@@ -19,31 +19,76 @@ import static space.cstm.models.Game.*;
 
 
 public interface Entity {
-    
+    /**
+     *
+     * @return the Entity instance ( instances in the case of CommonShip )
+     */
     Map<Pair<Float, Float>, Optional<Entity>> create();
 
+    /**
+     * Launches the Event deletes the Entity from the grid
+     * @param entityToCheck
+     */
     void die(Collider entityToCheck);
 
+    /**
+     *
+     * @return the type image
+     */
     CustomizableTypeImage getTypeImages();
 
+    /**
+     *
+     * @return
+     */
     float getPointsValue();
 
+    /**
+     *
+     * @return
+     */
     float getSpawnNumber();
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     default boolean canEntityMove(float x, float y) {
         return x < getMaxX() && y < getMaxY();
     }
 
+    /**
+     *
+     * @return
+     */
     default boolean isNPC() {
         return this instanceof CommonShip || this instanceof MotherShip;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     default boolean isPlayer() {
         return this instanceof PlayerShip;
     }
-    
-    default void move(Pair<Float, Float> pair, boolean isRight) {}
 
+    /**
+     * Just a default method that I've put to avoid to use the other move
+     * If I want, in the future, to make the playership not controlled by a user,
+     * and instead autonomous I can implement it via this
+     * @param pair
+     */
+    default void move(Pair<Float, Float> pair) {}
+
+    /**
+     *
+     * @param entity
+     * @param pair
+     * @param player
+     */
     default void move(Collider entity, Pair<Float, Float> pair, Optional<Entity> player) {
         final float unit = ModelConstants.ENTITY_MOVE_X_UNIT;
         final float accelerationFactor = getAccelerationFactor(pair);
@@ -84,7 +129,14 @@ public interface Entity {
         
         entity.setPosition(pair);
     }
-    
+
+    /**
+     *
+     * @param number
+     * @param scale
+     * @param isUp
+     * @return
+     */
     default float round(float number, int scale, boolean isUp) {
         RoundingMode roundingMode = RoundingMode.UP;
         
@@ -95,10 +147,21 @@ public interface Entity {
         return BigDecimal.valueOf(number).setScale(scale, roundingMode).floatValue();
     }
 
+    /**
+     *
+     * @param pair
+     * @return
+     */
     default float getAccelerationFactor(Pair<Float, Float> pair) {
         return pair.getY() % getMaxX() * 0.0025f;
     }
 
+    /**
+     *
+     * @param currentY
+     * @param startingY
+     * @return
+     */
     default boolean isGoingRight(float currentY, float startingY) {
         final float subtract = currentY - startingY;
         
@@ -109,6 +172,10 @@ public interface Entity {
         return round(subtract, 0, true) % 2.0 == 0.0;
     }
 
+    /**
+     *
+     * @return
+     */
     default String getFilename(){
         return getTypeImages().getName();
     }

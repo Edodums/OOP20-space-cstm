@@ -76,7 +76,7 @@ public class Game implements ObservableModel, GameWorld {
   }
   
   /**
-   *
+   * {@inheritDoc}
    */
   @Override
   public void initGrid() {
@@ -85,7 +85,7 @@ public class Game implements ObservableModel, GameWorld {
   }
   
   /**
-   *
+   * {@inheritDoc}
    */
   @Override
   public void updateGrid() {
