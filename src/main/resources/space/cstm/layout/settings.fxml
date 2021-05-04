@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="915.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="space.cstm.views.SettingsView">
+    <ScrollPane fx:id="scrollPane" prefHeight="915.0" prefWidth="906.0">
+        <Button fx:id="save" layoutX="800.0" layoutY="910.0" mnemonicParsing="false" onAction="#saveSettings" prefHeight="51.0" prefWidth="99.0" text="Save">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <Button fx:id="cancel" layoutX="670.0" layoutY="910.0" mnemonicParsing="false" onAction="#cancelSettings" text="Cancel">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <Button fx:id="goBack" layoutX="530.0" layoutY="910.0" mnemonicParsing="false" onAction="#goBack" text="Menu" AnchorPane.bottomAnchor="600.0" AnchorPane.leftAnchor="740.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+    </ScrollPane>
+</AnchorPane>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+
+<Group xmlns="http://javafx.com/javafx"
+       xmlns:fx="http://javafx.com/fxml"
+       fx:controller="space.cstm.views.customization.components.WeaponPlayer"
+       fx:id="weaponPlayer">
+    <Label fx:id="weaponPlayerLabel" layoutX="45.0" layoutY="312.0" text="Player Laser">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Label>
+    <TextField fx:id="weaponPlayerFilename"  disable="true" layoutX="162.0" layoutY="349.0" prefHeight="25.0" prefWidth="233.0"
+               promptText="Filename goes here after being chosen"/>
+    <ImageView fx:id="weaponPlayerImage" layoutX="412.0" layoutY="300.0" fitWidth="80" fitHeight="80" />
+    <CheckBox fx:id="weaponPlayerIsDivided" layoutX="45.0" layoutY="392.0" mnemonicParsing="false" text="Divide into grid image"/>
+    <Button layoutX="45.0" layoutY="349.0" mnemonicParsing="false" text="Choose Image" onAction="#weaponPlayerChooseImage"/>
+    <TextField fx:id="weaponPlayerRows" alignment="CENTER_RIGHT" disable="true" layoutX="45.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="43.0" promptText="Row"/>
+    <TextField fx:id="weaponPlayerColumns" alignment="CENTER_RIGHT" disable="true" layoutX="94.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="62.0" promptText="Column"/>
+    <TextField fx:id="weaponPlayerSelectedRow" alignment="CENTER_RIGHT" disable="true" layoutX="164.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="84.0" promptText="Row Selected"/>
+    <TextField fx:id="weaponPlayerSelectedColumn" alignment="CENTER_RIGHT" disable="true" layoutX="256.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="105.0" promptText="Column Selected"/>
+    <TextField fx:id="weaponPlayerInternalColumns" alignment="CENTER_RIGHT" disable="true" layoutX="404.0" layoutY="437.0" opacity="0.0" prefHeight="25.0"
+               prefWidth="105.0" promptText="Internal Columns"/>
+</Group>
